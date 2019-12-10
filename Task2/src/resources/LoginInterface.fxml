@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="primaryPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="551.0" prefWidth="760.0" style="-fx-background-color: #FFFFE0#FFFFE0;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LoginInterface">
+   <children>
+      <Separator fx:id="separator" layoutY="145.0" orientation="VERTICAL" prefHeight="407.0" prefWidth="760.0" />
+      <Label fx:id="logLablel" layoutX="179.0" layoutY="156.0" text="Log In" AnchorPane.topAnchor="155.0" />
+      <Label fx:id="regLabel" layoutX="520.0" layoutY="155.0" text="Registration" AnchorPane.leftAnchor="515.0" AnchorPane.topAnchor="155.0" />
+      <PasswordField fx:id="pwdField" focusTraversable="false" layoutX="106.0" layoutY="271.0" promptText="Password" AnchorPane.leftAnchor="106.0" AnchorPane.topAnchor="271.0" />
+      <TextField fx:id="emailField" layoutX="106.0" layoutY="208.0" promptText="Email" AnchorPane.leftAnchor="106.0" AnchorPane.topAnchor="208.0" />
+      <Label fx:id="emailLabel" layoutX="106.0" layoutY="184.0" text="Email:" AnchorPane.leftAnchor="106.0" AnchorPane.topAnchor="184.0" />
+      <Label fx:id="pedLabel" layoutX="106.0" layoutY="247.0" text="Password" AnchorPane.leftAnchor="106.0" AnchorPane.topAnchor="247.0" />
+      <Button fx:id="logButton" layoutX="106.0" layoutY="323.0" mnemonicParsing="false" onAction="#login" text="Log In" AnchorPane.leftAnchor="106.0" AnchorPane.topAnchor="323.0" />
+      <TextField fx:id="nameField" layoutX="502.0" layoutY="219.0" promptText="Name" AnchorPane.leftAnchor="515.0" AnchorPane.topAnchor="207.0" />
+      <TextField fx:id="surnameField" layoutX="498.0" layoutY="263.0" promptText="Surname" AnchorPane.leftAnchor="515.0" AnchorPane.topAnchor="259.0" />
+      <TextField fx:id="nickNameField" layoutX="504.0" layoutY="309.0" promptText="NickName" AnchorPane.leftAnchor="515.0" AnchorPane.topAnchor="311.0" />
+      <TextField fx:id="emailRegField" layoutX="526.0" layoutY="363.0" promptText="Email" AnchorPane.leftAnchor="515.0" AnchorPane.topAnchor="363.0" />
+      <TextField fx:id="pwdRegField" layoutX="512.0" layoutY="415.0" promptText="Password" AnchorPane.leftAnchor="515.0" AnchorPane.topAnchor="415.0" />
+      <Button fx:id="regButton" layoutX="522.0" layoutY="470.0" mnemonicParsing="false" onAction="#registration" text="Register" AnchorPane.leftAnchor="515.0" AnchorPane.topAnchor="470.0" />
+      <Label fx:id="nameRegLabel" layoutX="428.0" layoutY="224.0" text="Name:" AnchorPane.leftAnchor="417.0" AnchorPane.topAnchor="212.0" />
+      <Label fx:id="surnameLabel" layoutX="418.0" layoutY="268.0" text="Surname:" AnchorPane.leftAnchor="417.0" AnchorPane.topAnchor="264.0" />
+      <Label fx:id="nickNameLabel" layoutX="397.0" layoutY="322.0" text="Nick Name:" AnchorPane.leftAnchor="417.0" AnchorPane.topAnchor="316.0" />
+      <Label fx:id="emailRegLabel" layoutX="414.0" layoutY="377.0" text="Email:" AnchorPane.leftAnchor="417.0" AnchorPane.topAnchor="368.0" />
+      <Label fx:id="pwdRegLabel" layoutX="417.0" layoutY="430.0" text="Password:" AnchorPane.leftAnchor="417.0" AnchorPane.topAnchor="420.0" />
+   </children>
+</AnchorPane>
