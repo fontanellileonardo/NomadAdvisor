@@ -1,9 +1,23 @@
-import com.mongodb.*;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 
 import java.util.List;
 
 public class MongoDBHandle {
 
+    private static MongoClient mongoClient;
+
+    static{
+        mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+        System.out.println("Created Connection with the DB");
+    }
+
+    public static void finish() {
+        if(mongoClient != null)
+            mongoClient.close();
+            System.out.println("Closed connection with the DB");
+    }
+  
     // Login interface
 
     // It creates an Employee or a Customer object, but it returns a User object. In this way it can be used to read
@@ -39,7 +53,7 @@ public class MongoDBHandle {
     boolean updatePreferences(String email, List<String> preferences) {
         return false;
     }
-
+  
     // Employee Interface
     List<Customer> selectCustomers() {
         return null;
