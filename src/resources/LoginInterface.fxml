@@ -5,6 +5,8 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane fx:id="primaryPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="522.0" prefWidth="760.0" style="-fx-background-color: #FFFFE0#FFFFE0;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LoginInterface">
@@ -28,5 +30,10 @@
       <Label fx:id="nickNameLabel" layoutX="397.0" layoutY="322.0" text="Nick Name:" AnchorPane.leftAnchor="417.0" AnchorPane.topAnchor="316.0" />
       <Label fx:id="emailRegLabel" layoutX="414.0" layoutY="377.0" text="Email:" AnchorPane.leftAnchor="417.0" AnchorPane.topAnchor="368.0" />
       <Label fx:id="pwdRegLabel" layoutX="417.0" layoutY="430.0" text="Password:" AnchorPane.leftAnchor="417.0" AnchorPane.topAnchor="420.0" />
+      <ImageView fitHeight="148.0" fitWidth="403.0" layoutX="129.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/logo.gif" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
