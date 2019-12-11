@@ -17,7 +17,41 @@ public class StatisticsInterface {
     public ObservableList<PieChart.Data> setPieChartData(HashMap<String, Integer> slices) {
     	ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
     	for(Map.Entry<String, Integer> slice : slices.entrySet()) {
-    		pieChartData.add(new PieChart.Data(slice.getValue() + "\t" + slice.getKey(), slice.getValue()));
+    		switch(slice.getKey()) {
+    			case Utils.TEMPERATURE:
+    				pieChartData.add(new PieChart.Data("Temperature", slice.getValue()));
+    				break;
+    			case Utils.AIR_QUALITY:
+    				pieChartData.add(new PieChart.Data("Air quality", slice.getValue()));
+    				break;
+    			case Utils.COST:
+    				pieChartData.add(new PieChart.Data("Cost", slice.getValue()));
+    				break;
+    			case Utils.SAFETY:
+    				pieChartData.add(new PieChart.Data("Safety", slice.getValue()));
+    				break;
+    			case Utils.QUALITY_LIFE:
+    				pieChartData.add(new PieChart.Data("Quality of life", slice.getValue()));
+    				break;
+    			case Utils.WALKABILITY:
+    				pieChartData.add(new PieChart.Data("Walkability", slice.getValue()));
+    				break;
+    			case Utils.HEALTHCARE:
+    				pieChartData.add(new PieChart.Data("Healthcare", slice.getValue()));
+    				break;
+    			case Utils.NIGHTLIFE:
+    				pieChartData.add(new PieChart.Data("Nightlife", slice.getValue()));
+    				break;
+    			case Utils.WIFI:
+    				pieChartData.add(new PieChart.Data("Free wifi", slice.getValue()));
+    				break;
+    			case Utils.FOREIGNERS:
+    				pieChartData.add(new PieChart.Data("Friendly for foreigners", slice.getValue()));
+    				break;
+    			case Utils.ENGLISH:
+    				pieChartData.add(new PieChart.Data("English speaking", slice.getValue()));
+    				break;
+    		}
     	}
     	return pieChartData;
     }
