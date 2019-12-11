@@ -1,14 +1,17 @@
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoDatabase;
 
 import java.util.List;
 
 public class MongoDBHandle {
 
     private static MongoClient mongoClient;
+    private static MongoDatabase database;
 
     static{
         mongoClient = DBConnection.getInstance().mongoClient;
+        database = mongoClient.getDatabase("task2");
         System.out.println("Created Connection with the DB");
     }
 
