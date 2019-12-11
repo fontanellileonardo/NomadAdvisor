@@ -12,7 +12,7 @@
 
 <VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PersonalAreaInterface">
   <children>
-    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="551.0" prefWidth="760.0" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="551.0" prefWidth="760.0" style="-fx-background-color: #d8eff3;" VBox.vgrow="ALWAYS">
       <children>
             <Button fx:id="logoutButton" layoutX="667.0" layoutY="14.0" mnemonicParsing="false" onAction="#logout" prefHeight="27.0" prefWidth="70.0" text="Logout" />
             <Button fx:id="backButton" layoutX="589.0" layoutY="15.0" mnemonicParsing="false" onAction="#comeBack" prefHeight="27.0" prefWidth="59.0" text="Back" />
