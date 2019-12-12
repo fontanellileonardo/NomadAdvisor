@@ -2,6 +2,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Review {
@@ -10,7 +11,7 @@ public class Review {
     private SimpleStringProperty nationality;
     private SimpleIntegerProperty rating;
     private SimpleStringProperty text;
-    private SimpleObjectProperty<Date> date;
+    private SimpleObjectProperty<LocalDate> date;
     private SimpleStringProperty hotelName;
     private SimpleStringProperty cityName;
     private SimpleStringProperty countryName;
@@ -20,18 +21,18 @@ public class Review {
         this.nationality = new SimpleStringProperty("");
         this.rating = new SimpleIntegerProperty(0);
         this.text = new SimpleStringProperty("");
-        this.date = new SimpleObjectProperty<Date>();
+        this.date = new SimpleObjectProperty<LocalDate>();
         this.hotelName = new SimpleStringProperty("");
         this.cityName = new SimpleStringProperty("");
         this.countryName = new SimpleStringProperty("");
     }
 
-    public Review(String username, String nationality, int rating, String text, Date date, String hotelName, String cityName, String countryName) {
+    public Review(String username, String nationality, int rating, String text, LocalDate date, String hotelName, String cityName, String countryName) {
         this.username = new SimpleStringProperty(username);
         this.nationality = new SimpleStringProperty(nationality);
         this.rating = new SimpleIntegerProperty(rating);
         this.text = new SimpleStringProperty(text);
-        this.date = new SimpleObjectProperty<Date>(date);
+        this.date = new SimpleObjectProperty<LocalDate>(date);
         this.hotelName = new SimpleStringProperty(hotelName);
         this.cityName = new SimpleStringProperty(cityName);
         this.countryName = new SimpleStringProperty(countryName);
@@ -85,15 +86,15 @@ public class Review {
         this.text.set(text);
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date.get();
     }
 
-    public SimpleObjectProperty<Date> dateProperty() {
+    public SimpleObjectProperty<LocalDate> dateProperty() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date.set(date);
     }
 
