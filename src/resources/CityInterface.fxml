@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="primaryPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="639.0" prefWidth="721.0" style="-fx-background-color: #d8eff3;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CityInterface">
+   <children>
+      <Button fx:id="logOutButton" layoutX="616.0" layoutY="18.0" mnemonicParsing="false" onAction="#logOutButton" text="Log Out" AnchorPane.topAnchor="18.0" />
+      <Button fx:id="profileButton" layoutX="522.0" layoutY="18.0" mnemonicParsing="false" onAction="#profileButton" text="My Profile" AnchorPane.topAnchor="18.0" />
+      <TextField fx:id="cityText" layoutX="478.0" layoutY="174.0" prefHeight="27.0" prefWidth="118.0" promptText="City Name" AnchorPane.topAnchor="174.0" />
+      <Text fx:id="cityLabel" layoutX="344.0" layoutY="193.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose the City:" AnchorPane.leftAnchor="344.0" AnchorPane.topAnchor="178.498046875">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Text>
+      <Button fx:id="cityNameButton" layoutX="622.0" layoutY="174.0" mnemonicParsing="false" onAction="#cityNameButton" text="Search" AnchorPane.leftAnchor="622.0" AnchorPane.topAnchor="174.0" />
+      <Button fx:id="hotelButton" layoutX="345.0" layoutY="577.0" mnemonicParsing="false" onAction="#hotelButton" text="View Hotels" AnchorPane.leftAnchor="345.0" AnchorPane.topAnchor="577.0" />
+      <VBox fx:id="preferencesBox" layoutX="26.0" layoutY="169.0" prefHeight="445.0" prefWidth="318.0" AnchorPane.leftAnchor="26.0">
+         <children>
+            <GridPane fx:id="preferencesPane" prefHeight="440.0" prefWidth="271.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="135.3250732421875" minWidth="10.0" prefWidth="118.01239013671875" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="159.54954528808594" minWidth="10.0" prefWidth="152.98760986328125" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="58.03715515136719" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Text fx:id="temperatureLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Temperature (°C)" GridPane.rowIndex="2" />
+                  <ComboBox fx:id="temperatureBox" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets right="9.0" />
+                     </GridPane.margin>
+                  </ComboBox>
+                  <Text fx:id="qualityLifeLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Quality Of Life" GridPane.rowIndex="3" />
+                  <ComboBox fx:id="qualityLifeBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Text fx:id="englishLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="English Speaking" wrappingWidth="106.48876953125" GridPane.rowIndex="4" />
+                  <ComboBox fx:id="englishBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Text fx:id="friendlyLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Friendly" GridPane.rowIndex="5" />
+                  <ComboBox fx:id="friendlyBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <Text fx:id="nigthlifeLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Nigthlife" GridPane.rowIndex="6" />
+                  <ComboBox fx:id="nigthlifeBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <Text fx:id="costLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Cost ($)" GridPane.rowIndex="7" />
+                  <TextField fx:id="costField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="69.0" promptText=" Cost/mo" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                     <GridPane.margin>
+                        <Insets right="8.0" />
+                     </GridPane.margin>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </TextField>
+                  <Text fx:id="healthLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Healthcare" GridPane.rowIndex="8" />
+                  <ComboBox fx:id="helathBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                  <Text fx:id="safetyLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Safety" GridPane.rowIndex="9" />
+                  <ComboBox fx:id="safetyBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                  <Text fx:id="walkabilityLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Walkability" GridPane.rowIndex="10" />
+                  <ComboBox fx:id="walkabilityBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                  <Text fx:id="airQualityLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Air Quality" GridPane.rowIndex="11" />
+                  <ComboBox fx:id="airQualityBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+                  <Text fx:id="wifiLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Free WiFI" GridPane.rowIndex="1" />
+                  <ComboBox fx:id="wifiBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Text fx:id="prefTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose the preferences:" GridPane.columnSpan="2">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Text>
+                  <Button fx:id="cityPrefButton" mnemonicParsing="false" onAction="#cityPrefButton" text="Search" GridPane.rowIndex="12" />
+               </children>
+               <padding>
+                  <Insets left="15.0" />
+               </padding>
+            </GridPane>
+         </children>
+      </VBox>
+      <ImageView fx:id="worldImage" fitHeight="138.0" fitWidth="145.0" layoutX="217.0" layoutY="14.0">
+         <image>
+            <Image url="@images/world.gif" />
+         </image>
+      </ImageView>
+      <Label fx:id="cityTitle" layoutX="345.0" layoutY="18.0" prefHeight="107.0" prefWidth="160.0" text="City" textFill="#045491">
+         <font>
+            <Font name="Apple Chancery" size="64.0" />
+         </font>
+      </Label>
+      <TableView fx:id="cityTable" layoutX="343.0" layoutY="208.0" prefHeight="363.0" prefWidth="339.0">
+        <columns>
+          <TableColumn fx:id="countryColumn" prefWidth="94.0" text="Country" />
+          <TableColumn fx:id="cityColumn" prefWidth="75.0" text="City" />
+            <TableColumn fx:id="characteristicsColumn" prefWidth="169.0" text="Characteristics" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
