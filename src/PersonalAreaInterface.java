@@ -75,22 +75,30 @@ public class PersonalAreaInterface {
 
     @FXML
     private Label emailLabel;
+    
+    @FXML
+    private Label errorLabel;
+    
+    private NomadAdvisor nomadAdvisor;
 
     @FXML
     void comeBack(ActionEvent event) {
-
+    	errorLabel.setText("");
+    	System.out.println("Add city interface in the code!");
+    	//nomadAdvisor.changeScene("cityInterface");
     }
 
     @FXML
     void logout(ActionEvent event) {
-
+    	errorLabel.setText("");
+    	nomadAdvisor.changeScene("loginInterface");
     }
 
     @FXML
     void savePreferences(ActionEvent event) {
     	List<String> preferences = this.getPreferences();
-    	for(int i = 0; i < preferences.size(); i++)
-    		System.out.println(preferences.get(i));
+    	Customer customer = (Customer) nomadAdvisor.getLoggedUser();
+    	errorLabel.setText(nomadAdvisor.getNomadHandler().updatePreferences(customer, preferences));
     }
     
     private void setUsernameLabel(String username) {
@@ -110,6 +118,7 @@ public class PersonalAreaInterface {
     }
     
     private void setPreferences(List<String> preferences) {
+    	if(preferences == null) return;
     	if(preferences.contains(Utils.TEMPERATURE)) tempCheckBox.setSelected(true);
     	if(preferences.contains(Utils.AIR_QUALITY)) airCheckBox.setSelected(true);
     	if(preferences.contains(Utils.QUALITY_LIFE)) qualityLifeCheckBox.setSelected(true);
@@ -139,12 +148,15 @@ public class PersonalAreaInterface {
     	return preferences;
     }
     
-    public void initialize(Customer customer) {
-    	this.setUsernameLabel(customer.getUsername());
-    	this.setNameLabel(customer.getName());
-    	this.setSurnameLabel(customer.getSurname());
-    	this.setEmailLabel(customer.getEmail());
-    	this.setPreferences(customer.getPreferences());
+    public void initialize(Customer customer, NomadAdvisor nomadAdvisor) {
+    	if(customer != null) {
+	    	this.setUsernameLabel(customer.getUsername());
+	    	this.setNameLabel(customer.getName());
+	    	this.setSurnameLabel(customer.getSurname());
+	    	this.setEmailLabel(customer.getEmail());
+	    	this.setPreferences(customer.getPreferences());
+    	}
+    	this.nomadAdvisor = nomadAdvisor;
     }
 
 }
