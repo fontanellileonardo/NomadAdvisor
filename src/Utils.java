@@ -13,7 +13,8 @@ public class Utils {
 			NIGHTLIFE = "nightlife",
 			WIFI = "wifi",
 			FOREIGNERS = "foreignersFriendly",
-			ENGLISH = "english";
+			ENGLISH = "english",
+			PREFERENCES = "preferences";
 	
 	// encrypt the password
     public static String cryptPwd(String pwd) {
