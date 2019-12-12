@@ -52,7 +52,7 @@ public class LoginInterface {
 
     @FXML
     void login(ActionEvent event) {
-    	System.out.println("Funzionaaaa!!");
+    	
     }
 
     @FXML
