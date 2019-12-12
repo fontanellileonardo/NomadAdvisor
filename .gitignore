@@ -1,0 +1,21 @@
+# Default ignored files
+/workspace.xml
+/.gitignore
+/compiler.xml
+/libraries/Maven__org_mongodb_bson_3_11_2.xml
+/libraries/Maven__org_mongodb_mongodb_driver_core_3_11_2.xml
+/libraries/Maven__org_mongodb_mongodb_driver_sync_3_11_2.xml
+/libraries/Maven__org_openjfx_javafx_base_13.xml
+/libraries/Maven__org_openjfx_javafx_base_mac_13.xml
+/libraries/Maven__org_openjfx_javafx_controls_13.xml
+/libraries/Maven__org_openjfx_javafx_controls_mac_13.xml
+/libraries/Maven__org_openjfx_javafx_fxml_13.xml
+/libraries/Maven__org_openjfx_javafx_fxml_mac_13.xml
+/libraries/Maven__org_openjfx_javafx_graphics_13.xml
+/libraries/Maven__org_openjfx_javafx_graphics_mac_13.xml
+/misc.xml
+/modules.xml
+/../Task2.iml
+/vcs.xml
+/.DS_Store
+/target/
