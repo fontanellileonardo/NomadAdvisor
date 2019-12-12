@@ -1,17 +1,28 @@
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 import java.util.List;
+
+import org.bson.Document;
 
 public class MongoDBHandle {
 
     private static MongoClient mongoClient;
     private static MongoDatabase database;
+    private static MongoCollection<Document> userCollection;
+    private static MongoCollection<Document> cityCollection;
+    private static MongoCollection<Document> hotelCollection;
+    private static MongoCollection<Document> reviewCollection;
 
     static{
         mongoClient = DBConnection.getInstance().mongoClient;
         database = mongoClient.getDatabase("task2");
+        userCollection = database.getCollection("user");
+        cityCollection = database.getCollection("city");
+        hotelCollection = database.getCollection("hotel");
+        reviewCollection = database.getCollection("review");
         System.out.println("Created Connection with the DB");
     }
 

@@ -109,14 +109,6 @@ public class PersonalAreaInterface {
     	emailLabel.setText("Email: " + username);
     }
     
-    public void initialize(Customer customer) {
-    	this.setUsernameLabel(customer.getUsername());
-    	this.setNameLabel(customer.getName());
-    	this.setSurnameLabel(customer.getSurname());
-    	this.setEmailLabel(customer.getEmail());
-    	this.setPreferences(customer.getPreferences());
-    }
-    
     private void setPreferences(List<String> preferences) {
     	if(preferences.contains(Utils.TEMPERATURE)) tempCheckBox.setSelected(true);
     	if(preferences.contains(Utils.AIR_QUALITY)) airCheckBox.setSelected(true);
@@ -145,6 +137,14 @@ public class PersonalAreaInterface {
     	if(wifiCheckBox.isSelected()) preferences.add(Utils.WIFI);
     	if(englishCheckBox.isSelected()) preferences.add(Utils.ENGLISH);
     	return preferences;
+    }
+    
+    public void initialize(Customer customer) {
+    	this.setUsernameLabel(customer.getUsername());
+    	this.setNameLabel(customer.getName());
+    	this.setSurnameLabel(customer.getSurname());
+    	this.setEmailLabel(customer.getEmail());
+    	this.setPreferences(customer.getPreferences());
     }
 
 }
