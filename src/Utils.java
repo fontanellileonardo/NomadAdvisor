@@ -2,7 +2,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 
 public class Utils {
-	
+
 	public final static String TEMPERATURE = "temperature",
 			COST = "cost",
 			AIR_QUALITY = "airQuality",
@@ -15,7 +15,7 @@ public class Utils {
 			FOREIGNERS = "foreignersFriendly",
 			ENGLISH = "english",
 			PREFERENCES = "preferences";
-	
+
 	// encrypt the password
     public static String cryptPwd(String pwd) {
     	String ret = null;
