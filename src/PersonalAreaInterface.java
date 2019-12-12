@@ -118,33 +118,32 @@ public class PersonalAreaInterface {
     }
     
     private void setPreferences(List<String> preferences) {
-    	if(preferences == null) return;
-    	if(preferences.contains(Utils.TEMPERATURE)) tempCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.AIR_QUALITY)) airCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.QUALITY_LIFE)) qualityLifeCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.FOREIGNERS)) foreignersCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.HEALTHCARE)) healthcareCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.NIGHTLIFE)) nightlifeCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.COST)) costCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.SAFETY)) safetyCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.WALKABILITY)) walkabilityCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.WIFI)) wifiCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.ENGLISH)) englishCheckBox.setSelected(true);
+    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE))) tempCheckBox.setSelected(true);
+    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.AIR_QUALITY))) airCheckBox.setSelected(true);
+    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.QUALITY_LIFE))) qualityLifeCheckBox.setSelected(true);
+    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.FOREIGNERS))) foreignersCheckBox.setSelected(true);
+    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.HEALTHCARE))) healthcareCheckBox.setSelected(true);
+    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.NIGHTLIFE))) nightlifeCheckBox.setSelected(true);
+    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.COST))) costCheckBox.setSelected(true);
+    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.SAFETY))) safetyCheckBox.setSelected(true);
+    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.WALKABILITY))) walkabilityCheckBox.setSelected(true);
+    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.WIFI))) wifiCheckBox.setSelected(true);
+    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.ENGLISH))) englishCheckBox.setSelected(true);
     }
     
     private List<String> getPreferences() {
     	List<String> preferences = new ArrayList<>();
-    	if(tempCheckBox.isSelected()) preferences.add(Utils.TEMPERATURE);
-    	if(airCheckBox.isSelected()) preferences.add(Utils.AIR_QUALITY);
-    	if(qualityLifeCheckBox.isSelected()) preferences.add(Utils.QUALITY_LIFE);
-    	if(foreignersCheckBox.isSelected()) preferences.add(Utils.FOREIGNERS);
-    	if(healthcareCheckBox.isSelected()) preferences.add(Utils.HEALTHCARE);
-    	if(nightlifeCheckBox.isSelected()) preferences.add(Utils.NIGHTLIFE);
-    	if(costCheckBox.isSelected()) preferences.add(Utils.COST);
-    	if(safetyCheckBox.isSelected()) preferences.add(Utils.SAFETY);
-    	if(walkabilityCheckBox.isSelected()) preferences.add(Utils.WALKABILITY);
-    	if(wifiCheckBox.isSelected()) preferences.add(Utils.WIFI);
-    	if(englishCheckBox.isSelected()) preferences.add(Utils.ENGLISH);
+    	if(tempCheckBox.isSelected()) preferences.add(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE));
+    	if(airCheckBox.isSelected()) preferences.add(Utils.cityAttributes.get(Utils.cityNames.AIR_QUALITY));
+    	if(qualityLifeCheckBox.isSelected()) preferences.add(Utils.cityAttributes.get(Utils.cityNames.QUALITY_LIFE));
+    	if(foreignersCheckBox.isSelected()) preferences.add(Utils.cityAttributes.get(Utils.cityNames.FOREIGNERS));
+    	if(healthcareCheckBox.isSelected()) preferences.add(Utils.cityAttributes.get(Utils.cityNames.HEALTHCARE));
+    	if(nightlifeCheckBox.isSelected()) preferences.add(Utils.cityAttributes.get(Utils.cityNames.NIGHTLIFE));
+    	if(costCheckBox.isSelected()) preferences.add(Utils.cityAttributes.get(Utils.cityNames.COST));
+    	if(safetyCheckBox.isSelected()) preferences.add(Utils.cityAttributes.get(Utils.cityNames.SAFETY));
+    	if(walkabilityCheckBox.isSelected()) preferences.add(Utils.cityAttributes.get(Utils.cityNames.WALKABILITY));
+    	if(wifiCheckBox.isSelected()) preferences.add(Utils.cityAttributes.get(Utils.cityNames.WIFI));
+    	if(englishCheckBox.isSelected()) preferences.add(Utils.cityAttributes.get(Utils.cityNames.ENGLISH));
     	return preferences;
     }
     
