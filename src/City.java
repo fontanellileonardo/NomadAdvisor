@@ -26,8 +26,8 @@ public class City {
         return cityName.get();
     }
     
-    public HashMap<String,Integer> getCharacteristics() {
-    	return characteristics.get();
+    public String getCharacteristics() {
+    	return characteristics.get().toString();
     }
 
 
