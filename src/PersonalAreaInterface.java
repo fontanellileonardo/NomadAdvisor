@@ -85,7 +85,7 @@ public class PersonalAreaInterface {
     void comeBack(ActionEvent event) {
     	errorLabel.setText("");
     	System.out.println("Add city interface in the code!");
-    	//nomadAdvisor.changeScene("cityInterface");
+    	nomadAdvisor.changeScene("cityInterface");
     }
 
     @FXML
@@ -98,7 +98,7 @@ public class PersonalAreaInterface {
     void savePreferences(ActionEvent event) {
     	List<String> preferences = this.getPreferences();
     	Customer customer = (Customer) nomadAdvisor.getLoggedUser();
-    	errorLabel.setText(nomadAdvisor.getNomadHandler().updatePreferences(customer, preferences));
+    	errorLabel.setText(NomadHandler.updatePreferences(customer, preferences));
     }
     
     private void setUsernameLabel(String username) {
@@ -118,17 +118,19 @@ public class PersonalAreaInterface {
     }
     
     private void setPreferences(List<String> preferences) {
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE))) tempCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.AIR_QUALITY))) airCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.QUALITY_LIFE))) qualityLifeCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.FOREIGNERS))) foreignersCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.HEALTHCARE))) healthcareCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.NIGHTLIFE))) nightlifeCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.COST))) costCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.SAFETY))) safetyCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.WALKABILITY))) walkabilityCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.WIFI))) wifiCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.ENGLISH))) englishCheckBox.setSelected(true);
+    	if(preferences != null) {
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE))) tempCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.AIR_QUALITY))) airCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.QUALITY_LIFE))) qualityLifeCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.FOREIGNERS))) foreignersCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.HEALTHCARE))) healthcareCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.NIGHTLIFE))) nightlifeCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.COST))) costCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.SAFETY))) safetyCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.WALKABILITY))) walkabilityCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.WIFI))) wifiCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.ENGLISH))) englishCheckBox.setSelected(true);
+    	}
     }
     
     private List<String> getPreferences() {
@@ -147,7 +149,10 @@ public class PersonalAreaInterface {
     	return preferences;
     }
     
-    public void initialize(Customer customer, NomadAdvisor nomadAdvisor) {
+    public void initialize() {
+    	Customer customer = null;
+    	if(nomadAdvisor != null)
+    		customer = (Customer) nomadAdvisor.getLoggedUser();
     	if(customer != null) {
 	    	this.setUsernameLabel(customer.getUsername());
 	    	this.setNameLabel(customer.getName());
@@ -155,6 +160,9 @@ public class PersonalAreaInterface {
 	    	this.setEmailLabel(customer.getEmail());
 	    	this.setPreferences(customer.getPreferences());
     	}
+    }
+    
+    public void setNomadAdvisor(NomadAdvisor nomadAdvisor) {
     	this.nomadAdvisor = nomadAdvisor;
     }
 
