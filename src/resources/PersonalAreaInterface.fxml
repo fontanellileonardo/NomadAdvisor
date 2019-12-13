@@ -61,6 +61,7 @@
                   <Image url="@images/personalArea.png" />
                </image>
             </ImageView>
+            <Label fx:id="errorLabel" layoutX="317.0" layoutY="291.0" textFill="#045491" />
       </children>
     </AnchorPane>
   </children>

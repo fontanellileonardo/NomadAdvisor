@@ -154,8 +154,6 @@ public class CityInterface {
     	setLevels(cb);
     	temperatureBox.getItems().removeAll(temperatureBox.getItems());
     	temperatureBox.getItems().addAll(tempRange);
-    	
-    	// CityTable Initialization
     }
     
     private void setLevels(ComboBox[] cb) {
