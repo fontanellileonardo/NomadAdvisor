@@ -27,7 +27,7 @@ public class NomadAdvisor extends Application {
         
         this.stage.setTitle("Nomad Advisor");
         try {
-			this.root = FXMLLoader.load(NomadAdvisor.class.getResource("resources/LoginInterface.fxml"));
+			this.root = FXMLLoader.load(NomadAdvisor.class.getResource("resources/EmployeeInterface.fxml"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

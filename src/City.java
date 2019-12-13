@@ -16,7 +16,7 @@ public class City {
     private final SimpleIntegerProperty english;
     private final SimpleStringProperty cityName;
     private final SimpleStringProperty countryName;
-
+    
     public City() {
         cost = new SimpleIntegerProperty(0);
         temperature = new SimpleIntegerProperty(0);
@@ -53,110 +53,58 @@ public class City {
         return cost.get();
     }
 
-    public SimpleIntegerProperty costProperty() {
-        return cost;
-    }
-
     public int getTemperature() {
         return temperature.get();
-    }
-
-    public SimpleIntegerProperty temperatureProperty() {
-        return temperature;
     }
 
     public int getAirQuality() {
         return airQuality.get();
     }
 
-    public SimpleIntegerProperty airQualityProperty() {
-        return airQuality;
-    }
-
     public int getSafety() {
         return safety.get();
-    }
-
-    public SimpleIntegerProperty safetyProperty() {
-        return safety;
     }
 
     public int getQualityLife() {
         return qualityLife.get();
     }
 
-    public SimpleIntegerProperty qualityLifeProperty() {
-        return qualityLife;
-    }
-
     public int getWalkability() {
         return walkability.get();
-    }
-
-    public SimpleIntegerProperty walkabilityProperty() {
-        return walkability;
     }
 
     public int getHealthcare() {
         return healthcare.get();
     }
 
-    public SimpleIntegerProperty healthcareProperty() {
-        return healthcare;
-    }
-
     public int getNightlife() {
         return nightlife.get();
-    }
-
-    public SimpleIntegerProperty nightlifeProperty() {
-        return nightlife;
     }
 
     public int getWifi() {
         return wifi.get();
     }
 
-    public SimpleIntegerProperty wifiProperty() {
-        return wifi;
-    }
-
     public int getForeignersFriendly() {
         return foreignersFriendly.get();
-    }
-
-    public SimpleIntegerProperty foreignersFriendlyProperty() {
-        return foreignersFriendly;
     }
 
     public int getEnglish() {
         return english.get();
     }
 
-    public SimpleIntegerProperty englishProperty() {
-        return english;
-    }
-
     public String getCityName() {
         return cityName.get();
-    }
-
-    public SimpleStringProperty cityNameProperty() {
-        return cityName;
     }
 
     public String getCountryName() {
         return countryName.get();
     }
-
-    public SimpleStringProperty countryNameProperty() {
-        return countryName;
-    }
-
+    
     public void setCost(int c) {
         cost.set(c);
     }
-
+    
     public void setTemperature(int t) {
         temperature.set(t);
     }
@@ -204,6 +152,8 @@ public class City {
     public void setCountryName(String c) {
         countryName.set(c);
     }
+    
+    
 
 
 }
