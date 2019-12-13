@@ -40,14 +40,14 @@ public class NomadAdvisor extends Application {
         this.stage.setTitle("Nomad Advisor");
         try {
 
-			  /*fxmlLoaderLogin = new FXMLLoader(NomadAdvisor.class.getResource("resources/LoginInterface.fxml"));
+	    /*fxmlLoaderLogin = new FXMLLoader(NomadAdvisor.class.getResource("resources/LoginInterface.fxml"));
         root = fxmlLoaderLogin.load();
         loginScen = new Scene(root);
         fxmlLoaderHotel = new FXMLLoader(NomadAdvisor.class.getResource("resources/HotelInterface.fxml"));
         root = fxmlLoaderHotel.load();
         hotelScene = new Scene(root);*/
 
-			  fxmlLoaderEmployee = new FXMLLoader(NomadAdvisor.class.getResource("resources/EmployeeInterface.fxml"));
+	    fxmlLoaderEmployee = new FXMLLoader(NomadAdvisor.class.getResource("resources/EmployeeInterface.fxml"));
         root = fxmlLoaderEmployee.load();
         employeeScene = new Scene(root);
           
@@ -55,9 +55,9 @@ public class NomadAdvisor extends Application {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        hotelInterface = (HotelInterface) fxmlLoaderHotel.getController();
-        hotelInterface.initialize("Pisa", "Italy", loggedCustomer, this);
-        this.stage.setScene(loginScene);
+        /*hotelInterface = (HotelInterface) fxmlLoaderHotel.getController();
+        hotelInterface.initialize("Pisa", "Italy", loggedCustomer, this);*/
+        this.stage.setScene(employeeScene);
         this.stage.show();
     }
 
