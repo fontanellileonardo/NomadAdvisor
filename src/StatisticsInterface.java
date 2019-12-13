@@ -1,10 +1,12 @@
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Label;
 
 public class StatisticsInterface {
 
@@ -13,6 +15,9 @@ public class StatisticsInterface {
 
     @FXML
     private PieChart customerPieChart;
+    
+    @FXML
+    private Label errorLabel;
     
     private ObservableList<PieChart.Data> setPieChartData(HashMap<String, Integer> slices) {
     	ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
@@ -53,9 +58,14 @@ public class StatisticsInterface {
     	customerPieChart.setData(pieChartData);
     }
     
-    public void initialize(HashMap<String, Integer> cities, HashMap<String, Integer> customers) {
-    	this.setCityPieChart(cities);
-    	this.setCustomerPieChart(customers);
+    public void initialize() {
+    	List<HashMap<String, Integer>> pieChartsData = NomadHandler.computePieChartsData();
+    	if(pieChartsData == null) {
+    		errorLabel.setText("An error occurred during data loading");
+    		return;
+    	}
+    	this.setCityPieChart(pieChartsData.get(0));
+    	this.setCustomerPieChart(pieChartsData.get(1));
     }
 
 }
