@@ -33,13 +33,13 @@ public class MongoDBHandle {
         cityCollection = database.getCollection("city");
         hotelCollection = database.getCollection("hotel");
         reviewCollection = database.getCollection("review");
-        System.out.println("Created Connection with the DB");
     }
 
     public static void finish() {
-        if(mongoClient != null)
+        if(mongoClient != null) {
             mongoClient.close();
             System.out.println("Closed connection with the DB");
+        }
     }
   
     // Login interface

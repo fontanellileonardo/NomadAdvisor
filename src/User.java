@@ -27,20 +27,12 @@ public class User {
         return name.get();
     }
 
-    public SimpleStringProperty nameProperty() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name.set(name);
     }
 
     public String getSurname() {
         return surname.get();
-    }
-
-    public SimpleStringProperty surnameProperty() {
-        return surname;
     }
 
     public void setSurname(String surname) {
@@ -51,10 +43,6 @@ public class User {
         return email.get();
     }
 
-    public SimpleStringProperty emailProperty() {
-        return email;
-    }
-
     public void setEmail(String email) {
         this.email.set(email);
     }
@@ -63,20 +51,12 @@ public class User {
         return password.get();
     }
 
-    public SimpleStringProperty passwordProperty() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password.set(password);
     }
 
     public String getRole() {
         return role.get();
-    }
-
-    public SimpleStringProperty roleProperty() {
-        return role;
     }
 
     public void setRole(String role) {

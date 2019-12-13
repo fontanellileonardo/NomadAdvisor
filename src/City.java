@@ -9,7 +9,7 @@ public class City {
     private final SimpleObjectProperty<HashMap<String,Integer>> characteristics;
     private final SimpleStringProperty cityName;
     private final SimpleStringProperty countryName;
-
+    
     public City() {
     	characteristics = new SimpleObjectProperty<HashMap<String,Integer>>();
         cityName = new SimpleStringProperty("");
@@ -29,6 +29,7 @@ public class City {
     public HashMap<String,Integer> getCharacteristics() {
     	return characteristics.get();
     }
+
 
     public String getCountryName() {
         return countryName.get();

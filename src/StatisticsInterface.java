@@ -14,7 +14,7 @@ public class StatisticsInterface {
     @FXML
     private PieChart customerPieChart;
     
-    public ObservableList<PieChart.Data> setPieChartData(HashMap<String, Integer> slices) {
+    private ObservableList<PieChart.Data> setPieChartData(HashMap<String, Integer> slices) {
     	ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
     	for(Map.Entry<String, Integer> slice : slices.entrySet()) {
     		switch(slice.getKey()) {
@@ -56,14 +56,19 @@ public class StatisticsInterface {
     	return pieChartData;
     }
     
-    public void setCityPieChart(HashMap<String, Integer> slices) {
+    private void setCityPieChart(HashMap<String, Integer> slices) {
     	ObservableList<PieChart.Data> pieChartData = setPieChartData(slices);
     	citiesPieChart.setData(pieChartData);
     }
     
-    public void setCustomerPieChart(HashMap<String, Integer> slices) {
+    private void setCustomerPieChart(HashMap<String, Integer> slices) {
     	ObservableList<PieChart.Data> pieChartData = setPieChartData(slices);
     	customerPieChart.setData(pieChartData);
+    }
+    
+    public void initialize(HashMap<String, Integer> cities, HashMap<String, Integer> customers) {
+    	this.setCityPieChart(cities);
+    	this.setCustomerPieChart(customers);
     }
 
 }

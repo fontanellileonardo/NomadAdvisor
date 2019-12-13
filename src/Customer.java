@@ -26,20 +26,12 @@ public class Customer extends User {
         return username.get();
     }
 
-    public SimpleStringProperty usernameProperty() {
-        return username;
-    }
-
     public void setUsername(String username) {
         this.username.set(username);
     }
 
     public String getNationality() {
         return nationality.get();
-    }
-
-    public SimpleStringProperty nationalityProperty() {
-        return nationality;
     }
 
     public void setNationality(String nationality) {
