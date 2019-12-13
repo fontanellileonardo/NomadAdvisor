@@ -114,7 +114,7 @@ public class MongoDBHandle {
     // Personal Area
     public static boolean updatePreferences(Customer customer) {
     	UpdateResult result = userCollection.updateOne(Filters.eq("email", customer.getEmail()), new Document("$set",
-    			new Document(Utils.cityAttributes.get(Utils.PREFERENCES), customer.getPreferences())));
+    			new Document(Utils.PREFERENCES, customer.getPreferences())));
     	if(result.getModifiedCount() == 0) {
     		System.out.println("Update preferences failed: Customer not found");
     		return false;
