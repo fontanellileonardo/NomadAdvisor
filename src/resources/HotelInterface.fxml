@@ -51,5 +51,10 @@
             <Font name="Comic Sans MS" size="52.0" />
          </font>
       </Text>
+      <Text fx:id="userMsg" fill="#045491" layoutX="320.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" text="User Message" textAlignment="CENTER" wrappingWidth="310.0">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>
