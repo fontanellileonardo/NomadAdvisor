@@ -114,7 +114,7 @@ public class MongoDBHandle {
     // Personal Area
     public static boolean updatePreferences(Customer customer) {
     	UpdateResult result = userCollection.updateOne(Filters.eq("email", customer.getEmail()), new Document("$set",
-    			new Document(Utils.cityAttributes.get(Utils.cityNames.PREFERENCES), customer.getPreferences())));
+    			new Document(Utils.cityAttributes.get(Utils.PREFERENCES), customer.getPreferences())));
     	if(result.getModifiedCount() == 0) {
     		System.out.println("Update preferences failed: Customer not found");
     		return false;
@@ -145,7 +145,32 @@ public class MongoDBHandle {
     }
 
     public static HashMap<String, Integer> aggregateCustomersPreferences() {
-        return null;
+    	HashMap<String, Integer> result = new HashMap<String, Integer>();
+    	MongoCursor<Document> cursor = null;
+    	try {
+    		for(Map.Entry<Utils.cityNames, String> attribute : Utils.cityAttributes.entrySet()) {
+    			cursor = userCollection.aggregate(
+    					Arrays.asList(
+    							Aggregates.match(Filters.eq(Utils.PREFERENCES, Utils.cityAttributes.get(attribute.getKey()))),
+    							Aggregates.count()
+    							)).iterator();
+    			if(cursor.hasNext()) {
+    				result.put(Utils.cityAttributes.get(attribute.getKey()), (Integer) cursor.next().get("count"));
+    			}
+    			else {
+    				result.put(Utils.cityAttributes.get(attribute.getKey()), 0);
+    			}
+    		}
+    	}
+    	catch(Exception ex) {
+    		System.out.println("Customers' preferences aggregation exception: " + ex.getMessage());
+    		return null;
+    	}
+    	finally {
+    		if(cursor != null)
+    			cursor.close();
+    	}
+        return result;
     }
 
     public static HashMap<String, Integer> aggregateCitiesCharacteristics() {
@@ -162,6 +187,9 @@ public class MongoDBHandle {
 	    			if(cursor.hasNext()) {
 	    				result.put(Utils.cityAttributes.get(Utils.cityNames.COST), (Integer) cursor.next().get("count"));
 	    			}
+	    			else {
+	    				result.put(Utils.cityAttributes.get(Utils.cityNames.COST), 0);
+	    			}
 	    		}
 	    		else if(attribute.getKey() == Utils.cityNames.TEMPERATURE) {
 	    			cursor = cityCollection.aggregate(
@@ -175,6 +203,9 @@ public class MongoDBHandle {
 	    			if(cursor.hasNext()) {
 	    				result.put(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), (Integer) cursor.next().get("count"));
 	    			}
+	    			else {
+	    				result.put(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 0);
+	    			}
 	    		}
 	    		else {
 	    			cursor = cityCollection.aggregate(
@@ -184,6 +215,9 @@ public class MongoDBHandle {
 	    	    					)).iterator();
 	    			if(cursor.hasNext()) {
 	    				result.put(Utils.cityAttributes.get(attribute.getKey()), (Integer) cursor.next().get("count"));
+	    			}
+	    			else {
+	    				result.put(Utils.cityAttributes.get(attribute.getKey()), 0);
 	    			}
 	    		}
 	    	}
@@ -197,10 +231,5 @@ public class MongoDBHandle {
     			cursor.close();
     	}
         return result;
-    }
-    
-    public static void main(String[] args) {
-    	HashMap<String, Integer> aggregation = MongoDBHandle.aggregateCitiesCharacteristics();
-    	System.out.println(aggregation);
     }
 }
