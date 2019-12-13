@@ -22,13 +22,17 @@ public class NomadAdvisor extends Application {
     private Parent root;
     private FXMLLoader fxmlLoaderHotel;
     private FXMLLoader fxmlLoaderLogin;
+    private NomadHandler nomadHandler;
     private Scene loginScene;
-    
-    
-    
+    private Customer loggedCustomer;
+
+    public NomadHandler getNomadHandler() {
+        return nomadHandler;
+    }
+
     public void start(Stage stage) {
+        nomadHandler = new NomadHandler();
         this.stage = stage;
-        
         this.stage.setTitle("Nomad Advisor");
         try {
 			fxmlLoaderLogin = new FXMLLoader(NomadAdvisor.class.getResource("resources/LoginInterface.fxml"));
@@ -39,7 +43,7 @@ public class NomadAdvisor extends Application {
 			e.printStackTrace();
 		}
         hotelInterface = (HotelInterface) fxmlLoaderHotel.getController();
-        hotelInterface.initialize("Pisa", "Italy", this);
+        hotelInterface.initialize("Pisa", "Italy", loggedCustomer, this);
         this.stage.setScene(new Scene(root));
         this.stage.show();
     }
