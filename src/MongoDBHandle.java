@@ -4,6 +4,7 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.UpdateResult;
 
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bson.Document;
 
@@ -142,22 +144,63 @@ public class MongoDBHandle {
         return 0;
     }
 
-    public static List<Integer> aggregateCustomersPreferences() {
+    public static HashMap<String, Integer> aggregateCustomersPreferences() {
         return null;
     }
 
-    public static List<Integer> aggregateCitiesAttributes() {
-        return null;
+    public static HashMap<String, Integer> aggregateCitiesCharacteristics() {
+    	HashMap<String, Integer> result = new HashMap<String, Integer>();
+    	MongoCursor<Document> cursor = null;
+    	try {
+	    	for(Map.Entry<Utils.cityNames, String> attribute : Utils.cityAttributes.entrySet()) {
+	    		if(attribute.getKey() == Utils.cityNames.COST) {
+	    			cursor = cityCollection.aggregate(
+	    	    			Arrays.asList(
+	    	    					Aggregates.match(Filters.lt(Utils.cityAttributes.get(Utils.cityNames.COST), 2000)),
+	    	    					Aggregates.count()
+	    	    					)).iterator();
+	    			if(cursor.hasNext()) {
+	    				result.put(Utils.cityAttributes.get(Utils.cityNames.COST), (Integer) cursor.next().get("count"));
+	    			}
+	    		}
+	    		else if(attribute.getKey() == Utils.cityNames.TEMPERATURE) {
+	    			cursor = cityCollection.aggregate(
+	    	    			Arrays.asList(
+	    	    					Aggregates.match(Filters.and(
+	    	    							Filters.gt(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 15),
+	    	    							Filters.lt(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 25)
+	    	    							)),
+	    	    					Aggregates.count()
+	    	    					)).iterator();
+	    			if(cursor.hasNext()) {
+	    				result.put(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), (Integer) cursor.next().get("count"));
+	    			}
+	    		}
+	    		else {
+	    			cursor = cityCollection.aggregate(
+	    					Arrays.asList(
+	    	    					Aggregates.match(Filters.gt(Utils.cityAttributes.get(attribute.getKey()), 3)),
+	    	    					Aggregates.count()
+	    	    					)).iterator();
+	    			if(cursor.hasNext()) {
+	    				result.put(Utils.cityAttributes.get(attribute.getKey()), (Integer) cursor.next().get("count"));
+	    			}
+	    		}
+	    	}
+    	}
+    	catch(Exception ex) {
+    		System.out.println("Cities' characteristics aggregation exception: " + ex.getMessage());
+    		return null;
+    	}
+    	finally {
+    		if(cursor != null)
+    			cursor.close();
+    	}
+        return result;
     }
     
-    /*
     public static void main(String[] args) {
-    	List<City> cities = selectCities("Milan");
-    	for(int i = 0; i<cities.size(); i++) {
-    		System.out.println("country: "+cities.get(i).getCountryName());
-    		System.out.println("city: "+cities.get(i).getCityName());
-    		System.out.println("city: "+cities.get(i).getCharacteristics());
-    	}		
+    	HashMap<String, Integer> aggregation = MongoDBHandle.aggregateCitiesCharacteristics();
+    	System.out.println(aggregation);
     }
-    */
 }
