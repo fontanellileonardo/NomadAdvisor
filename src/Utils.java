@@ -33,6 +33,9 @@ public class Utils {
 			CITY = "city",
 			COUNTRY = "country";
 	
+	public final static int	CITY_VIEW = 1,
+			CUSTOMER_VIEW = 2;
+	
 	// encrypt the password
     public static String cryptPwd(String pwd) {
     	String ret = null;

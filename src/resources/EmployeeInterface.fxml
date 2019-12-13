@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="backgroundPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="563.0" prefWidth="695.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="employeeInterface">
+   <children>
+      <ImageView fx:id="logo" fitHeight="118.0" fitWidth="130.0" layoutX="155.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/employee.png" />
+         </image>
+      </ImageView>
+      <Pane fx:id="bodyPane" layoutY="109.0" prefHeight="454.0" prefWidth="695.0">
+         <children>
+            <ComboBox fx:id="chooseView" layoutX="25.0" layoutY="14.0" onAction="#changeView" prefWidth="150.0" promptText="Customer View" />
+            <Button fx:id="statButton" layoutX="565.0" layoutY="14.0" mnemonicParsing="false" onAction="#showStatistics" prefHeight="25.0" prefWidth="106.0" text="Show Statistics" />
+            <VBox fx:id="cityPanel" alignment="TOP_CENTER" layoutX="25.0" layoutY="61.0" prefHeight="373.0" prefWidth="308.0" visible="false">
+               <children>
+                  <Label fx:id="cityTitle" contentDisplay="CENTER" text="Cities List">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TableView fx:id="cityTable" prefHeight="309.0" prefWidth="316.0">
+                     <columns>
+                        <TableColumn fx:id="cityNameCol" prefWidth="77.0" text="Nome" />
+                        <TableColumn fx:id="cityCountryCol" prefWidth="85.0" text="Country" />
+                        <TableColumn fx:id="cityCharCol" prefWidth="145.0" text="Characteristics" />
+                     </columns>
+                  </TableView>
+                  <ButtonBar prefHeight="40.0" prefWidth="200.0">
+                    <buttons>
+                      <Button fx:id="newCityButton" mnemonicParsing="false" onAction="#addCity" text="NEW" />
+                        <Button fx:id="deleteCityButton" layoutX="243.0" layoutY="17.0" mnemonicParsing="false" onAction="#deleteCity" text="DELETE" />
+                    </buttons>
+                  </ButtonBar>
+               </children>
+            </VBox>
+            <VBox fx:id="hotelPanel" alignment="TOP_CENTER" layoutX="354.0" layoutY="60.0" prefHeight="373.0" prefWidth="316.0" visible="false">
+               <children>
+                  <Label fx:id="hotelTitle" contentDisplay="CENTER" text="City's Hotels List">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TableView fx:id="hotelTable" prefHeight="309.0" prefWidth="316.0">
+                     <columns>
+                        <TableColumn fx:id="hotelNameCol" prefWidth="61.0" text="Nome" />
+                        <TableColumn fx:id="hotelAddressCol" prefWidth="89.0" text="Address" />
+                        <TableColumn fx:id="avgColumn" prefWidth="83.0" text="Avg Score" />
+                        <TableColumn fx:id="webColumn" prefWidth="83.0" text="Websites" />
+                     </columns>
+                  </TableView>
+                  <ButtonBar prefHeight="40.0" prefWidth="200.0">
+                    <buttons>
+                      <Button fx:id="newHotelButton" mnemonicParsing="false" onAction="#addHotel" text="NEW" />
+                        <Button fx:id="deleteHotelButton" layoutX="251.0" layoutY="17.0" mnemonicParsing="false" onAction="#deleteHotel" text="DELETE" />
+                    </buttons>
+                  </ButtonBar>
+               </children></VBox>
+            <Text fx:id="logMsg" layoutX="309.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+            <VBox fx:id="customerPanel" alignment="TOP_CENTER" layoutX="25.0" layoutY="48.0" prefHeight="373.0" prefWidth="505.0">
+               <children>
+                  <Label fx:id="customerTitle" text="Customers List">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TableView fx:id="customerTable" prefHeight="345.0" prefWidth="505.0">
+                    <columns>
+                      <TableColumn fx:id="customerNameCol" prefWidth="96.0" text="Name" />
+                      <TableColumn fx:id="surnameCol" prefWidth="100.0" text="Surname" />
+                        <TableColumn fx:id="usernameCol" prefWidth="122.0" text="Username" />
+                        <TableColumn fx:id="emailCol" prefWidth="186.0" text="Email" />
+                    </columns>
+                  </TableView>
+               </children>
+            </VBox>
+         </children>
+      </Pane>
+      <Button fx:id="logoutButton" layoutX="600.0" layoutY="14.0" mnemonicParsing="false" onAction="#logout" text="LOGOUT" />
+      <Text fx:id="title" fill="#9e1818" layoutX="242.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Administration Area" wrappingWidth="236.17138671875">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>
