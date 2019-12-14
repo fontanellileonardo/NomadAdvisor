@@ -1,8 +1,13 @@
-import com.mongodb.client.MongoCursor;
+import java.util.ArrayList;
 
 import java.util.List;
 
 public class NomadHandler {
+	
+	public static List<City> getCity(String cityName) {
+		List<City> cities = new ArrayList<City>();
+		return cities = MongoDBHandle.selectCities(cityName);
+	}
 
     public static boolean addReview(Review newReview){
         return MongoDBHandle.createReview(newReview);

@@ -2,6 +2,13 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.HashMap;
 
+import javafx.application.Platform;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.layout.VBox;
+import javafx.util.Callback;
+
 public class Utils {
 	// City's Characteristics
 	public static enum cityNames {
@@ -27,11 +34,46 @@ public class Utils {
 		cityAttributes.put(cityNames.PREFERENCES, "preferences");
 	}
 	
+	public static final Callback<TableColumn<City,String>, TableCell<City,String>> WRAPPING_CELL_FACTORY =
+            new Callback<TableColumn<City,String>, TableCell<City,String>>() {
+
+                @Override public TableCell<City,String> call(TableColumn<City,String> param) {
+                    TableCell<City,String> tableCell = new TableCell<City,String>() {
+                        @Override protected void updateItem(String item, boolean empty) {
+                            if (item == getItem()) return;
+
+                            super.updateItem(item, empty);
+                            if (item == null) {
+                                super.setText(null);
+                                super.setGraphic(null);
+                            } else {
+                            	item = item.replace("}", "");
+                                item = item.replace("{", "");
+                                item = item.replace(", ", "\n");
+                                super.setText(null);
+                                Label l = new Label(item);
+                                l.setWrapText(true);
+                                VBox box = new VBox(l);
+                                l.heightProperty().addListener((observable,oldValue,newValue)-> {
+                                    box.setPrefHeight(newValue.doubleValue()+7);
+                                    Platform.runLater(()->this.getTableRow().requestLayout());
+                                });
+                                super.setGraphic(box);
+                            }
+                        }
+                    };
+                    return tableCell;
+                }
+            };
+	
 	// DB's keys
 	public final static String ID = "_id",
 			// city's keys
 			CITY = "city",
 			COUNTRY = "country";
+	
+	public final static int	CITY_VIEW = 1,
+			CUSTOMER_VIEW = 2;
 	
 	// encrypt the password
     public static String cryptPwd(String pwd) {

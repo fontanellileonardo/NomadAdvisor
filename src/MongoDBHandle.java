@@ -58,6 +58,7 @@ public class MongoDBHandle {
     public static List<City> selectCities(String name) {
     	return selectCities(name, null, null);
     }
+    
     public static List<City> selectCities(String name, String country, List<String> filters) {
     	List<City> cities = new ArrayList<City>();
     	MongoCursor<Document> cursor = cityCollection.find(Filters.eq("_id.city", name)).iterator();
@@ -68,11 +69,12 @@ public class MongoDBHandle {
     		}
     	}catch(Exception ex) {
     		System.out.println("Error: "+ex);
+    		return null;
     	}
         return cities;
     }
     
-    // initialize city with the values taken from the DB
+    // Initialize city with the values taken from the DB
     static City buildCity(Document dc) {
     	HashMap<String,Integer> charact = new HashMap<String,Integer>();
     	// put all the characteristics in the HashMap
