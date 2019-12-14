@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-
 import java.util.List;
 
 public class NomadHandler {
@@ -10,16 +9,12 @@ public class NomadHandler {
 	}
 
     public static boolean addReview(Review newReview){
-        return MongoDBHandle.createReview(newReview);
+        return true;
     }
 
     public static List<Review> getReviews(Hotel hotel){
-        return MongoDBHandle.selectReviews(hotel.getHotelName(), hotel.getCityName(), hotel.getCountryName());
+        return null;
     }
-
-    public static List<Hotel> getHotels(City city){
-    	return MongoDBHandle.selectHotels(city.getCityName(), city.getCountryName());
-	}
 	
 	public static String updatePreferences(Customer customer, List<String> preferences) {
 		customer.setPreferences(preferences);
