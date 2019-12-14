@@ -20,7 +20,8 @@ public class HotelInterface {
     private ObservableList<Hotel> hotelList;
     private ObservableList<Review> reviewList;
     private Customer loggedCustomer;
-    private City city;
+    private String city;
+    private String country;
     private Hotel selectedHotel;
 
     @FXML
@@ -97,7 +98,7 @@ public class HotelInterface {
 
             Review newReview = new Review(loggedCustomer.getUsername(), loggedCustomer.getNationality(), Integer.parseInt(mark), comment, LocalDate.now(), selectedHotel.getHotelName(), selectedHotel.getCityName(), selectedHotel.getCountryName());
 
-            if(!NomadHandler.addReview(newReview)){
+            if(!nomadAdvisor.getNomadHandler().addReview(newReview)){
                 //ERROR SITUATION
                 userMsg.setText("Oops! Something went wrong!");
             }
@@ -170,18 +171,18 @@ public class HotelInterface {
                 }
             };
 
-    public void initialize(City city, Customer loggedCustomer, NomadAdvisor nomadAdvisor) {
+    public void initialize(String city, String country, Customer loggedCustomer, NomadAdvisor nomadAdvisor) {
         this.nomadAdvisor = nomadAdvisor;
         this.loggedCustomer = loggedCustomer;
         this.city = city;
+        this.country = country;
         userMsg.setText("");
 
         chooseMarkBox.getItems().addAll(scores);
 
-        hotelTableTitle.setText(city.getCityName() + " hotels");
+        hotelTableTitle.setText(city + " hotels");
 
         hotelList = FXCollections.observableArrayList();
-        listHotelsUpdate(NomadHandler.getHotels(city));
 
         hotelNameColumn.setCellValueFactory(new PropertyValueFactory("hotelName"));
         addressNameColumn.setCellValueFactory(new PropertyValueFactory("address"));
@@ -206,7 +207,7 @@ public class HotelInterface {
             else {
                 selectedHotel = hotelTable.getSelectionModel().getSelectedItem();
                 System.out.println("Selected: "+ selectedHotel.getHotelName());
-                listReviewUpdate(NomadHandler.getReviews(selectedHotel));
+                listReviewUpdate(nomadAdvisor.getNomadHandler().getReviews(selectedHotel));
             }
         });
 
