@@ -20,8 +20,7 @@ public class HotelInterface {
     private ObservableList<Hotel> hotelList;
     private ObservableList<Review> reviewList;
     private Customer loggedCustomer;
-    private String city;
-    private String country;
+    private City city;
     private Hotel selectedHotel;
 
     @FXML
@@ -102,7 +101,7 @@ public class HotelInterface {
             //Decommentare questa sotto che è la dichiarazione non di test
             //Review newReview = new Review(loggedCustomer.getUsername(), loggedCustomer.getNationality(), Integer.parseInt(mark), comment, LocalDate.now(), selectedHotel.getHotelName(), selectedHotel.getCityName(), selectedHotel.getCountryName());
 
-            if(!nomadAdvisor.getNomadHandler().addReview(newReview)){
+            if(!NomadHandler.addReview(newReview)){
                 //ERROR SITUATION
                 userMsg.setText("Oops! Something went wrong!");
             }
@@ -174,24 +173,24 @@ public class HotelInterface {
                 }
             };
 
-    public void initialize(String city, String country, Customer loggedCustomer, NomadAdvisor nomadAdvisor) {
+    public void initialize(City city, Customer loggedCustomer, NomadAdvisor nomadAdvisor) {
         this.nomadAdvisor = nomadAdvisor;
         this.loggedCustomer = loggedCustomer;
         this.city = city;
-        this.country = country;
         userMsg.setText("");
 
         chooseMarkBox.getItems().addAll(scores);
 
-        hotelTableTitle.setText(city + " hotels");
+        hotelTableTitle.setText(city.getCityName() + " hotels");
 
         hotelList = FXCollections.observableArrayList();
+        listHotelsUpdate(NomadHandler.getHotels(city));
 
         //*** TEST ***//
-        Hotel h = new Hotel("Hotel Palazzaccio", "Cecina", "Italia", 5, "Via Aurelia 34", "www.palazzaccio.it");
-        Hotel h1 = new Hotel("Hotel Marinetta", "Bibbona", "Italia", 3, "Via Cavalleggeri 34", "www.marinetta.it");
-        hotelList.add(h);
-        hotelList.add(h1);
+        //Hotel h = new Hotel("Hotel Palazzaccio", "Cecina", "Italia", 5, "Via Aurelia 34", "www.palazzaccio.it");
+        //Hotel h1 = new Hotel("Hotel Marinetta", "Bibbona", "Italia", 3, "Via Cavalleggeri 34", "www.marinetta.it");
+        //hotelList.add(h);
+        //hotelList.add(h1);
         //*** TEST ***//
 
         hotelNameColumn.setCellValueFactory(new PropertyValueFactory("hotelName"));
@@ -202,9 +201,9 @@ public class HotelInterface {
         reviewList = FXCollections.observableArrayList();
 
         //*** TEST ***//
-        LocalDate d = LocalDate.of(2019, 12, 7);
-        Review r = new Review("Fonta", "Italy", 5, "Ottimo!dgsuaifishduhiuogahshflusarhagòuhrguhstpighjo09df8gshrdfpghdroghidfoghiodfghiodfhiudsfioghjfiodjgioòdfjgpàiofjàpfdjàgjdfà9sgjhà90rfghjs9erjhgrejsgà", d, "Hotel Palazzaccio" , "Cecina", "Italy");
-        reviewList.add(r);
+        //LocalDate d = LocalDate.of(2019, 12, 7);
+        //Review r = new Review("Fonta", "Italy", 5, "Ottimo!dgsuaifishduhiuogahshflusarhagòuhrguhstpighjo09df8gshrdfpghdroghidfoghiodfghiodfhiudsfioghjfiodjgioòdfjgpàiofjàpfdjàgjdfà9sgjhà90rfghjs9erjhgrejsgà", d, "Hotel Palazzaccio" , "Cecina", "Italy");
+        //reviewList.add(r);
         //*** TEST ***//
 
         usernameColumn.setCellValueFactory(new PropertyValueFactory("username"));
@@ -222,7 +221,7 @@ public class HotelInterface {
             else {
                 selectedHotel = hotelTable.getSelectionModel().getSelectedItem();
                 System.out.println("Selected: "+ selectedHotel.getHotelName());
-                listReviewUpdate(nomadAdvisor.getNomadHandler().getReviews(selectedHotel));
+                listReviewUpdate(NomadHandler.getReviews(selectedHotel));
             }
         });
 

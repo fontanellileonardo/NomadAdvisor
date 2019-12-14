@@ -1,16 +1,22 @@
+import com.mongodb.client.MongoCursor;
+
 import java.util.List;
 
 public class NomadHandler {
 
-    public boolean addReview(Review newReview){
-        return true;
+    public static boolean addReview(Review newReview){
+        return MongoDBHandle.createReview(newReview);
     }
 
-    public List<Review> getReviews(Hotel hotel){
-        return null;
+    public static List<Review> getReviews(Hotel hotel){
+        return MongoDBHandle.selectReviews(hotel.getHotelName(), hotel.getCityName(), hotel.getCountryName());
     }
+
+    public static List<Hotel> getHotels(City city){
+    	return MongoDBHandle.selectHotels(city.getCityName(), city.getCountryName());
+	}
 	
-	public String updatePreferences(Customer customer, List<String> preferences) {
+	public static String updatePreferences(Customer customer, List<String> preferences) {
 		customer.setPreferences(preferences);
 		String result;
 		if(MongoDBHandle.updatePreferences(customer)) {
