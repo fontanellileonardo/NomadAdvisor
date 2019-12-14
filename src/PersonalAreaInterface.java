@@ -84,7 +84,6 @@ public class PersonalAreaInterface {
     @FXML
     void comeBack(ActionEvent event) {
     	errorLabel.setText("");
-    	System.out.println("Add city interface in the code!");
     	nomadAdvisor.changeScene("cityInterface");
     }
 
