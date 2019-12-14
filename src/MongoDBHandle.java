@@ -1,21 +1,20 @@
 import com.mongodb.Block;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.MongoWriteException;
+import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.UpdateResult;
 
 import java.awt.Desktop.Action;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Filter;
 
 import org.bson.Document;
-
-
 
 public class MongoDBHandle {
 
@@ -99,16 +98,57 @@ public class MongoDBHandle {
     }
 
     public static List<Hotel> selectHotels(String city, String country) {
-        return null;
+        List<Hotel> hotels = new ArrayList<>();
+        MongoCursor<Document> cursor = hotelCollection.find(Filters.and(Filters.eq("_id.city", city), Filters.eq("_id.country", country))).iterator();
+        try{
+            while(cursor.hasNext()){
+                Document d = cursor.next();
+                Document d_hotel = (Document) d.get("_id");
+                int avg = d.getInteger("avgScore")==null?0:d.getInteger("avgScore");
+                Hotel h = new Hotel(d_hotel.getString("name"), d_hotel.getString("city"), d_hotel.getString("country"), avg, d.getString("address"), d.getString("website"));
+                hotels.add(h);
+            }
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return hotels;
     }
 
     // Customer Interface (Hotel)
     public static List<Review> selectReviews(String hotelName, String city, String country) {
-        return null;
+        List<Review> reviews = new ArrayList<>();
+        MongoCursor<Document> cursor = reviewCollection.find(Filters.and(Filters.eq("hotelId.name", hotelName), Filters.eq("hotelId.city", city), Filters.eq("hotelId.country", country))).iterator();
+        try{
+            while(cursor.hasNext()){
+                Document d = cursor.next();
+                Document d_hotel = (Document) d.get("hotelId");
+
+                DateFormat osLocalizedDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                LocalDate date = LocalDate.parse(osLocalizedDateFormat.format(d.getDate("date")));
+
+                Review r = new Review(d.getString("username"), d.getString("nationality"), d.getInteger("rating"), d.getString("text"), date, d_hotel.getString("name"), d_hotel.getString("city"), d_hotel.getString("country"));
+                reviews.add(r);
+            }
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return reviews;
     }
 
-    public static int createReview(Review review) {
-        return 0;
+    public static boolean createReview(Review review) {
+        Document rv = new Document("username", review.getUsername())
+                        .append("nationality", review.getNationality())
+                        .append("rating", review.getRating())
+                        .append("text", review.getText())
+                        .append("date", review.getDate())
+                        .append("hotelId", new Document("name", review.getHotelName()).append("city", review.getCityName()).append("country", review.getCountryName()));
+        try {
+            reviewCollection.insertOne(rv);
+        } catch (MongoWriteException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     // Personal Area
@@ -151,15 +191,5 @@ public class MongoDBHandle {
     public static List<Integer> aggregateCitiesAttributes() {
         return null;
     }
-    
-    /*
-    public static void main(String[] args) {
-    	List<City> cities = selectCities("Milan");
-    	for(int i = 0; i<cities.size(); i++) {
-    		System.out.println("country: "+cities.get(i).getCountryName());
-    		System.out.println("city: "+cities.get(i).getCityName());
-    		System.out.println("city: "+cities.get(i).getCharacteristics());
-    	}		
-    }
-    */
+
 }
