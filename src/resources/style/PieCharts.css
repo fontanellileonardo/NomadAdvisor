@@ -1,3 +1,4 @@
+// Set pie chart slices colors
 .data0.chart-pie { -fx-pie-color: #ffff00; } // Yellow
 .data1.chart-pie { -fx-pie-color: #ff0000; } // Red
 .data2.chart-pie { -fx-pie-color: #800080; } // Purple
