@@ -94,12 +94,8 @@ public class HotelInterface {
         String comment = addReviewField.getText();
         String mark = chooseMarkBox.getValue();
         if(selectedHotel != null && mark != null && !comment.equals("") && !mark.equals("Rating")){
-            //*** TEST ***//
-            Review newReview = new Review("Fonta", "Italy", 5, "Bravi!", LocalDate.of(2012, 4, 30), selectedHotel.getHotelName(), selectedHotel.getCityName(), selectedHotel.getCountryName());
-            //*** TEST ***//
 
-            //Decommentare questa sotto che è la dichiarazione non di test
-            //Review newReview = new Review(loggedCustomer.getUsername(), loggedCustomer.getNationality(), Integer.parseInt(mark), comment, LocalDate.now(), selectedHotel.getHotelName(), selectedHotel.getCityName(), selectedHotel.getCountryName());
+            Review newReview = new Review(loggedCustomer.getUsername(), loggedCustomer.getNationality(), Integer.parseInt(mark), comment, LocalDate.now(), selectedHotel.getHotelName(), selectedHotel.getCityName(), selectedHotel.getCountryName());
 
             if(!NomadHandler.addReview(newReview)){
                 //ERROR SITUATION
@@ -110,6 +106,7 @@ public class HotelInterface {
                 userMsg.setText("Review succesfully inserted");
                 addReviewField.clear();
                 chooseMarkBox.setValue("Rating");
+                listReviewUpdate(NomadHandler.getReviews(selectedHotel));
             }
         }
         else{
@@ -186,13 +183,6 @@ public class HotelInterface {
         hotelList = FXCollections.observableArrayList();
         listHotelsUpdate(NomadHandler.getHotels(city));
 
-        //*** TEST ***//
-        //Hotel h = new Hotel("Hotel Palazzaccio", "Cecina", "Italia", 5, "Via Aurelia 34", "www.palazzaccio.it");
-        //Hotel h1 = new Hotel("Hotel Marinetta", "Bibbona", "Italia", 3, "Via Cavalleggeri 34", "www.marinetta.it");
-        //hotelList.add(h);
-        //hotelList.add(h1);
-        //*** TEST ***//
-
         hotelNameColumn.setCellValueFactory(new PropertyValueFactory("hotelName"));
         addressNameColumn.setCellValueFactory(new PropertyValueFactory("address"));
         avgColumn.setCellValueFactory(new PropertyValueFactory("avgScore"));
@@ -200,11 +190,6 @@ public class HotelInterface {
 
         reviewList = FXCollections.observableArrayList();
 
-        //*** TEST ***//
-        //LocalDate d = LocalDate.of(2019, 12, 7);
-        //Review r = new Review("Fonta", "Italy", 5, "Ottimo!dgsuaifishduhiuogahshflusarhagòuhrguhstpighjo09df8gshrdfpghdroghidfoghiodfghiodfhiudsfioghjfiodjgioòdfjgpàiofjàpfdjàgjdfà9sgjhà90rfghjs9erjhgrejsgà", d, "Hotel Palazzaccio" , "Cecina", "Italy");
-        //reviewList.add(r);
-        //*** TEST ***//
 
         usernameColumn.setCellValueFactory(new PropertyValueFactory("username"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory("rating"));
