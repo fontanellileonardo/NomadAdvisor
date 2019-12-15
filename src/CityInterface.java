@@ -29,6 +29,9 @@ import javafx.util.Callback;
 
 public class CityInterface {
 	
+	NomadAdvisor nomadAdvisor;
+	Customer loggedCustomer;
+	
     @FXML private AnchorPane primaryPane;
     @FXML private Label cityTitle;
     @FXML private Button logOutButton;
@@ -82,7 +85,7 @@ public class CityInterface {
     @FXML private TableColumn<City, String> characteristicsColumn;
     @FXML private Button hotelButton;
     
-    @FXML private void initialize() {
+    @FXML public void initialize() {
     	initializeCityTable();
     	initializeComboBox();
     }
@@ -134,7 +137,7 @@ public class CityInterface {
     
     // Go to the customer's personal area interface
     @FXML void profileButton(ActionEvent event) {
-
+    	
     }
 
     // Search the hotels related to the selected city and go to the relative interface
@@ -144,7 +147,15 @@ public class CityInterface {
 
     // Go back to the Login interface
     @FXML void logOutButton(ActionEvent event) {
-
+    	nomadAdvisor.changeScene("loginInterface");
     }
-
+    
+    public void setNomadAdvisor(NomadAdvisor nomadAdvisor) {
+    	this.nomadAdvisor = nomadAdvisor;
+    }
+    
+    public void setCustomer(User user) {
+    	loggedCustomer = (Customer) user;
+    	Utils.printUser(loggedCustomer);
+    }
 }

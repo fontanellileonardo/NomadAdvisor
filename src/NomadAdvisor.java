@@ -18,17 +18,21 @@ public class NomadAdvisor extends Application {
     
     private LoginInterface loginInterface;
     private HotelInterface hotelInterface;
+    private PersonalAreaInterface personalAreaInterface;
+    private CityInterface cityInterface;
+    private employeeInterface employeeInterface;
     private Stage stage;
     private Parent root;
     private FXMLLoader fxmlLoaderHotel;
     private FXMLLoader fxmlLoaderLogin;
+    private FXMLLoader fxmlLoaderCity;
     private FXMLLoader fxmlLoaderEmployee;
     private NomadHandler nomadHandler;
     private Scene loginScene;
     private Scene cityScene;
     private Scene hotelScene;
     private Scene employeeScene;
-    private Customer loggedCustomer;
+    private User loggedUser;
 
     public NomadHandler getNomadHandler() {
         return nomadHandler;
@@ -39,44 +43,54 @@ public class NomadAdvisor extends Application {
         this.stage = stage;
         this.stage.setTitle("Nomad Advisor");
         try {
+        	// Initialize FXML loaders
+        	fxmlLoaderCity = new FXMLLoader(NomadAdvisor.class.getResource("resources/CityInterface.fxml"));
+        	fxmlLoaderLogin = new FXMLLoader(NomadAdvisor.class.getResource("resources/LoginInterface.fxml"));
+        	fxmlLoaderEmployee = new FXMLLoader(NomadAdvisor.class.getResource("resources/EmployeeInterface.fxml"));
+        	// Create Scenes
+        	this.loginScene = new Scene(fxmlLoaderLogin.load());
+        	this.cityScene = new Scene(fxmlLoaderCity.load());
+        	this.employeeScene = new Scene(fxmlLoaderEmployee.load());
 
-			  /*fxmlLoaderLogin = new FXMLLoader(NomadAdvisor.class.getResource("resources/LoginInterface.fxml"));
-        root = fxmlLoaderLogin.load();
-        loginScen = new Scene(root);
-        fxmlLoaderHotel = new FXMLLoader(NomadAdvisor.class.getResource("resources/HotelInterface.fxml"));
-        root = fxmlLoaderHotel.load();
-        hotelScene = new Scene(root);*/
-
-			  fxmlLoaderEmployee = new FXMLLoader(NomadAdvisor.class.getResource("resources/EmployeeInterface.fxml"));
-        root = fxmlLoaderEmployee.load();
-        employeeScene = new Scene(root);
-          
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        hotelInterface = (HotelInterface) fxmlLoaderHotel.getController();
-        hotelInterface.initialize("Pisa", "Italy", loggedCustomer, this);
-        this.stage.setScene(loginScene);
+        // Get controllers
+        loginInterface = (LoginInterface) fxmlLoaderLogin.getController();
+        cityInterface = (CityInterface) fxmlLoaderCity.getController();
+        employeeInterface = (employeeInterface) fxmlLoaderEmployee.getController();
+        // Set the NomadAdvisor reference
+        cityInterface.setNomadAdvisor(this);
+        loginInterface.setNomadAdvisor(this);
+        
+        changeScene("loginInterface");
         this.stage.show();
     }
 
     public void changeScene(String newScene) { //per ora solo login-interface
         switch (newScene) {
             case "loginInterface":
-                Parent sceneParent = null;
-                try {
-                    sceneParent = fxmlLoaderLogin.load();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                loginScene = new Scene(sceneParent);
                 this.stage.setScene(loginScene);
-                this.stage.show();
                 break;
+            case "personalAreaInterface":
+            	System.out.println("personal Area Interface");
+            	break;
+            case "cityInterface":
+            	cityInterface.initialize();
+            	cityInterface.setCustomer(loggedUser);
+            	this.stage.setScene(cityScene);
+            	break;
+            case "emplpoyeeInterface":
+            	employeeInterface.initialize();
+            	this.stage.setScene(employeeScene);
             default:
                 System.out.println("Not Implemented");
         }
+    }
+    
+    public void setUser(User user) {
+    	loggedUser = user;
     }
 }
 

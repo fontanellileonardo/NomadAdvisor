@@ -46,11 +46,59 @@ public class MongoDBHandle {
 
     // It creates an Employee or a Customer object, but it returns a User object. In this way it can be used to read
     // both Customers and Employees.
-    public static User readUser(String email) {
-        return null;
+    public static User readUser(User user, StringBuilder msg) {
+    	Customer customer;
+    	Employee employee;
+    	try {
+    		Document document = userCollection.find(Filters.and(Filters.eq("email", user.getEmail()),Filters.eq("password", user.getPassword()))).first();
+    		// Check if the user exists
+    		if(document == null) {
+    			msg.append("Wrong email or password");
+    			return null;
+    		}
+    		System.out.println("Document retrieved in readUser: " + document.toString());
+    		// Check if the role field exists
+			if(document.getString("role") != null) {
+				if(document.getString("role").equals("customer")) {	// customer
+					msg.append("Success!");
+	    			return customer = new Customer(document.getString("name"), document.getString("surname"), user.getEmail(), user.getPassword(), 
+	    					document.getString("username"), (List<String>) document.get("preferences"));
+	    		} else // employee
+	    			return employee = new Employee(document.getString("name"), document.getString("surname"), user.getEmail(), user.getPassword());
+			}
+    	}catch(Exception ex) {
+        	msg.append("Oops! Something went wrong");
+    		System.out.println("Error during readUser: "+ex.getMessage());
+    		return null;
+    	}
+    	// if role is null
+    	msg.append("Oops! Something went wrong. Do again the registration");
+    	return null;
     }
 
+    /* Create new object. 
+	 * Return 0 -> everything is ok
+	 * Return 1 -> object already exists or a unique value already exists
+	 * Return 2 -> DB error
+	 */
     public static int createCustomer(Customer customer) {
+    	try {
+    	Document doc = new Document("role",customer.getRole())
+    			.append("name", customer.getName())
+    			.append("surname", customer.getSurname())
+    			.append("email", customer.getEmail())
+    			.append("password", customer.getPassword())
+    			.append("username", customer.getUsername());
+    	userCollection.insertOne(doc);
+    	}catch(Exception ex) {
+    		System.out.println("Error inserting a new customer: "+ex.getMessage());
+    		// Duplicate key
+    		if(ex.toString().contains("E11000")) {
+    			return 1;
+    		}
+    		// Other general errors
+    		return 2;
+    	}
         return 0;
     }
 
@@ -152,14 +200,43 @@ public class MongoDBHandle {
         return null;
     }
     
-    /*
+    
     public static void main(String[] args) {
+    	/*
+    	// Read city  by name
     	List<City> cities = selectCities("Milan");
     	for(int i = 0; i<cities.size(); i++) {
     		System.out.println("country: "+cities.get(i).getCountryName());
     		System.out.println("city: "+cities.get(i).getCityName());
     		System.out.println("city: "+cities.get(i).getCharacteristics());
-    	}		
+    	}
+    	*/
+    	/*
+    	// Insert a new Customer
+    	Customer customer = new Customer("Eugenia","Petrangeli","e.petrangeli@gmail.com","Eugenia","Geggi", null);
+    	System.out.println("Insert a customer: "+createCustomer(customer));
+    	// Delete the Customer
+    	userCollection.deleteOne(Filters.eq("username","Geggi"));
+		*/
+    	/*
+    	// read a Customer
+    	StringBuilder msg = new StringBuilder();
+    	Customer customer = new Customer("Eugenia","Petrangeli","e.petrangeli@gmail.com","Eugenia","Geggi", null);
+    	System.out.println("Insert a customer: "+createCustomer(customer));
+    	User user = new User("","","e.petrangeli@gmail.com","Eugenia","");
+    	Customer readUser = (Customer) readUser(user, msg);
+    	Utils.printUser(readUser);
+    	System.out.println("msg: "+msg);
+    	userCollection.deleteOne(Filters.eq("username","Geggi"));
+    	
+    	// read an employee
+    	// nel DB c'è: Employee employee = new Employee("Carmelo","Aparo","c.aparo@gmail.com","Carmelo");
+    	user.setEmail("c.aparo@gmail.com");
+    	user.setPassword("Carmelo");
+    	Employee readUser2 = (Employee) readUser(user, msg);
+    	System.out.println("msg: "+msg);
+    	Utils.printUser(readUser2);
+    	*/
     }
-    */
+    
 }
