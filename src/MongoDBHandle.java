@@ -124,7 +124,8 @@ public class MongoDBHandle {
                 DateFormat osLocalizedDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 LocalDate date = LocalDate.parse(osLocalizedDateFormat.format(d.getDate("date")));
 
-                Review r = new Review(d.getString("username"), d.getString("nationality"), d.getInteger("rating"), d.getString("text"), date, d_hotel.getString("name"), d_hotel.getString("city"), d_hotel.getString("country"));
+                String username = d.getString("username")==null?"Anonymous":d.getString("username");
+                Review r = new Review(username, d.getString("nationality"), d.getInteger("rating"), d.getString("text"), date, d_hotel.getString("name"), d_hotel.getString("city"), d_hotel.getString("country"));
                 reviews.add(r);
             }
         } catch (Exception ex){

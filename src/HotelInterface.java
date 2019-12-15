@@ -75,6 +75,9 @@ public class HotelInterface {
     private TableView<Review> reviewTable;
 
     @FXML
+    private Text reviewMessage;
+
+    @FXML
     private TableColumn<Review, String> usernameColumn;
 
     @FXML
@@ -204,6 +207,7 @@ public class HotelInterface {
                 selectedHotel = hotelTable.getSelectionModel().getSelectedItem();
                 System.out.println("Selected: "+ selectedHotel.getHotelName());
                 listReviewUpdate(NomadHandler.getReviews(selectedHotel));
+                reviewMessage.setText("Add a new review for " + selectedHotel.getHotelName() + ":");
             }
         });
 
