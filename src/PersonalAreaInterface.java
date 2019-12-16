@@ -96,7 +96,7 @@ public class PersonalAreaInterface {
     @FXML
     void savePreferences(ActionEvent event) {
     	List<String> preferences = this.getPreferences();
-    	Customer customer = (Customer) nomadAdvisor.getLoggedUser();
+    	Customer customer = (Customer) nomadAdvisor.getUser();
     	errorLabel.setText(NomadHandler.updatePreferences(customer, preferences));
     }
     
@@ -163,7 +163,7 @@ public class PersonalAreaInterface {
     public void initialize() {
     	Customer customer = null;
     	if(nomadAdvisor != null)
-    		customer = (Customer) nomadAdvisor.getLoggedUser();
+    		customer = (Customer) nomadAdvisor.getUser();
     	if(customer != null) {
 	    	this.setUsernameLabel(customer.getUsername());
 	    	this.setNameLabel(customer.getName());
