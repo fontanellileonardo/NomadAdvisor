@@ -78,7 +78,6 @@ public class NomadAdvisor extends Application {
             	break;
             case "cityInterface":
             	cityInterface.initialize();
-            	cityInterface.setCustomer(loggedUser);
             	this.stage.setScene(cityScene);
             	break;
             case "emplpoyeeInterface":
@@ -91,6 +90,10 @@ public class NomadAdvisor extends Application {
     
     public void setUser(User user) {
     	loggedUser = user;
+    }
+    
+    public User getUser() {
+    	return loggedUser;
     }
 }
 

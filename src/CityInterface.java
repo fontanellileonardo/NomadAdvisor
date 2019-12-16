@@ -30,7 +30,6 @@ import javafx.util.Callback;
 public class CityInterface {
 	
 	NomadAdvisor nomadAdvisor;
-	Customer loggedCustomer;
 	
     @FXML private AnchorPane primaryPane;
     @FXML private Label cityTitle;
@@ -152,10 +151,5 @@ public class CityInterface {
     
     public void setNomadAdvisor(NomadAdvisor nomadAdvisor) {
     	this.nomadAdvisor = nomadAdvisor;
-    }
-    
-    public void setCustomer(User user) {
-    	loggedCustomer = (Customer) user;
-    	Utils.printUser(loggedCustomer);
     }
 }

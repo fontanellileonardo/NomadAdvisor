@@ -56,12 +56,8 @@ public class LoginInterface {
     		if(user.getRole().equals("customer"))
     			nomadAdvisor.changeScene("cityInterface");
     		if(user.getRole().equals("employee"))
-    			nomadAdvisor.changeScene("emplpoyeeInterface");
-    	}
-    	
-    	// Clean the log fields
-    	// Clean the notifications messages
-    	
+    			nomadAdvisor.changeScene("employeeInterface");
+    	}	
     }
 
     @FXML void registration(ActionEvent event) {
@@ -74,7 +70,6 @@ public class LoginInterface {
     	regNotificationMsg.setText(NomadHandler.createCustomer(customer));
     	if(regNotificationMsg.getText().equals("Success!"))
     		clearRegFields();
-    		
     }
     
     private void clearRegFields() {
