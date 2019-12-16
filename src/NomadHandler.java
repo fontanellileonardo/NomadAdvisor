@@ -1,8 +1,9 @@
 import java.util.ArrayList;
+
 import java.util.List;
 
 public class NomadHandler {
-	
+  
 	// Search a specific user in the login phase
 	public static User readUser(User user, StringBuilder msg) {
 		if(user!=null) {
@@ -44,12 +45,16 @@ public class NomadHandler {
 	}
 
     public static boolean addReview(Review newReview){
-        return true;
+        return MongoDBHandle.createReview(newReview);
     }
 
     public static List<Review> getReviews(Hotel hotel){
-        return null;
+        return MongoDBHandle.selectReviews(hotel.getHotelName(), hotel.getCityName(), hotel.getCountryName());
     }
+
+    public static List<Hotel> getHotels(City city){
+    	return MongoDBHandle.selectHotels(city.getCityName(), city.getCountryName());
+	}
 	
 	public static String updatePreferences(Customer customer, List<String> preferences) {
 		customer.setPreferences(preferences);
