@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-
+import java.util.HashMap;
 import java.util.List;
 
 public class NomadHandler {
@@ -66,5 +66,14 @@ public class NomadHandler {
 			result = "Update operation failed";
 		}
 		return result;
+	}
+	
+	public static List<HashMap<String, Integer>> computePieChartsData() {
+		List<HashMap<String, Integer>> pieChartsData = new ArrayList();
+		pieChartsData.add(MongoDBHandle.aggregateCitiesCharacteristics());
+		pieChartsData.add(MongoDBHandle.aggregateCustomersPreferences());
+		if((pieChartsData.get(0) == null) || (pieChartsData.get(1) == null))
+			return null;
+		return pieChartsData;
 	}
 }

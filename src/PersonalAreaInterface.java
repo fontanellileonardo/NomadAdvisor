@@ -84,8 +84,7 @@ public class PersonalAreaInterface {
     @FXML
     void comeBack(ActionEvent event) {
     	errorLabel.setText("");
-    	System.out.println("Add city interface in the code!");
-    	//nomadAdvisor.changeScene("cityInterface");
+    	nomadAdvisor.changeScene("cityInterface");
     }
 
     @FXML
@@ -97,38 +96,52 @@ public class PersonalAreaInterface {
     @FXML
     void savePreferences(ActionEvent event) {
     	List<String> preferences = this.getPreferences();
-    	Customer customer = (Customer) nomadAdvisor.getLoggedUser();
-    	errorLabel.setText(nomadAdvisor.getNomadHandler().updatePreferences(customer, preferences));
+    	Customer customer = (Customer) nomadAdvisor.getUser();
+    	errorLabel.setText(NomadHandler.updatePreferences(customer, preferences));
     }
     
     private void setUsernameLabel(String username) {
-    	usernameLabel.setText(username);
+    	if(username == null)
+    		usernameLabel.setText("");
+    	else
+    		usernameLabel.setText(username);
     }
     
-    private void setNameLabel(String username) {
-    	nameLabel.setText("Name: " + username);
+    private void setNameLabel(String name) {
+    	if(name == null)
+    		nameLabel.setText("Name: not available");
+    	else
+    		nameLabel.setText("Name: " + name);
     }
     
-    private void setSurnameLabel(String username) {
-    	surnameLabel.setText("Surname: " + username);
+    private void setSurnameLabel(String surname) {
+    	if(surname == null)
+    		surnameLabel.setText("Surname: not available");
+    	else
+    		surnameLabel.setText("Surname: " + surname);
     }
     
-    private void setEmailLabel(String username) {
-    	emailLabel.setText("Email: " + username);
+    private void setEmailLabel(String email) {
+    	if(email == null)
+    		emailLabel.setText("Email: not available");
+    	else
+    		emailLabel.setText("Email: " + email);
     }
     
     private void setPreferences(List<String> preferences) {
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE))) tempCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.AIR_QUALITY))) airCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.QUALITY_LIFE))) qualityLifeCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.FOREIGNERS))) foreignersCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.HEALTHCARE))) healthcareCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.NIGHTLIFE))) nightlifeCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.COST))) costCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.SAFETY))) safetyCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.WALKABILITY))) walkabilityCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.WIFI))) wifiCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.ENGLISH))) englishCheckBox.setSelected(true);
+    	if(preferences != null) {
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE))) tempCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.AIR_QUALITY))) airCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.QUALITY_LIFE))) qualityLifeCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.FOREIGNERS))) foreignersCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.HEALTHCARE))) healthcareCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.NIGHTLIFE))) nightlifeCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.COST))) costCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.SAFETY))) safetyCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.WALKABILITY))) walkabilityCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.WIFI))) wifiCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.ENGLISH))) englishCheckBox.setSelected(true);
+    	}
     }
     
     private List<String> getPreferences() {
@@ -147,7 +160,10 @@ public class PersonalAreaInterface {
     	return preferences;
     }
     
-    public void initialize(Customer customer, NomadAdvisor nomadAdvisor) {
+    public void initialize() {
+    	Customer customer = null;
+    	if(nomadAdvisor != null)
+    		customer = (Customer) nomadAdvisor.getUser();
     	if(customer != null) {
 	    	this.setUsernameLabel(customer.getUsername());
 	    	this.setNameLabel(customer.getName());
@@ -155,6 +171,9 @@ public class PersonalAreaInterface {
 	    	this.setEmailLabel(customer.getEmail());
 	    	this.setPreferences(customer.getPreferences());
     	}
+    }
+    
+    public void setNomadAdvisor(NomadAdvisor nomadAdvisor) {
     	this.nomadAdvisor = nomadAdvisor;
     }
 

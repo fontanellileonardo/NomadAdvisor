@@ -1,10 +1,12 @@
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Label;
 
 public class StatisticsInterface {
 
@@ -14,44 +16,34 @@ public class StatisticsInterface {
     @FXML
     private PieChart customerPieChart;
     
+    @FXML
+    private Label errorLabel;
+    
     private ObservableList<PieChart.Data> setPieChartData(HashMap<String, Integer> slices) {
     	ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
     	for(Map.Entry<String, Integer> slice : slices.entrySet()) {
-    		switch(slice.getKey()) {
-    			case Utils.TEMPERATURE:
-    				pieChartData.add(new PieChart.Data("Temperature", slice.getValue()));
-    				break;
-    			case Utils.AIR_QUALITY:
-    				pieChartData.add(new PieChart.Data("Air quality", slice.getValue()));
-    				break;
-    			case Utils.COST:
-    				pieChartData.add(new PieChart.Data("Cost", slice.getValue()));
-    				break;
-    			case Utils.SAFETY:
-    				pieChartData.add(new PieChart.Data("Safety", slice.getValue()));
-    				break;
-    			case Utils.QUALITY_LIFE:
-    				pieChartData.add(new PieChart.Data("Quality of life", slice.getValue()));
-    				break;
-    			case Utils.WALKABILITY:
-    				pieChartData.add(new PieChart.Data("Walkability", slice.getValue()));
-    				break;
-    			case Utils.HEALTHCARE:
-    				pieChartData.add(new PieChart.Data("Healthcare", slice.getValue()));
-    				break;
-    			case Utils.NIGHTLIFE:
-    				pieChartData.add(new PieChart.Data("Nightlife", slice.getValue()));
-    				break;
-    			case Utils.WIFI:
-    				pieChartData.add(new PieChart.Data("Free wifi", slice.getValue()));
-    				break;
-    			case Utils.FOREIGNERS:
-    				pieChartData.add(new PieChart.Data("Friendly for foreigners", slice.getValue()));
-    				break;
-    			case Utils.ENGLISH:
-    				pieChartData.add(new PieChart.Data("English speaking", slice.getValue()));
-    				break;
-    		}
+    		if(slice.getKey() == Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE))
+    			pieChartData.add(new PieChart.Data("Temperature", slice.getValue()));
+    		if(slice.getKey() == Utils.cityAttributes.get(Utils.cityNames.AIR_QUALITY))
+    			pieChartData.add(new PieChart.Data("Air quality", slice.getValue()));
+    		if(slice.getKey() == Utils.cityAttributes.get(Utils.cityNames.COST))
+    			pieChartData.add(new PieChart.Data("Cost", slice.getValue()));
+    		if(slice.getKey() == Utils.cityAttributes.get(Utils.cityNames.SAFETY))
+    			pieChartData.add(new PieChart.Data("Safety", slice.getValue()));
+    		if(slice.getKey() == Utils.cityAttributes.get(Utils.cityNames.QUALITY_LIFE))
+    			pieChartData.add(new PieChart.Data("Quality of life", slice.getValue()));
+    		if(slice.getKey() == Utils.cityAttributes.get(Utils.cityNames.WALKABILITY))
+    			pieChartData.add(new PieChart.Data("Walkability", slice.getValue()));
+    		if(slice.getKey() == Utils.cityAttributes.get(Utils.cityNames.HEALTHCARE))
+    			pieChartData.add(new PieChart.Data("Healthcare", slice.getValue()));
+    		if(slice.getKey() == Utils.cityAttributes.get(Utils.cityNames.NIGHTLIFE))
+    			pieChartData.add(new PieChart.Data("Nightlife", slice.getValue()));
+    		if(slice.getKey() == Utils.cityAttributes.get(Utils.cityNames.WIFI))
+    			pieChartData.add(new PieChart.Data("Free wifi", slice.getValue()));
+    		if(slice.getKey() == Utils.cityAttributes.get(Utils.cityNames.FOREIGNERS))
+    			pieChartData.add(new PieChart.Data("Friendly for foreigners", slice.getValue()));
+    		if(slice.getKey() == Utils.cityAttributes.get(Utils.cityNames.ENGLISH))
+    			pieChartData.add(new PieChart.Data("English speaking", slice.getValue()));
     	}
     	return pieChartData;
     }
@@ -66,9 +58,14 @@ public class StatisticsInterface {
     	customerPieChart.setData(pieChartData);
     }
     
-    public void initialize(HashMap<String, Integer> cities, HashMap<String, Integer> customers) {
-    	this.setCityPieChart(cities);
-    	this.setCustomerPieChart(customers);
+    public void initialize() {
+    	List<HashMap<String, Integer>> pieChartsData = NomadHandler.computePieChartsData();
+    	if(pieChartsData == null) {
+    		errorLabel.setText("An error occurred during data loading");
+    		return;
+    	}
+    	this.setCityPieChart(pieChartsData.get(0));
+    	this.setCustomerPieChart(pieChartsData.get(1));
     }
 
 }
