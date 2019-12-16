@@ -4,21 +4,17 @@ import java.util.ArrayList;
 
 public class Customer extends User {
     private final SimpleStringProperty username;
-    private final SimpleStringProperty nationality;
     private List<String> preferences;
 
     public Customer() {
         super();
         this.username = new SimpleStringProperty("");
-        this.nationality = new SimpleStringProperty("");
         preferences = new ArrayList<String>();
     }
 
-    public Customer(String name, String surname, String email, String password, String role,
-                    String username, String nationality, List<String> preferences) {
-        super(name, surname, email, password, role);
+    public Customer(String name, String surname, String email, String password, String username, List<String> preferences) {
+        super(name, surname, email, password, "customer");
         this.username = new SimpleStringProperty(username);
-        this.nationality = new SimpleStringProperty(nationality);
         this.preferences = preferences;
     }
 
@@ -28,14 +24,6 @@ public class Customer extends User {
 
     public void setUsername(String username) {
         this.username.set(username);
-    }
-
-    public String getNationality() {
-        return nationality.get();
-    }
-
-    public void setNationality(String nationality) {
-        this.nationality.set(nationality);
     }
 
     public List<String> getPreferences() {

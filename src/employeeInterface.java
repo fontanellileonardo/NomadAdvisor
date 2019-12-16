@@ -63,8 +63,7 @@ public class employeeInterface {
     @FXML private Button logoutButton;
     @FXML private Text title;
     
-    @FXML
-    private void initialize() {
+    @FXML public void initialize() {
     	chooseView.setItems(viewList);
     	initializeCustomerTable();
     	initializeCityTable();
