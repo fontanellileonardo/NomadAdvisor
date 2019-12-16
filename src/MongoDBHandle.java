@@ -201,6 +201,7 @@ public class MongoDBHandle {
     }
 
     // Personal Area
+    // Update customer preferences
     public static boolean updatePreferences(Customer customer) {
     	UpdateResult result = userCollection.updateOne(Filters.eq("email", customer.getEmail()), new Document("$set",
     			new Document(Utils.PREFERENCES, customer.getPreferences())));
@@ -233,6 +234,7 @@ public class MongoDBHandle {
         return 0;
     }
 
+    // For each city characteristics, computes the number of customers that have that preference
     public static HashMap<String, Integer> aggregateCustomersPreferences() {
     	HashMap<String, Integer> result = new HashMap<String, Integer>();
     	MongoCursor<Document> cursor = null;
@@ -262,6 +264,7 @@ public class MongoDBHandle {
         return result;
     }
 
+ // For each city characteristics, computes the number of cities that have that characteristic
     public static HashMap<String, Integer> aggregateCitiesCharacteristics() {
     	HashMap<String, Integer> result = new HashMap<String, Integer>();
     	MongoCursor<Document> cursor = null;
