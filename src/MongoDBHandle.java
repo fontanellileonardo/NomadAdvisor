@@ -1,23 +1,21 @@
 import com.mongodb.Block;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Aggregates;
+import com.mongodb.MongoWriteException;
+import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.UpdateResult;
 
 import java.awt.Desktop.Action;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Filter;
 
 import org.bson.Document;
-
-
 
 public class MongoDBHandle {
 
@@ -48,11 +46,59 @@ public class MongoDBHandle {
 
     // It creates an Employee or a Customer object, but it returns a User object. In this way it can be used to read
     // both Customers and Employees.
-    public static User readUser(String email) {
-        return null;
+    public static User readUser(User user, StringBuilder msg) {
+    	Customer customer;
+    	Employee employee;
+    	try {
+    		Document document = userCollection.find(Filters.and(Filters.eq("email", user.getEmail()),Filters.eq("password", user.getPassword()))).first();
+    		// Check if the user exists
+    		if(document == null) {
+    			msg.append("Wrong email or password");
+    			return null;
+    		}
+    		System.out.println("Document retrieved in readUser: " + document.toString());
+    		// Check if the role field exists
+			if(document.getString("role") != null) {
+				if(document.getString("role").equals("customer")) {	// customer
+					msg.append("Success!");
+	    			return customer = new Customer(document.getString("name"), document.getString("surname"), user.getEmail(), user.getPassword(), 
+	    					document.getString("username"), (List<String>) document.get("preferences"));
+	    		} else // employee
+	    			return employee = new Employee(document.getString("name"), document.getString("surname"), user.getEmail(), user.getPassword());
+			}
+    	}catch(Exception ex) {
+        	msg.append("Oops! Something went wrong");
+    		System.out.println("Error during readUser: "+ex.getMessage());
+    		return null;
+    	}
+    	// if role is null
+    	msg.append("Oops! Something went wrong. Do again the registration");
+    	return null;
     }
 
+    /* Create new object. 
+	 * Return 0 -> everything is ok
+	 * Return 1 -> object already exists or a unique value already exists
+	 * Return 2 -> DB error
+	 */
     public static int createCustomer(Customer customer) {
+    	try {
+    	Document doc = new Document("role",customer.getRole())
+    			.append("name", customer.getName())
+    			.append("surname", customer.getSurname())
+    			.append("email", customer.getEmail())
+    			.append("password", customer.getPassword())
+    			.append("username", customer.getUsername());
+    	userCollection.insertOne(doc);
+    	}catch(Exception ex) {
+    		System.out.println("Error inserting a new customer: "+ex.getMessage());
+    		// Duplicate key
+    		if(ex.toString().contains("E11000")) {
+    			return 1;
+    		}
+    		// Other general errors
+    		return 2;
+    	}
         return 0;
     }
 
@@ -99,16 +145,58 @@ public class MongoDBHandle {
     }
 
     public static List<Hotel> selectHotels(String city, String country) {
-        return null;
+        List<Hotel> hotels = new ArrayList<>();
+        MongoCursor<Document> cursor = hotelCollection.find(Filters.and(Filters.eq("_id.city", city), Filters.eq("_id.country", country))).iterator();
+        try{
+            while(cursor.hasNext()){
+                Document d = cursor.next();
+                Document d_hotel = (Document) d.get("_id");
+                int avg = d.getInteger("avgScore")==null?0:d.getInteger("avgScore");
+                Hotel h = new Hotel(d_hotel.getString("name"), d_hotel.getString("city"), d_hotel.getString("country"), avg, d.getString("address"), d.getString("website"));
+                hotels.add(h);
+            }
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return hotels;
     }
 
     // Customer Interface (Hotel)
     public static List<Review> selectReviews(String hotelName, String city, String country) {
-        return null;
+        List<Review> reviews = new ArrayList<>();
+        MongoCursor<Document> cursor = reviewCollection.find(Filters.and(Filters.eq("hotelId.name", hotelName), Filters.eq("hotelId.city", city), Filters.eq("hotelId.country", country))).iterator();
+        try{
+            while(cursor.hasNext()){
+                Document d = cursor.next();
+                Document d_hotel = (Document) d.get("hotelId");
+
+                DateFormat osLocalizedDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                LocalDate date = LocalDate.parse(osLocalizedDateFormat.format(d.getDate("date")));
+
+                String username = d.getString("username")==null?"Anonymous":d.getString("username");
+                Review r = new Review(username, d.getString("nationality"), d.getInteger("rating"), d.getString("text"), date, d_hotel.getString("name"), d_hotel.getString("city"), d_hotel.getString("country"));
+                reviews.add(r);
+            }
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return reviews;
     }
 
-    public static int createReview(Review review) {
-        return 0;
+    public static boolean createReview(Review review) {
+        Document rv = new Document("username", review.getUsername())
+                        .append("nationality", review.getNationality())
+                        .append("rating", review.getRating())
+                        .append("text", review.getText())
+                        .append("date", review.getDate())
+                        .append("hotelId", new Document("name", review.getHotelName()).append("city", review.getCityName()).append("country", review.getCountryName()));
+        try {
+            reviewCollection.insertOne(rv);
+        } catch (MongoWriteException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     // Personal Area
