@@ -34,6 +34,7 @@ public class Utils {
 		cityAttributes.put(cityNames.PREFERENCES, "preferences");
 	}
 	
+	// Adjust the strings in order to be visible in the column of the tables
 	public static final Callback<TableColumn<City,String>, TableCell<City,String>> WRAPPING_CELL_FACTORY =
             new Callback<TableColumn<City,String>, TableCell<City,String>>() {
 
@@ -92,4 +93,12 @@ public class Utils {
     	return ret;
     }
     
+    // Print the user's fields
+    public static void printUser(User user) {
+    	System.out.print(user.getRole()+":"+" name:"+user.getName()+" surname: "+"email:"+user.getEmail()+" pwd:"+user.getPassword());
+    	if(user.getRole().contentEquals("customer")) {
+    		Customer customer = (Customer) user;
+    		System.out.println(" username:"+customer.getUsername()+" preferences: "+customer.getPreferences()); 
+    	}
+    }
 }

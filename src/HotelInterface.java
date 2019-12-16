@@ -107,7 +107,6 @@ public class HotelInterface {
                 userMsg.setText("Review succesfully inserted");
                 addReviewField.clear();
                 chooseMarkBox.setValue("Rating");
-                listReviewUpdate(NomadHandler.getReviews(selectedHotel));
             }
         }
         else{
