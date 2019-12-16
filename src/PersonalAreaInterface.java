@@ -84,7 +84,8 @@ public class PersonalAreaInterface {
     @FXML
     void comeBack(ActionEvent event) {
     	errorLabel.setText("");
-    	nomadAdvisor.changeScene("cityInterface");
+    	//nomadAdvisor.changeScene("cityInterface");
+    	nomadAdvisor.changeScene("statisticsInterface");
     }
 
     @FXML
@@ -100,6 +101,7 @@ public class PersonalAreaInterface {
     	errorLabel.setText(NomadHandler.updatePreferences(customer, preferences));
     }
     
+    // Sets the username label with the username of the logged user
     private void setUsernameLabel(String username) {
     	if(username == null)
     		usernameLabel.setText("");
@@ -107,6 +109,7 @@ public class PersonalAreaInterface {
     		usernameLabel.setText(username);
     }
     
+ // Sets the name label with the name of the logged user
     private void setNameLabel(String name) {
     	if(name == null)
     		nameLabel.setText("Name: not available");
@@ -114,6 +117,7 @@ public class PersonalAreaInterface {
     		nameLabel.setText("Name: " + name);
     }
     
+ // Sets the surname label with the surname of the logged user
     private void setSurnameLabel(String surname) {
     	if(surname == null)
     		surnameLabel.setText("Surname: not available");
@@ -121,6 +125,7 @@ public class PersonalAreaInterface {
     		surnameLabel.setText("Surname: " + surname);
     }
     
+ // Sets the email label with the email of the logged user
     private void setEmailLabel(String email) {
     	if(email == null)
     		emailLabel.setText("Email: not available");
@@ -128,6 +133,7 @@ public class PersonalAreaInterface {
     		emailLabel.setText("Email: " + email);
     }
     
+    // Select the checkbox fields depending on the preferences of the logged customer
     private void setPreferences(List<String> preferences) {
     	if(preferences != null) {
 	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE))) tempCheckBox.setSelected(true);
@@ -144,6 +150,7 @@ public class PersonalAreaInterface {
     	}
     }
     
+    // Creating a list of preferences depending on what the customer selects on the interface
     private List<String> getPreferences() {
     	List<String> preferences = new ArrayList<>();
     	if(tempCheckBox.isSelected()) preferences.add(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE));
@@ -160,6 +167,7 @@ public class PersonalAreaInterface {
     	return preferences;
     }
     
+    // Get the logged Customer from NomadAdvisor and sets the fields of the interface
     public void initialize() {
     	Customer customer = null;
     	if(nomadAdvisor != null)
@@ -173,6 +181,7 @@ public class PersonalAreaInterface {
     	}
     }
     
+ // Sets the reference to the NomadAdvisor object
     public void setNomadAdvisor(NomadAdvisor nomadAdvisor) {
     	this.nomadAdvisor = nomadAdvisor;
     }
