@@ -101,19 +101,31 @@ public class PersonalAreaInterface {
     }
     
     private void setUsernameLabel(String username) {
-    	usernameLabel.setText(username);
+    	if(username == null)
+    		usernameLabel.setText("");
+    	else
+    		usernameLabel.setText(username);
     }
     
-    private void setNameLabel(String username) {
-    	nameLabel.setText("Name: " + username);
+    private void setNameLabel(String name) {
+    	if(name == null)
+    		nameLabel.setText("Name: not available");
+    	else
+    		nameLabel.setText("Name: " + name);
     }
     
-    private void setSurnameLabel(String username) {
-    	surnameLabel.setText("Surname: " + username);
+    private void setSurnameLabel(String surname) {
+    	if(surname == null)
+    		surnameLabel.setText("Surname: not available");
+    	else
+    		surnameLabel.setText("Surname: " + surname);
     }
     
-    private void setEmailLabel(String username) {
-    	emailLabel.setText("Email: " + username);
+    private void setEmailLabel(String email) {
+    	if(email == null)
+    		emailLabel.setText("Email: not available");
+    	else
+    		emailLabel.setText("Email: " + email);
     }
     
     private void setPreferences(List<String> preferences) {
