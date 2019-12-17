@@ -2,17 +2,23 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.HashMap;
 
+import javafx.application.Platform;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.layout.VBox;
+import javafx.util.Callback;
+
 public class Utils {
 	// City's Characteristics
 	public static enum cityNames {
 		TEMPERATURE,COST,AIR_QUALITY,SAFETY,QUALITY_LIFE,WALKABILITY,HEALTHCARE,NIGHTLIFE,
-		WIFI,FOREIGNERS,ENGLISH,PREFERENCES
+		WIFI,FOREIGNERS,ENGLISH
 	}
 	// HashMap where the key is the cityNames and the value is the key in the DB related to the characteristics
 	public static HashMap<cityNames,String> cityAttributes = new HashMap();
 
 	static {
-		cityAttributes.put(cityNames.PREFERENCES,"preferences");
 		cityAttributes.put(cityNames.TEMPERATURE,"temperature");
 		cityAttributes.put(cityNames.COST,"cost");
 		cityAttributes.put(cityNames.AIR_QUALITY,"airQuality");
@@ -24,14 +30,47 @@ public class Utils {
 		cityAttributes.put(cityNames.WIFI, "wifi");
 		cityAttributes.put(cityNames.FOREIGNERS, "foreignersFriendly");
 		cityAttributes.put(cityNames.ENGLISH, "english");
-		cityAttributes.put(cityNames.PREFERENCES, "preferences");
 	}
+	
+	// Adjust the strings in order to be visible in the column of the tables
+	public static final Callback<TableColumn<City,String>, TableCell<City,String>> WRAPPING_CELL_FACTORY =
+            new Callback<TableColumn<City,String>, TableCell<City,String>>() {
+
+                @Override public TableCell<City,String> call(TableColumn<City,String> param) {
+                    TableCell<City,String> tableCell = new TableCell<City,String>() {
+                        @Override protected void updateItem(String item, boolean empty) {
+                            if (item == getItem()) return;
+
+                            super.updateItem(item, empty);
+                            if (item == null) {
+                                super.setText(null);
+                                super.setGraphic(null);
+                            } else {
+                            	item = item.replace("}", "");
+                                item = item.replace("{", "");
+                                item = item.replace(", ", "\n");
+                                super.setText(null);
+                                Label l = new Label(item);
+                                l.setWrapText(true);
+                                VBox box = new VBox(l);
+                                l.heightProperty().addListener((observable,oldValue,newValue)-> {
+                                    box.setPrefHeight(newValue.doubleValue()+7);
+                                    Platform.runLater(()->this.getTableRow().requestLayout());
+                                });
+                                super.setGraphic(box);
+                            }
+                        }
+                    };
+                    return tableCell;
+                }
+            };
 	
 	// DB's keys
 	public final static String ID = "_id",
 			// city's keys
 			CITY = "city",
-			COUNTRY = "country";
+			COUNTRY = "country",
+			PREFERENCES = "preferences";
 	
 	public final static int	CITY_VIEW = 1,
 			CUSTOMER_VIEW = 2;
@@ -53,4 +92,12 @@ public class Utils {
     	return ret;
     }
     
+    // Print the user's fields
+    public static void printUser(User user) {
+    	System.out.print(user.getRole()+":"+" name:"+user.getName()+" surname: "+"email:"+user.getEmail()+" pwd:"+user.getPassword());
+    	if(user.getRole().contentEquals("customer")) {
+    		Customer customer = (Customer) user;
+    		System.out.println(" username:"+customer.getUsername()+" preferences: "+customer.getPreferences()); 
+    	}
+    }
 }
