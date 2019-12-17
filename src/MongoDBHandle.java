@@ -206,7 +206,7 @@ public class MongoDBHandle {
     	UpdateResult result = userCollection.updateOne(Filters.eq("email", customer.getEmail()), new Document("$set",
     			new Document(Utils.PREFERENCES, customer.getPreferences())));
     	if(result.getModifiedCount() == 0) {
-    		System.out.println("Update operation failed: There's nothing to change");
+    		System.out.println("Customer preferences update operation failed: There's nothing to change");
     		return false;
     	}
         return true;
@@ -249,10 +249,26 @@ public class MongoDBHandle {
 	    		hotelDoc.append("websites", hotel.getWebsite());
 	    	hotelCollection.insertOne(hotelDoc);
     	} catch(Exception ex) {
-    		System.out.println("Error inserting a new hotel: "+ex.getMessage());
-    		if(ex.toString().contains("E11000")) { // Hotel already exists
-    			return 1;
+    		if(ex.toString().contains("E11000")) { // Hotel already exists, so it is updated
+    			return updateHotel(hotel);
     		}
+    		return 2;
+    	}
+        return 0;
+    }
+    
+    // Updates the fields address and websites of an hotel
+    private static int updateHotel(Hotel hotel) {
+    	Document id = new Document(
+				"name", hotel.getHotelName())
+				.append("city", hotel.getCityName())
+				.append("country", hotel.getCountryName());
+    	Document updatedFields = new Document("address", hotel.getAddress());
+    	if(hotel.getWebsite() != null)
+    		updatedFields.append("websites", hotel.getWebsite());
+    	UpdateResult result = hotelCollection.updateOne(Filters.eq("_id", id), new Document("$set", updatedFields));
+    	if(result.getModifiedCount() == 0) {
+    		System.out.println("Hotel update operation failed: There's nothing to change");
     		return 2;
     	}
         return 0;
