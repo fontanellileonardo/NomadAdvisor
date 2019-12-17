@@ -19,7 +19,6 @@ public class HotelInterface {
     private NomadAdvisor nomadAdvisor;
     private ObservableList<Hotel> hotelList;
     private ObservableList<Review> reviewList;
-    private Customer loggedCustomer;
     private City city;
     private Hotel selectedHotel;
 
@@ -96,8 +95,10 @@ public class HotelInterface {
         Hotel selectedHotel = hotelTable.getSelectionModel().getSelectedItem();
         String comment = addReviewField.getText();
         String mark = chooseMarkBox.getValue();
-        if(selectedHotel != null && mark != null && !comment.equals("") && !mark.equals("Rating")){
-            Review newReview = new Review(loggedCustomer.getUsername(), loggedCustomer.getNationality(), Integer.parseInt(mark), comment, LocalDate.now(), selectedHotel.getHotelName(), selectedHotel.getCityName(), selectedHotel.getCountryName());
+        if(selectedHotel != null && mark != null && !mark.equals("Rating")){
+        	Customer loggedCustomer = (Customer) nomadAdvisor.getUser();
+        	comment = comment.equals("")?null:comment;
+            Review newReview = new Review(loggedCustomer.getUsername(), Integer.parseInt(mark), comment, LocalDate.now(), selectedHotel.getHotelName(), selectedHotel.getCityName(), selectedHotel.getCountryName());
             if(!NomadHandler.addReview(newReview)){
                 //ERROR SITUATION
                 userMsg.setText("Oops! Something went wrong!");
@@ -107,6 +108,7 @@ public class HotelInterface {
                 userMsg.setText("Review succesfully inserted");
                 addReviewField.clear();
                 chooseMarkBox.setValue("Rating");
+                listReviewUpdate(NomadHandler.getReviews(selectedHotel));
             }
         }
         else{
@@ -169,14 +171,12 @@ public class HotelInterface {
                     return tableCell;
                 }
             };
+            
+    public void setNomadAdvisor(NomadAdvisor nomadAdvisor) {
+    	this.nomadAdvisor = nomadAdvisor;
+    }
 
-    public void initialize(City city, Customer loggedCustomer, NomadAdvisor nomadAdvisor) {
-        this.nomadAdvisor = nomadAdvisor;
-        this.loggedCustomer = loggedCustomer;
-        this.city = city;
-        userMsg.setText("");
-
-        chooseMarkBox.getItems().addAll(scores);
+    public void initHotelTable(){
 
         hotelTableTitle.setText(city.getCityName() + " hotels");
 
@@ -187,6 +187,9 @@ public class HotelInterface {
         addressNameColumn.setCellValueFactory(new PropertyValueFactory("address"));
         avgColumn.setCellValueFactory(new PropertyValueFactory("avgScore"));
         websiteColumn.setCellValueFactory(new PropertyValueFactory("website"));
+    }
+
+    public void initReviewTable(){
 
         reviewList = FXCollections.observableArrayList();
 
@@ -195,6 +198,9 @@ public class HotelInterface {
         dateColumn.setCellValueFactory(new PropertyValueFactory("date"));
         textColumn.setCellValueFactory(new PropertyValueFactory("text"));
 
+    }
+
+    public void setHotelListener(){
         selectedHotel = new Hotel();
         hotelTable.getSelectionModel().selectedIndexProperty().addListener((num) ->
         {
@@ -209,12 +215,24 @@ public class HotelInterface {
                 reviewMessage.setText("Add a new review for " + selectedHotel.getHotelName() + ":");
             }
         });
+    }
 
+    public void initInterface() {
+        userMsg.setText("");
+        /* ****TEST**** */
+        city = new City(null, "Amsterdam", "Netherlands");
+        /* ***TEST**** */
+
+        /*
+         * city = nomadAdvisor.getCity();
+         */
+        chooseMarkBox.getItems().addAll(scores);
+        initHotelTable();
+        initReviewTable();
+        setHotelListener();
         reviewTable.setItems(reviewList);
         hotelTable.setItems(hotelList);
-
         textColumn.setCellFactory(WRAPPING_CELL_FACTORY);
-
     }
 
 }

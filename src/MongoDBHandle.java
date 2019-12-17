@@ -1,6 +1,7 @@
 import com.mongodb.Block;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.*;
+import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.UpdateResult;
 
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Filter;
 
 import org.bson.Document;
@@ -173,7 +175,7 @@ public class MongoDBHandle {
                 LocalDate date = LocalDate.parse(osLocalizedDateFormat.format(d.getDate("date")));
 
                 String username = d.getString("username")==null?"Anonymous":d.getString("username");
-                Review r = new Review(username, d.getString("nationality"), d.getInteger("rating"), d.getString("text"), date, d_hotel.getString("name"), d_hotel.getString("city"), d_hotel.getString("country"));
+                Review r = new Review(username, d.getInteger("rating"), d.getString("text"), date, d_hotel.getString("name"), d_hotel.getString("city"), d_hotel.getString("country"));
                 reviews.add(r);
             }
         } catch (Exception ex){
@@ -184,11 +186,11 @@ public class MongoDBHandle {
 
     public static boolean createReview(Review review) {
         Document rv = new Document("username", review.getUsername())
-                        .append("nationality", review.getNationality())
                         .append("rating", review.getRating())
-                        .append("text", review.getText())
                         .append("date", review.getDate())
                         .append("hotelId", new Document("name", review.getHotelName()).append("city", review.getCityName()).append("country", review.getCountryName()));
+        if(review.getText() != null)
+        	rv.append("text", review.getText());
         try {
             reviewCollection.insertOne(rv);
         } catch (MongoWriteException ex) {
@@ -198,16 +200,17 @@ public class MongoDBHandle {
         return true;
     }
 
+    /*
     // Personal Area
     public static boolean updatePreferences(Customer customer) {
     	UpdateResult result = userCollection.updateOne(Filters.eq("email", customer.getEmail()), new Document("$set",
-    			new Document(Utils.cityAttributes.get(Utils.cityNames.PREFERENCES), customer.getPreferences())));
+    			new Document(Utils.PREFERENCES, customer.getPreferences())));
     	if(result.getModifiedCount() == 0) {
     		System.out.println("Update preferences failed: Customer not found");
     		return false;
     	}
         return true;
-    }
+    }*/
   
     // Employee Interface
     public static List<Customer> selectCustomers() {
@@ -231,11 +234,93 @@ public class MongoDBHandle {
         return 0;
     }
 
-    public static List<Integer> aggregateCustomersPreferences() {
-        return null;
-    }
+    /*
+    public static HashMap<String, Integer> aggregateCustomersPreferences() {
+    	HashMap<String, Integer> result = new HashMap<String, Integer>();
+    	MongoCursor<Document> cursor = null;
+    	try {
+    		for(Map.Entry<Utils.cityNames, String> attribute : Utils.cityAttributes.entrySet()) {
+    			cursor = userCollection.aggregate(
+    					Arrays.asList(
+    							Aggregates.match(Filters.eq(Utils.PREFERENCES, Utils.cityAttributes.get(attribute.getKey()))),
+    							Aggregates.count()
+    							)).iterator();
+    			if(cursor.hasNext()) {
+    				result.put(Utils.cityAttributes.get(attribute.getKey()), (Integer) cursor.next().get("count"));
+    			}
+    			else {
+    				result.put(Utils.cityAttributes.get(attribute.getKey()), 0);
+    			}
+    		}
+    	}
+    	catch(Exception ex) {
+    		System.out.println("Customers' preferences aggregation exception: " + ex.getMessage());
+    		return null;
+    	}
+    	finally {
+    		if(cursor != null)
+    			cursor.close();
+    	}
+        return result;
+    }*/
 
-    public static List<Integer> aggregateCitiesAttributes() {
-        return null;
+    public static HashMap<String, Integer> aggregateCitiesCharacteristics() {
+    	HashMap<String, Integer> result = new HashMap<String, Integer>();
+    	MongoCursor<Document> cursor = null;
+    	try {
+	    	for(Map.Entry<Utils.cityNames, String> attribute : Utils.cityAttributes.entrySet()) {
+	    		if(attribute.getKey() == Utils.cityNames.COST) {
+	    			cursor = cityCollection.aggregate(
+	    	    			Arrays.asList(
+	    	    					Aggregates.match(Filters.lt(Utils.cityAttributes.get(Utils.cityNames.COST), 2000)),
+	    	    					Aggregates.count()
+	    	    					)).iterator();
+	    			if(cursor.hasNext()) {
+	    				result.put(Utils.cityAttributes.get(Utils.cityNames.COST), (Integer) cursor.next().get("count"));
+	    			}
+	    			else {
+	    				result.put(Utils.cityAttributes.get(Utils.cityNames.COST), 0);
+	    			}
+	    		}
+	    		else if(attribute.getKey() == Utils.cityNames.TEMPERATURE) {
+	    			cursor = cityCollection.aggregate(
+	    	    			Arrays.asList(
+	    	    					Aggregates.match(Filters.and(
+	    	    							Filters.gt(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 15),
+	    	    							Filters.lt(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 25)
+	    	    							)),
+	    	    					Aggregates.count()
+	    	    					)).iterator();
+	    			if(cursor.hasNext()) {
+	    				result.put(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), (Integer) cursor.next().get("count"));
+	    			}
+	    			else {
+	    				result.put(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 0);
+	    			}
+	    		}
+	    		else {
+	    			cursor = cityCollection.aggregate(
+	    					Arrays.asList(
+	    	    					Aggregates.match(Filters.gt(Utils.cityAttributes.get(attribute.getKey()), 3)),
+	    	    					Aggregates.count()
+	    	    					)).iterator();
+	    			if(cursor.hasNext()) {
+	    				result.put(Utils.cityAttributes.get(attribute.getKey()), (Integer) cursor.next().get("count"));
+	    			}
+	    			else {
+	    				result.put(Utils.cityAttributes.get(attribute.getKey()), 0);
+	    			}
+	    		}
+	    	}
+    	}
+    	catch(Exception ex) {
+    		System.out.println("Cities' characteristics aggregation exception: " + ex.getMessage());
+    		return null;
+    	}
+    	finally {
+    		if(cursor != null)
+    			cursor.close();
+    	}
+        return result;
     }
 }

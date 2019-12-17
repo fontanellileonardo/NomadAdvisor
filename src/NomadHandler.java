@@ -55,7 +55,7 @@ public class NomadHandler {
     public static List<Hotel> getHotels(City city){
     	return MongoDBHandle.selectHotels(city.getCityName(), city.getCountryName());
 	}
-	
+	/*
 	public static String updatePreferences(Customer customer, List<String> preferences) {
 		customer.setPreferences(preferences);
 		String result;
@@ -66,5 +66,5 @@ public class NomadHandler {
 			result = "Update operation failed";
 		}
 		return result;
-	}
+	}*/
 }
