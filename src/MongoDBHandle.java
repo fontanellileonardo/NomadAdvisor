@@ -273,8 +273,12 @@ public class MongoDBHandle {
     // Personal Area
     // Update customer preferences
     public static boolean updatePreferences(Customer customer) {
-    	UpdateResult result = userCollection.updateOne(Filters.eq("email", customer.getEmail()), new Document("$set",
-    			new Document(Utils.PREFERENCES, customer.getPreferences())));
+    	Document updateDoc = null;
+    	if(customer.getPreferences().size() == 0) // If there are no preferences, the field is removed
+    		updateDoc = new Document("$unset", new Document(Utils.PREFERENCES, 1));
+    	else
+    		updateDoc = new Document("$set", new Document(Utils.PREFERENCES, customer.getPreferences())); // Set the chosen preferences
+    	UpdateResult result = userCollection.updateOne(Filters.eq("email", customer.getEmail()), updateDoc);
     	if(result.getModifiedCount() == 0) {
     		System.out.println("Customer preferences update operation failed: There's nothing to change");
     		return false;
