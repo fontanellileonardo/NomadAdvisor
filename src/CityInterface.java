@@ -95,6 +95,9 @@ public class CityInterface {
     @FXML public void initInterface() {
     	initializeCityTable();
     	initializeComboBox();
+    	hotelButton.setDisable(true);
+    	notificationMsg.setText("");
+    	costField.setText("");
     }
      
     // City Table initialization
@@ -105,9 +108,6 @@ public class CityInterface {
     	characteristicsColumn.setCellFactory(Utils.WRAPPING_CELL_FACTORY);
 
     	cityTable.setItems(cityList);
-    	
-    	hotelButton.setDisable(true);
-    	notificationMsg.setText("");
     	
     	// Retrieve the preferences of the logged Customer and retrieve the cities more appropriate to him
     	List<String> userPreferences = ((Customer) nomadAdvisor.getUser()).getPreferences();
@@ -154,7 +154,6 @@ public class CityInterface {
     // Set the levels of the comboboxes
     private void setLevels(ComboBox[] cb) {
     	for(int i = 0; i<cb.length; i++) {
-    		System.out.println("combox "+cb[i]);
     		cb[i].getItems().removeAll(cb[i].getItems());
     		cb[i].getItems().addAll(levels);
     	}

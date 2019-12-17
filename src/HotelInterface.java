@@ -87,7 +87,7 @@ public class HotelInterface {
 
     @FXML
     void personalAreaSelected(ActionEvent event) {
-        nomadAdvisor.changeScene("personalArea");
+        nomadAdvisor.changeScene("personalAreaInterface");
     }
 
     public void listHotelsUpdate(List<Hotel> hotels){
@@ -187,6 +187,7 @@ public class HotelInterface {
     public void initInterface() {
         userMsg.setText("");
         city = nomadAdvisor.getCity();   // Retrieve the City object from nomadAdvisor
+        chooseMarkBox.getItems().removeAll(chooseMarkBox.getItems());
         chooseMarkBox.getItems().addAll(scores); //Populate the combo-box of the review scores
         initHotelTable(); //Initialize the Hotel Table
         initReviewTable();  //Initialize the Review Table
