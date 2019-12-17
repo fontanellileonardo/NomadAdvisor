@@ -17,7 +17,7 @@ public class StatisticsInterface {
     private PieChart customerPieChart;
     
     @FXML
-    private Label errorLabel;
+    private Label outcomeLabel;
     
     // Creates the slices of the pie chart using the key of the map as label and the value of the map as value of the slice
     private ObservableList<PieChart.Data> setPieChartData(HashMap<String, Integer> slices) {
@@ -63,9 +63,10 @@ public class StatisticsInterface {
     
     // Computes the data to show and inserts them in the pie charts
     public void initInterface() {
+    	outcomeLabel.setText("");
     	List<HashMap<String, Integer>> pieChartsData = NomadHandler.computePieChartsData();
     	if(pieChartsData == null) {
-    		errorLabel.setText("An error occurred during data loading");
+    		outcomeLabel.setText("An error occurred during data loading");
     		return;
     	}
     	this.setCityPieChart(pieChartsData.get(0));

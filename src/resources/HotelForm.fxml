@@ -6,6 +6,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -29,7 +30,6 @@
                   <Image url="@images/HotelForm.png" />
                </image>
             </ImageView>
-            <Label fx:id="outcomeLabel" layoutX="58.0" layoutY="436.0" text="You must fill both the Name and Address fields" textFill="#045491" />
             <Label fx:id="cityLabel" layoutX="25.0" layoutY="207.0" text="City:">
                <font>
                   <Font size="14.0" />
@@ -50,6 +50,11 @@
                   <Font size="14.0" />
                </font>
             </Label>
+            <HBox alignment="CENTER" layoutY="436.0" prefHeight="23.0" prefWidth="368.0">
+               <children>
+                  <Label fx:id="outcomeLabel" text="You must fill both the Name and Address fields" textFill="#045491" />
+               </children>
+            </HBox>
          </children>
     </AnchorPane>
   </children>
