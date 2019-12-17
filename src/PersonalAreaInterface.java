@@ -84,14 +84,14 @@ public class PersonalAreaInterface {
     @FXML
     // Comes back to the city interface
     void comeBack(ActionEvent event) {
-    	outcomeLabel.setText("");
+    	clearAll();
     	nomadAdvisor.changeScene("cityInterface");
     }
 
     @FXML
     // Logout and returns to login interface
     void logout(ActionEvent event) {
-    	outcomeLabel.setText("");
+    	clearAll();
     	nomadAdvisor.changeScene("loginInterface");
     }
 
@@ -111,7 +111,7 @@ public class PersonalAreaInterface {
     		usernameLabel.setText(username);
     }
     
- // Sets the name label with the name of the logged user
+    // Sets the name label with the name of the logged user
     private void setNameLabel(String name) {
     	if(name == null)
     		nameLabel.setText("Name: not available");
@@ -119,7 +119,7 @@ public class PersonalAreaInterface {
     		nameLabel.setText("Name: " + name);
     }
     
- // Sets the surname label with the surname of the logged user
+    // Sets the surname label with the surname of the logged user
     private void setSurnameLabel(String surname) {
     	if(surname == null)
     		surnameLabel.setText("Surname: not available");
@@ -127,7 +127,7 @@ public class PersonalAreaInterface {
     		surnameLabel.setText("Surname: " + surname);
     }
     
- // Sets the email label with the email of the logged user
+    // Sets the email label with the email of the logged user
     private void setEmailLabel(String email) {
     	if(email == null)
     		emailLabel.setText("Email: not available");
@@ -184,9 +184,25 @@ public class PersonalAreaInterface {
     	}
     }
     
- // Sets the reference to the NomadAdvisor object
+    // Sets the reference to the NomadAdvisor object
     public void setNomadAdvisor(NomadAdvisor nomadAdvisor) {
     	this.nomadAdvisor = nomadAdvisor;
+    }
+    
+    // Clears all the fields of the interface
+    private void clearAll() {
+    	outcomeLabel.setText("");
+    	tempCheckBox.setSelected(false);
+    	airCheckBox.setSelected(false);
+    	qualityLifeCheckBox.setSelected(false);
+    	foreignersCheckBox.setSelected(false);
+    	healthcareCheckBox.setSelected(false);
+    	nightlifeCheckBox.setSelected(false);
+    	costCheckBox.setSelected(false);
+    	safetyCheckBox.setSelected(false);
+    	walkabilityCheckBox.setSelected(false);
+    	wifiCheckBox.setSelected(false);
+    	englishCheckBox.setSelected(false);
     }
 
 }
