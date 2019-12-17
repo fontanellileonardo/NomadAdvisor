@@ -20,7 +20,7 @@ public class NomadAdvisor extends Application {
     private HotelInterface hotelInterface;
     private PersonalAreaInterface personalAreaInterface;
     private CityInterface cityInterface;
-    private employeeInterface employeeInterface;
+    private EmployeeInterface employeeInterface;
     private Stage stage;
     private Parent root;
     private FXMLLoader fxmlLoaderHotel;
@@ -51,21 +51,23 @@ public class NomadAdvisor extends Application {
         	this.loginScene = new Scene(fxmlLoaderLogin.load());
         	this.cityScene = new Scene(fxmlLoaderCity.load());
         	this.employeeScene = new Scene(fxmlLoaderEmployee.load());
-
+          
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        // Get controllers
-        loginInterface = (LoginInterface) fxmlLoaderLogin.getController();
-        cityInterface = (CityInterface) fxmlLoaderCity.getController();
-        employeeInterface = (employeeInterface) fxmlLoaderEmployee.getController();
-        // Set the NomadAdvisor reference
-        cityInterface.setNomadAdvisor(this);
-        loginInterface.setNomadAdvisor(this);
-        
-        changeScene("loginInterface");
-        this.stage.show();
+
+
+    // Get controllers
+    loginInterface = (LoginInterface) fxmlLoaderLogin.getController();
+    cityInterface = (CityInterface) fxmlLoaderCity.getController();
+    employeeInterface = (EmployeeInterface) fxmlLoaderEmployee.getController();
+    // Set the NomadAdvisor reference
+    cityInterface.setNomadAdvisor(this);
+    loginInterface.setNomadAdvisor(this);
+
+    changeScene("loginInterface");
+    this.stage.show();
     }
 
     public void changeScene(String newScene) { //per ora solo login-interface
