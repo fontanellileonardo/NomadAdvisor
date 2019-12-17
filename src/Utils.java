@@ -18,6 +18,7 @@ public class Utils {
 	// HashMap where the key is the cityNames and the value is the key in the DB related to the characteristics
 	public static HashMap<cityNames,String> cityAttributes = new HashMap();
 
+	// Initialize cityAttributes
 	static {
 		cityAttributes.put(cityNames.PREFERENCES,"preferences");
 		cityAttributes.put(cityNames.TEMPERATURE,"temperature");
@@ -31,7 +32,6 @@ public class Utils {
 		cityAttributes.put(cityNames.WIFI, "wifi");
 		cityAttributes.put(cityNames.FOREIGNERS, "foreignersFriendly");
 		cityAttributes.put(cityNames.ENGLISH, "english");
-		cityAttributes.put(cityNames.PREFERENCES, "preferences");
 	}
 	
 	// Adjust the strings in order to be visible in the column of the tables

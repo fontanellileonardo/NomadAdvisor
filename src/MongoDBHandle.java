@@ -45,8 +45,11 @@ public class MongoDBHandle {
   
     // Login interface
 
-    // It creates an Employee or a Customer object, but it returns a User object. In this way it can be used to read
-    // both Customers and Employees.
+    /* It creates an Employee or a Customer object, but it returns a User object. In this way it can be used to read both Customers and Employees.
+     * 
+     * return: null in case of errors, the desired user. 
+     * In msg set the result of the method, this is needed for the loginInterface
+     */
     public static User readUser(User user, StringBuilder msg) {
     	Customer customer;
     	Employee employee;
@@ -103,8 +106,11 @@ public class MongoDBHandle {
         return 0;
     }
     
-    // Customer interface (City)
-    // Retrieve all the cities
+    // Customer Interface (City)
+    
+    /* Retrieve all the cities
+     * return: null if an error occurs, empty list if no city is found or the full list
+     */
     public static List<City> selectCities() {
     	List<City> cities = new ArrayList<City>();
     	MongoCursor<Document> cursor = cityCollection.find().limit(30).iterator();
@@ -122,7 +128,9 @@ public class MongoDBHandle {
         return cities;
     }
     
-    // Search the first 30 cities that satisfies the preferences inserted
+    /* Search the first 30 cities that satisfies the preferences inserted
+     * return: null if an error occurs, empty list if no city is found or the full list
+     */
     public static List<City> selectCities(HashMap<String,Integer> pref) {
     	List<City> cities = new ArrayList<City>();
     	List<Bson> filters = new ArrayList<Bson>();
@@ -159,6 +167,9 @@ public class MongoDBHandle {
     	return cities;
     }
     
+	/* Find the cities by a given name
+	 * return: null if an error occurs, empty list if no city is found or the full list
+	 */
     public static List<City> selectCities(String name) {
     	List<City> cities = new ArrayList<City>();
     	MongoCursor<Document> cursor = cityCollection.find(Filters.eq("_id.city", name)).limit(30).iterator();

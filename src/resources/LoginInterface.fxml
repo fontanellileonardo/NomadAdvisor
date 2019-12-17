@@ -37,12 +37,12 @@
             <Image url="@images/logo.gif" />
          </image>
       </ImageView>
-      <Text fx:id="regNotificationMsg" fill="#029057" layoutX="421.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" AnchorPane.leftAnchor="417.0" AnchorPane.topAnchor="150.5712890625">
+      <Text fx:id="regNotificationMsg" fill="#045491" layoutX="421.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" AnchorPane.leftAnchor="417.0" AnchorPane.topAnchor="150.5712890625">
          <font>
             <Font name="Comic Sans MS" size="14.0" />
          </font>
       </Text>
-      <Text fx:id="loginNotificationMsg" fill="#029057" layoutX="97.0" layoutY="166.0" strokeType="OUTSIDE" strokeWidth="0.0" AnchorPane.leftAnchor="106.0" AnchorPane.topAnchor="150.5712890625">
+      <Text fx:id="loginNotificationMsg" fill="#045491" layoutX="97.0" layoutY="166.0" strokeType="OUTSIDE" strokeWidth="0.0" AnchorPane.leftAnchor="106.0" AnchorPane.topAnchor="150.5712890625">
          <font>
             <Font name="Comic Sans MS" size="14.0" />
          </font>
