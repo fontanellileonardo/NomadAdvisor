@@ -14,7 +14,7 @@
   <children>
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="508.0" prefWidth="368.0" style="-fx-background-color: #ffebcc;" VBox.vgrow="ALWAYS">
          <children>
-            <Label fx:id="titleLabel" layoutX="121.0" layoutY="166.0" text="Add a new hotel:">
+            <Label fx:id="titleLabel" layoutX="121.0" layoutY="164.0" text="Add a new hotel:">
                <font>
                   <Font name="System Italic" size="18.0" />
                </font></Label>
@@ -25,11 +25,6 @@
             <TextField fx:id="addressTextField" layoutX="100.0" layoutY="340.0" prefHeight="27.0" prefWidth="242.0" />
             <TextField fx:id="websiteTextField" layoutX="100.0" layoutY="393.0" prefHeight="27.0" prefWidth="242.0" />
             <Button fx:id="addButton" layoutX="254.0" layoutY="467.0" mnemonicParsing="false" onAction="#addHotel" text="ADD HOTEL" />
-            <ImageView fitHeight="238.0" fitWidth="314.0" layoutX="27.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/HotelForm.png" />
-               </image>
-            </ImageView>
             <Label fx:id="cityLabel" layoutX="25.0" layoutY="207.0" text="City:">
                <font>
                   <Font size="14.0" />
@@ -55,6 +50,11 @@
                   <Label fx:id="outcomeLabel" text="You must fill both the Name and Address fields" textFill="#045491" />
                </children>
             </HBox>
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="105.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/hotelLogo.png" />
+               </image>
+            </ImageView>
          </children>
     </AnchorPane>
   </children>
