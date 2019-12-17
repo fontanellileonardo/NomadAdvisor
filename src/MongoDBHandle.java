@@ -206,7 +206,7 @@ public class MongoDBHandle {
     	UpdateResult result = userCollection.updateOne(Filters.eq("email", customer.getEmail()), new Document("$set",
     			new Document(Utils.PREFERENCES, customer.getPreferences())));
     	if(result.getModifiedCount() == 0) {
-    		System.out.println("Update preferences failed: Customer not found");
+    		System.out.println("Update operation failed: There's nothing to change");
     		return false;
     	}
         return true;
@@ -297,7 +297,7 @@ public class MongoDBHandle {
 	    		if(attribute.getKey() == Utils.cityNames.COST) {
 	    			cursor = cityCollection.aggregate(
 	    	    			Arrays.asList(
-	    	    					Aggregates.match(Filters.lt(Utils.cityAttributes.get(Utils.cityNames.COST), 2000)),
+	    	    					Aggregates.match(Filters.lte(Utils.cityAttributes.get(Utils.cityNames.COST), 2000)),
 	    	    					Aggregates.count()
 	    	    					)).iterator();
 	    			if(cursor.hasNext()) {
@@ -311,8 +311,8 @@ public class MongoDBHandle {
 	    			cursor = cityCollection.aggregate(
 	    	    			Arrays.asList(
 	    	    					Aggregates.match(Filters.and(
-	    	    							Filters.gt(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 15),
-	    	    							Filters.lt(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 25)
+	    	    							Filters.gte(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 15),
+	    	    							Filters.lte(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 25)
 	    	    							)),
 	    	    					Aggregates.count()
 	    	    					)).iterator();
@@ -326,7 +326,7 @@ public class MongoDBHandle {
 	    		else {
 	    			cursor = cityCollection.aggregate(
 	    					Arrays.asList(
-	    	    					Aggregates.match(Filters.gt(Utils.cityAttributes.get(attribute.getKey()), 3)),
+	    	    					Aggregates.match(Filters.gte(Utils.cityAttributes.get(attribute.getKey()), 3)),
 	    	    					Aggregates.count()
 	    	    					)).iterator();
 	    			if(cursor.hasNext()) {

@@ -63,7 +63,7 @@ public class NomadHandler {
 			result = "Success!!!";
 		}
 		else {
-			result = "Update operation failed";
+			result = "There's nothing to change";
 		}
 		return result;
 	}
