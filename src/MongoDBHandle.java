@@ -263,7 +263,7 @@ public class MongoDBHandle {
 				"name", hotel.getHotelName())
 				.append("city", hotel.getCityName())
 				.append("country", hotel.getCountryName());
-    	Document updatedFields = new Document("address", hotel.getAddress());
+    	Document updatedFields = new Document("address", hotel.getAddress()); // Fields to update
     	if(hotel.getWebsite() != null)
     		updatedFields.append("websites", hotel.getWebsite());
     	UpdateResult result = hotelCollection.updateOne(Filters.eq("_id", id), new Document("$set", updatedFields));
@@ -280,6 +280,7 @@ public class MongoDBHandle {
     	MongoCursor<Document> cursor = null;
     	try {
     		for(Map.Entry<Utils.cityNames, String> attribute : Utils.cityAttributes.entrySet()) {
+    			// Count the customers that has the attribute
     			cursor = userCollection.aggregate(
     					Arrays.asList(
     							Aggregates.match(Filters.eq(Utils.PREFERENCES, Utils.cityAttributes.get(attribute.getKey()))),
@@ -309,8 +310,8 @@ public class MongoDBHandle {
     	HashMap<String, Integer> result = new HashMap<String, Integer>();
     	MongoCursor<Document> cursor = null;
     	try {
-	    	for(Map.Entry<Utils.cityNames, String> attribute : Utils.cityAttributes.entrySet()) {
-	    		if(attribute.getKey() == Utils.cityNames.COST) {
+	    	for(Map.Entry<Utils.cityNames, String> attribute : Utils.cityAttributes.entrySet()) { // For each attribute
+	    		if(attribute.getKey() == Utils.cityNames.COST) { // Count costs less or equal 2000
 	    			cursor = cityCollection.aggregate(
 	    	    			Arrays.asList(
 	    	    					Aggregates.match(Filters.lte(Utils.cityAttributes.get(Utils.cityNames.COST), 2000)),
@@ -323,7 +324,7 @@ public class MongoDBHandle {
 	    				result.put(Utils.cityAttributes.get(Utils.cityNames.COST), 0);
 	    			}
 	    		}
-	    		else if(attribute.getKey() == Utils.cityNames.TEMPERATURE) {
+	    		else if(attribute.getKey() == Utils.cityNames.TEMPERATURE) { // Count temperatures between 15 and 25
 	    			cursor = cityCollection.aggregate(
 	    	    			Arrays.asList(
 	    	    					Aggregates.match(Filters.and(
@@ -339,7 +340,7 @@ public class MongoDBHandle {
 	    				result.put(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 0);
 	    			}
 	    		}
-	    		else {
+	    		else { // Count attributes greater or equal to 3
 	    			cursor = cityCollection.aggregate(
 	    					Arrays.asList(
 	    	    					Aggregates.match(Filters.gte(Utils.cityAttributes.get(attribute.getKey()), 3)),

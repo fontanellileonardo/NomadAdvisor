@@ -56,6 +56,7 @@ public class NomadHandler {
     	return MongoDBHandle.selectHotels(city.getCityName(), city.getCountryName());
 	}
 	
+    // Updates the customer preferences and return the message to show in the interface
 	public static String updatePreferences(Customer customer, List<String> preferences) {
 		customer.setPreferences(preferences);
 		String result;
@@ -83,6 +84,7 @@ public class NomadHandler {
 		return null;
 	}
 	
+	// Computes the data to show in the pie charts
 	public static List<HashMap<String, Integer>> computePieChartsData() {
 		List<HashMap<String, Integer>> pieChartsData = new ArrayList();
 		pieChartsData.add(MongoDBHandle.aggregateCitiesCharacteristics());
