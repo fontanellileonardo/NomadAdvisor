@@ -46,8 +46,11 @@ public class MongoDBHandle {
   
     // Login interface
 
-    // It creates an Employee or a Customer object, but it returns a User object. In this way it can be used to read
-    // both Customers and Employees.
+    /* It creates an Employee or a Customer object, but it returns a User object. In this way it can be used to read both Customers and Employees.
+     * 
+     * return: null in case of errors, the desired user. 
+     * In msg set the result of the method, this is needed for the loginInterface
+     */
     public static User readUser(User user, StringBuilder msg) {
     	Customer customer;
     	Employee employee;
@@ -104,8 +107,11 @@ public class MongoDBHandle {
         return 0;
     }
     
-    // Customer interface (City)
-    // Retrieve all the cities
+    // Customer Interface (City)
+    
+    /* Retrieve all the cities
+     * return: null if an error occurs, empty list if no city is found or the full list
+     */
     public static List<City> selectCities() {
     	List<City> cities = new ArrayList<City>();
     	MongoCursor<Document> cursor = cityCollection.find().limit(30).iterator();
@@ -123,7 +129,9 @@ public class MongoDBHandle {
         return cities;
     }
     
-    // Search the first 30 cities that satisfies the preferences inserted
+    /* Search the first 30 cities that satisfies the preferences inserted
+     * return: null if an error occurs, empty list if no city is found or the full list
+     */
     public static List<City> selectCities(HashMap<String,Integer> pref) {
     	List<City> cities = new ArrayList<City>();
     	List<Bson> filters = new ArrayList<Bson>();
@@ -160,6 +168,9 @@ public class MongoDBHandle {
     	return cities;
     }
     
+	/* Find the cities by a given name
+	 * return: null if an error occurs, empty list if no city is found or the full list
+	 */
     public static List<City> selectCities(String name) {
     	List<City> cities = new ArrayList<City>();
     	MongoCursor<Document> cursor = cityCollection.find(Filters.eq("_id.city", name)).limit(30).iterator();
@@ -200,15 +211,17 @@ public class MongoDBHandle {
     	return new City(charact, cityName, countryName);
     }
 
+    //Retrieve the hotels of a certain City (specifying also the country)
     public static List<Hotel> selectHotels(String city, String country) {
         List<Hotel> hotels = new ArrayList<>();
+        //Query the Hotel Collection DB for a City name and a Country
         MongoCursor<Document> cursor = hotelCollection.find(Filters.and(Filters.eq("_id.city", city), Filters.eq("_id.country", country))).iterator();
         try{
-            while(cursor.hasNext()){
+            while(cursor.hasNext()){ //Iterates on the documents
                 Document d = cursor.next();
                 Document d_hotel = (Document) d.get("_id");
                 int avg = d.getInteger("avgScore")==null?0:d.getInteger("avgScore");
-                Hotel h = new Hotel(d_hotel.getString("name"), d_hotel.getString("city"), d_hotel.getString("country"), avg, d.getString("address"), d.getString("website"));
+                Hotel h = new Hotel(d_hotel.getString("name"), d_hotel.getString("city"), d_hotel.getString("country"), avg, d.getString("address"), d.getString("websites"));
                 hotels.add(h);
             }
         } catch (Exception ex){
@@ -218,6 +231,7 @@ public class MongoDBHandle {
     }
 
     // Customer Interface (Hotel)
+	// Retrieve the reviews for a certain hotel
     public static List<Review> selectReviews(String hotelName, String city, String country) {
         List<Review> reviews = new ArrayList<>();
         MongoCursor<Document> cursor = reviewCollection.find(Filters.and(Filters.eq("hotelId.name", hotelName), Filters.eq("hotelId.city", city), Filters.eq("hotelId.country", country))).iterator();
@@ -230,7 +244,7 @@ public class MongoDBHandle {
                 LocalDate date = LocalDate.parse(osLocalizedDateFormat.format(d.getDate("date")));
 
                 String username = d.getString("username")==null?"Anonymous":d.getString("username");
-                Review r = new Review(username, d.getString("nationality"), d.getInteger("rating"), d.getString("text"), date, d_hotel.getString("name"), d_hotel.getString("city"), d_hotel.getString("country"));
+                Review r = new Review(username, d.getInteger("rating"), d.getString("text"), date, d_hotel.getString("name"), d_hotel.getString("city"), d_hotel.getString("country"));
                 reviews.add(r);
             }
         } catch (Exception ex){
@@ -239,13 +253,14 @@ public class MongoDBHandle {
         return reviews;
     }
 
+    //Insert the review in the DB
     public static boolean createReview(Review review) {
         Document rv = new Document("username", review.getUsername())
-                        .append("nationality", review.getNationality())
                         .append("rating", review.getRating())
-                        .append("text", review.getText())
                         .append("date", review.getDate())
                         .append("hotelId", new Document("name", review.getHotelName()).append("city", review.getCityName()).append("country", review.getCountryName()));
+        if(review.getText() != null)
+        	rv.append("text", review.getText());
         try {
             reviewCollection.insertOne(rv);
         } catch (MongoWriteException ex) {

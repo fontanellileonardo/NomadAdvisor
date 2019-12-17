@@ -52,14 +52,17 @@ public class NomadHandler {
 		return MongoDBHandle.selectCities(cityName);
 	}
 
+	//Add a review for a certain hotel
     public static boolean addReview(Review newReview){
         return MongoDBHandle.createReview(newReview);
     }
 
+    //Gets the reviews of a certain hotel
     public static List<Review> getReviews(Hotel hotel){
         return MongoDBHandle.selectReviews(hotel.getHotelName(), hotel.getCityName(), hotel.getCountryName());
     }
 
+    //Get the hotels of a certain city
     public static List<Hotel> getHotels(City city){
     	return MongoDBHandle.selectHotels(city.getCityName(), city.getCountryName());
 	}

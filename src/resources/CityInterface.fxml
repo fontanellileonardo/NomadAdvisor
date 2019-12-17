@@ -12,29 +12,30 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="primaryPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="639.0" prefWidth="721.0" style="-fx-background-color: #d8eff3;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CityInterface">
+<AnchorPane fx:id="primaryPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="676.0" prefWidth="763.0" style="-fx-background-color: #d8eff3;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CityInterface">
    <children>
-      <Button fx:id="logOutButton" layoutX="616.0" layoutY="18.0" mnemonicParsing="false" onAction="#logOutButton" text="Log Out" AnchorPane.topAnchor="18.0" />
-      <Button fx:id="profileButton" layoutX="522.0" layoutY="18.0" mnemonicParsing="false" onAction="#profileButton" text="My Profile" AnchorPane.topAnchor="18.0" />
-      <TextField fx:id="cityText" layoutX="478.0" layoutY="174.0" prefHeight="27.0" prefWidth="118.0" promptText="City Name" AnchorPane.topAnchor="174.0" />
-      <Text fx:id="cityLabel" layoutX="344.0" layoutY="193.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose the City:" AnchorPane.leftAnchor="344.0" AnchorPane.topAnchor="178.498046875">
+      <Button fx:id="logOutButton" layoutX="616.0" layoutY="18.0" mnemonicParsing="false" onAction="#logOutButton" text="Log Out" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="18.0" />
+      <Button fx:id="profileButton" layoutX="569.0" layoutY="18.0" mnemonicParsing="false" onAction="#profileButton" text="My Profile" AnchorPane.topAnchor="18.0" />
+      <TextField fx:id="cityText" layoutX="451.0" layoutY="188.0" prefHeight="27.0" prefWidth="138.0" promptText="City Name" AnchorPane.topAnchor="188.0" />
+      <Text fx:id="cityLabel" layoutX="319.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose the City:" AnchorPane.leftAnchor="319.0" AnchorPane.topAnchor="192.498046875">
          <font>
             <Font size="15.0" />
          </font>
       </Text>
-      <Button fx:id="cityNameButton" layoutX="622.0" layoutY="174.0" mnemonicParsing="false" onAction="#cityNameButton" text="Search" AnchorPane.leftAnchor="622.0" AnchorPane.topAnchor="174.0" />
-      <Button fx:id="hotelButton" layoutX="345.0" layoutY="577.0" mnemonicParsing="false" onAction="#hotelButton" text="View Hotels" AnchorPane.leftAnchor="345.0" AnchorPane.topAnchor="577.0" />
-      <VBox fx:id="preferencesBox" layoutX="26.0" layoutY="169.0" prefHeight="445.0" prefWidth="318.0" AnchorPane.leftAnchor="26.0">
+      <Button fx:id="cityNameButton" layoutX="609.0" layoutY="188.0" mnemonicParsing="false" onAction="#cityNameButton" prefHeight="27.0" prefWidth="88.0" text="Search" AnchorPane.leftAnchor="609.0" AnchorPane.rightAnchor="66.0" AnchorPane.topAnchor="188.0" />
+      <Button fx:id="hotelButton" layoutX="317.0" layoutY="633.0" mnemonicParsing="false" onAction="#hotelButton" text="View Hotels" AnchorPane.leftAnchor="317.0" AnchorPane.topAnchor="633.0" />
+      <VBox fx:id="preferencesBox" layoutX="27.0" layoutY="188.0" prefHeight="445.0" prefWidth="318.0" AnchorPane.leftAnchor="27.0">
          <children>
             <GridPane fx:id="preferencesPane" prefHeight="440.0" prefWidth="271.0">
                <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="135.3250732421875" minWidth="10.0" prefWidth="118.01239013671875" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="159.54954528808594" minWidth="10.0" prefWidth="152.98760986328125" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.5" minWidth="10.0" prefWidth="144.5" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="159.54954528808594" minWidth="10.0" prefWidth="151.0" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -62,7 +63,7 @@
                   <ComboBox fx:id="qualityLifeBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <Text fx:id="englishLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="English Speaking" wrappingWidth="106.48876953125" GridPane.rowIndex="4" />
                   <ComboBox fx:id="englishBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <Text fx:id="friendlyLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Friendly" GridPane.rowIndex="5" />
+                  <Text fx:id="friendlyLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Friendly for foreigners" GridPane.rowIndex="5" />
                   <ComboBox fx:id="friendlyBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                   <Text fx:id="nigthlifeLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Nigthlife" GridPane.rowIndex="6" />
                   <ComboBox fx:id="nigthlifeBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="6" />
@@ -76,7 +77,7 @@
                      </opaqueInsets>
                   </TextField>
                   <Text fx:id="healthLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Healthcare" GridPane.rowIndex="8" />
-                  <ComboBox fx:id="helathBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                  <ComboBox fx:id="healthBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                   <Text fx:id="safetyLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Safety" GridPane.rowIndex="9" />
                   <ComboBox fx:id="safetyBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                   <Text fx:id="walkabilityLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Walkability" GridPane.rowIndex="10" />
@@ -98,22 +99,34 @@
             </GridPane>
          </children>
       </VBox>
-      <ImageView fx:id="worldImage" fitHeight="138.0" fitWidth="145.0" layoutX="217.0" layoutY="14.0">
+      <ImageView fx:id="worldImage" fitHeight="138.0" fitWidth="145.0" layoutX="234.0" layoutY="14.0">
          <image>
             <Image url="@images/world.gif" />
          </image>
       </ImageView>
-      <Label fx:id="cityTitle" layoutX="345.0" layoutY="18.0" prefHeight="107.0" prefWidth="160.0" text="City" textFill="#045491">
+      <Label fx:id="cityTitle" layoutX="362.0" layoutY="18.0" prefHeight="107.0" prefWidth="160.0" text="City" textFill="#045491">
          <font>
             <Font name="Apple Chancery" size="64.0" />
          </font>
       </Label>
-      <TableView fx:id="cityTable" layoutX="343.0" layoutY="208.0" prefHeight="363.0" prefWidth="339.0">
+      <TableView fx:id="cityTable" layoutX="293.0" layoutY="222.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="401.0" prefWidth="417.0" AnchorPane.rightAnchor="27.0">
         <columns>
-          <TableColumn fx:id="countryColumn" prefWidth="94.0" text="Country" />
-          <TableColumn fx:id="cityColumn" prefWidth="75.0" text="City" />
-            <TableColumn fx:id="characteristicsColumn" prefWidth="169.0" text="Characteristics" />
+          <TableColumn fx:id="countryColumn" prefWidth="115.0" resizable="false" text="Country" />
+          <TableColumn fx:id="cityColumn" prefWidth="128.0" resizable="false" text="City" />
+            <TableColumn fx:id="characteristicsColumn" prefWidth="173.0" resizable="false" text="Characteristics" />
         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
+      <HBox fx:id="notificationBox" alignment="TOP_CENTER" layoutX="39.0" layoutY="152.0" prefHeight="27.0" prefWidth="644.0">
+         <children>
+            <Text fx:id="notificationMsg" fill="#045491" strokeType="OUTSIDE" strokeWidth="0.0">
+               <font>
+                  <Font name="Comic Sans MS" size="14.0" />
+               </font>
+            </Text>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>
