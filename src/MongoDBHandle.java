@@ -304,7 +304,7 @@ public class MongoDBHandle {
         return result;
     }
 
- // For each city characteristics, computes the number of cities that have that characteristic
+    // For each city characteristics, computes the number of cities that have that characteristic
     public static HashMap<String, Integer> aggregateCitiesCharacteristics() {
     	HashMap<String, Integer> result = new HashMap<String, Integer>();
     	MongoCursor<Document> cursor = null;
