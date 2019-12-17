@@ -13,14 +13,13 @@ public class Utils {
 	// City's Characteristics
 	public static enum cityNames {
 		TEMPERATURE,COST,AIR_QUALITY,SAFETY,QUALITY_LIFE,WALKABILITY,HEALTHCARE,NIGHTLIFE,
-		WIFI,FOREIGNERS,ENGLISH,PREFERENCES
+		WIFI,FOREIGNERS,ENGLISH
 	}
 	// HashMap where the key is the cityNames and the value is the key in the DB related to the characteristics
 	public static HashMap<cityNames,String> cityAttributes = new HashMap();
 
 	// Initialize cityAttributes
 	static {
-		cityAttributes.put(cityNames.PREFERENCES,"preferences");
 		cityAttributes.put(cityNames.TEMPERATURE,"temperature");
 		cityAttributes.put(cityNames.COST,"cost");
 		cityAttributes.put(cityNames.AIR_QUALITY,"airQuality");
@@ -71,7 +70,8 @@ public class Utils {
 	public final static String ID = "_id",
 			// city's keys
 			CITY = "city",
-			COUNTRY = "country";
+			COUNTRY = "country",
+			PREFERENCES = "preferences";
 	
 	public final static int	CITY_VIEW = 1,
 			CUSTOMER_VIEW = 2;

@@ -8,7 +8,6 @@ import java.util.Date;
 public class Review {
 
     private SimpleStringProperty username;
-    private SimpleStringProperty nationality;
     private SimpleIntegerProperty rating;
     private SimpleStringProperty text;
     private SimpleObjectProperty<LocalDate> date;
@@ -18,7 +17,6 @@ public class Review {
 
     public Review(){
         this.username = new SimpleStringProperty("");
-        this.nationality = new SimpleStringProperty("");
         this.rating = new SimpleIntegerProperty(0);
         this.text = new SimpleStringProperty("");
         this.date = new SimpleObjectProperty<LocalDate>();
@@ -27,9 +25,8 @@ public class Review {
         this.countryName = new SimpleStringProperty("");
     }
 
-    public Review(String username, String nationality, int rating, String text, LocalDate date, String hotelName, String cityName, String countryName) {
+    public Review(String username, int rating, String text, LocalDate date, String hotelName, String cityName, String countryName) {
         this.username = new SimpleStringProperty(username);
-        this.nationality = new SimpleStringProperty(nationality);
         this.rating = new SimpleIntegerProperty(rating);
         this.text = new SimpleStringProperty(text);
         this.date = new SimpleObjectProperty<LocalDate>(date);
@@ -48,18 +45,6 @@ public class Review {
 
     public void setUsername(String username) {
         this.username.set(username);
-    }
-
-    public String getNationality() {
-        return nationality.get();
-    }
-
-    public SimpleStringProperty nationalityProperty() {
-        return nationality;
-    }
-
-    public void setNationality(String nationality) {
-        this.nationality.set(nationality);
     }
 
     public int getRating() {

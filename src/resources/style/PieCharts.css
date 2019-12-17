@@ -1,0 +1,12 @@
+// Set pie chart slices colors
+.data0.chart-pie { -fx-pie-color: #ffff00; } // Yellow
+.data1.chart-pie { -fx-pie-color: #ff0000; } // Red
+.data2.chart-pie { -fx-pie-color: #800080; } // Purple
+.data3.chart-pie { -fx-pie-color: #adff2f; } // GreenYellow
+.data4.chart-pie { -fx-pie-color: #ffa500; } // Orange
+.data5.chart-pie { -fx-pie-color: #00ffff; } // Aqua
+.data6.chart-pie { -fx-pie-color: #0000ff; } // Blue
+.data7.chart-pie { -fx-pie-color: #5f9ea0; } // CadetBlue
+.data8.chart-pie { -fx-pie-color: #006400; } // DarkGreen
+.data9.chart-pie { -fx-pie-color: #ff1493; } // DeepPink
+.data10.chart-pie { -fx-pie-color: #a0522d; } // Sienna

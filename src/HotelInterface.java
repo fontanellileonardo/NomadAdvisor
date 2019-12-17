@@ -19,88 +19,44 @@ public class HotelInterface {
     private NomadAdvisor nomadAdvisor;
     private ObservableList<Hotel> hotelList;
     private ObservableList<Review> reviewList;
-    private Customer loggedCustomer;
     private City city;
     private Hotel selectedHotel;
-
-    @FXML
-    private AnchorPane primaryPane;
-
-    @FXML
-    private Button logoutButton;
-
-    @FXML
-    private Button personalAreaButton;
-
-    @FXML
-    private Button backButton;
-
-    @FXML
-    private TableView<Hotel> hotelTable;
-
-    @FXML
-    private TextField addReviewField;
-
-    @FXML
-    private ComboBox<String> chooseMarkBox;
-
-    @FXML
-    private Button addReviewButton;
-
-    @FXML
-    private Text hotelTableTitle;
-    
-    @FXML
-    private ImageView logoImage;
-
-    @FXML
-    private Text reviewTableTitle;
-
-    @FXML
-    private Text userMsg;
-
-    @FXML
-    private TableColumn<Hotel, String> hotelNameColumn;
-
-    @FXML
-    private TableColumn<Hotel, String> addressNameColumn;
-
-    @FXML
-    private TableColumn<Hotel, Integer> avgColumn;
-
-    @FXML
-    private TableColumn<Hotel, String> websiteColumn;
-
-    @FXML
-    private TableView<Review> reviewTable;
-
-    @FXML
-    private TableColumn<Review, String> usernameColumn;
-
-    @FXML
-    private TableColumn<Review, Integer> ratingColumn;
-
-    @FXML
-    private TableColumn<Review, Date> dateColumn;
-
-    @FXML
-    private TableColumn<Review, String> textColumn;
-    
+    @FXML private AnchorPane primaryPane;
+    @FXML private Button logoutButton;
+    @FXML private Button personalAreaButton;
+    @FXML private Button backButton;
+    @FXML private ComboBox<String> chooseMarkBox;
+    @FXML private Button addReviewButton;
+    @FXML private ImageView logoImage;
+    @FXML private Text userMsg;
+    @FXML private TableView<Hotel> hotelTable;
+    @FXML private Text hotelTableTitle;
+    @FXML private TableColumn<Hotel, String> hotelNameColumn;
+    @FXML private TableColumn<Hotel, String> addressNameColumn;
+    @FXML private TableColumn<Hotel, Integer> avgColumn;
+    @FXML private TableColumn<Hotel, String> websiteColumn;
+    @FXML private Text reviewMessage;
+    @FXML private TableView<Review> reviewTable;
+    @FXML private Text reviewTableTitle;
+    @FXML private TextField addReviewField;
+    @FXML private TableColumn<Review, String> usernameColumn;
+    @FXML private TableColumn<Review, Integer> ratingColumn;
+    @FXML private TableColumn<Review, Date> dateColumn;
+    @FXML private TableColumn<Review, String> textColumn;
     private ObservableList<String> scores = FXCollections.observableArrayList("1","2","3","4","5");
 
+    /*
+     * This method will be triggered every time the "Add" button of the review will be pressed
+     */
     @FXML
     void addReviewSelected(ActionEvent event) {
-        Hotel selectedHotel = hotelTable.getSelectionModel().getSelectedItem();
-        String comment = addReviewField.getText();
-        String mark = chooseMarkBox.getValue();
-        if(selectedHotel != null && mark != null && !comment.equals("") && !mark.equals("Rating")){
-            //*** TEST ***//
-            Review newReview = new Review("Fonta", "Italy", 5, "Bravi!", LocalDate.of(2012, 4, 30), selectedHotel.getHotelName(), selectedHotel.getCityName(), selectedHotel.getCountryName());
-            //*** TEST ***//
-
-            //Decommentare questa sotto che è la dichiarazione non di test
-            //Review newReview = new Review(loggedCustomer.getUsername(), loggedCustomer.getNationality(), Integer.parseInt(mark), comment, LocalDate.now(), selectedHotel.getHotelName(), selectedHotel.getCityName(), selectedHotel.getCountryName());
-
+        Hotel selectedHotel = hotelTable.getSelectionModel().getSelectedItem(); //Retrieve the selected hotel from the table
+        String comment = addReviewField.getText(); //Retrieve the text from the text field of the review
+        String mark = chooseMarkBox.getValue(); //Retrieve the score selected in the combo-box
+        if(selectedHotel != null && mark != null && !mark.equals("Score")){ //If the hotel is not selected, or the score is not selected the review cannot be added
+        	Customer loggedCustomer = (Customer) nomadAdvisor.getUser(); //Gets the logged customer data
+        	comment = comment.equals("")?null:comment;
+            Review newReview = new Review(loggedCustomer.getUsername(), Integer.parseInt(mark), comment, LocalDate.now(), selectedHotel.getHotelName(), selectedHotel.getCityName(), selectedHotel.getCountryName());
             if(!NomadHandler.addReview(newReview)){
                 //ERROR SITUATION
                 userMsg.setText("Oops! Something went wrong!");
@@ -109,7 +65,8 @@ public class HotelInterface {
                 //CORRECT INSERTION
                 userMsg.setText("Review succesfully inserted");
                 addReviewField.clear();
-                chooseMarkBox.setValue("Rating");
+                chooseMarkBox.setValue("Score");
+                listReviewUpdate(NomadHandler.getReviews(selectedHotel));
             }
         }
         else{
@@ -143,16 +100,17 @@ public class HotelInterface {
         reviewList.addAll(reviews);
     }
 
+    /*
+     * This method is used in order to embellish the text field of the reviews in the table
+     * Without this, the text will be truncated is the review is too long
+     */
     public static final Callback<TableColumn<Review,String>, TableCell<Review,String>> WRAPPING_CELL_FACTORY =
             new Callback<TableColumn<Review,String>, TableCell<Review,String>>() {
-
                 @Override public TableCell<Review,String> call(TableColumn<Review,String> param) {
                     TableCell<Review,String> tableCell = new TableCell<Review,String>() {
                         @Override protected void updateItem(String item, boolean empty) {
                             if (item == getItem()) return;
-
                             super.updateItem(item, empty);
-
                             if (item == null) {
                                 super.setText(null);
                                 super.setGraphic(null);
@@ -172,64 +130,69 @@ public class HotelInterface {
                     return tableCell;
                 }
             };
+            
+    public void setNomadAdvisor(NomadAdvisor nomadAdvisor) {
+    	this.nomadAdvisor = nomadAdvisor;
+    }
 
-    public void initialize(City city, Customer loggedCustomer, NomadAdvisor nomadAdvisor) {
-        this.nomadAdvisor = nomadAdvisor;
-        this.loggedCustomer = loggedCustomer;
-        this.city = city;
-        userMsg.setText("");
-
-        chooseMarkBox.getItems().addAll(scores);
-
+    /*
+     * Initialize the hotel table's columns with the correspondent PropertyValueFactory
+     */
+    public void initHotelTable(){
         hotelTableTitle.setText(city.getCityName() + " hotels");
-
         hotelList = FXCollections.observableArrayList();
         listHotelsUpdate(NomadHandler.getHotels(city));
-
-        //*** TEST ***//
-        //Hotel h = new Hotel("Hotel Palazzaccio", "Cecina", "Italia", 5, "Via Aurelia 34", "www.palazzaccio.it");
-        //Hotel h1 = new Hotel("Hotel Marinetta", "Bibbona", "Italia", 3, "Via Cavalleggeri 34", "www.marinetta.it");
-        //hotelList.add(h);
-        //hotelList.add(h1);
-        //*** TEST ***//
-
         hotelNameColumn.setCellValueFactory(new PropertyValueFactory("hotelName"));
         addressNameColumn.setCellValueFactory(new PropertyValueFactory("address"));
         avgColumn.setCellValueFactory(new PropertyValueFactory("avgScore"));
         websiteColumn.setCellValueFactory(new PropertyValueFactory("website"));
+    }
 
+    /*
+     * Initialize the review table's columns with the correspondent PropertyValueFactory
+     */
+    public void initReviewTable(){
         reviewList = FXCollections.observableArrayList();
-
-        //*** TEST ***//
-        //LocalDate d = LocalDate.of(2019, 12, 7);
-        //Review r = new Review("Fonta", "Italy", 5, "Ottimo!dgsuaifishduhiuogahshflusarhagòuhrguhstpighjo09df8gshrdfpghdroghidfoghiodfghiodfhiudsfioghjfiodjgioòdfjgpàiofjàpfdjàgjdfà9sgjhà90rfghjs9erjhgrejsgà", d, "Hotel Palazzaccio" , "Cecina", "Italy");
-        //reviewList.add(r);
-        //*** TEST ***//
-
         usernameColumn.setCellValueFactory(new PropertyValueFactory("username"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory("rating"));
         dateColumn.setCellValueFactory(new PropertyValueFactory("date"));
         textColumn.setCellValueFactory(new PropertyValueFactory("text"));
+    }
 
+    /*
+     * This method sets the listener for the Hotel Interface, every time the user selects a Hotel in the "hotel table",
+     * the relative reviews will be shown in the "review table"
+     */
+    public void setHotelListener(){
         selectedHotel = new Hotel();
         hotelTable.getSelectionModel().selectedIndexProperty().addListener((num) ->
         {
             if(hotelTable.getSelectionModel().getSelectedItem() == null) {
                 hotelTable.getSelectionModel().clearSelection();
-
+                userMsg.setText("");
             }
             else {
+                userMsg.setText("");
                 selectedHotel = hotelTable.getSelectionModel().getSelectedItem();
                 System.out.println("Selected: "+ selectedHotel.getHotelName());
                 listReviewUpdate(NomadHandler.getReviews(selectedHotel));
+                reviewMessage.setText("Add a new review for " + selectedHotel.getHotelName() + ":");
             }
         });
-
-        reviewTable.setItems(reviewList);
-        hotelTable.setItems(hotelList);
-
-        textColumn.setCellFactory(WRAPPING_CELL_FACTORY);
-
     }
 
+    /*
+     * This method initialize the tables
+     */
+    public void initInterface() {
+        userMsg.setText("");
+        city = nomadAdvisor.getCity();   // Retrieve the City object from nomadAdvisor
+        chooseMarkBox.getItems().addAll(scores); //Populate the combo-box of the review scores
+        initHotelTable(); //Initialize the Hotel Table
+        initReviewTable();  //Initialize the Review Table
+        setHotelListener(); //This method sets the listener for the Hotel selection in the table
+        hotelTable.setItems(hotelList);   //Populate the Hotel table
+        reviewTable.setItems(reviewList);   //Populate the Review table
+        textColumn.setCellFactory(WRAPPING_CELL_FACTORY); //This will embellish the text of the review in the table
+    }
 }

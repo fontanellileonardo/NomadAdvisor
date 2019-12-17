@@ -1,6 +1,7 @@
 import com.mongodb.Block;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.*;
+import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.UpdateResult;
 
@@ -210,15 +211,17 @@ public class MongoDBHandle {
     	return new City(charact, cityName, countryName);
     }
 
+    //Retrieve the hotels of a certain City (specifying also the country)
     public static List<Hotel> selectHotels(String city, String country) {
         List<Hotel> hotels = new ArrayList<>();
+        //Query the Hotel Collection DB for a City name and a Country
         MongoCursor<Document> cursor = hotelCollection.find(Filters.and(Filters.eq("_id.city", city), Filters.eq("_id.country", country))).iterator();
         try{
-            while(cursor.hasNext()){
+            while(cursor.hasNext()){ //Iterates on the documents
                 Document d = cursor.next();
                 Document d_hotel = (Document) d.get("_id");
                 int avg = d.getInteger("avgScore")==null?0:d.getInteger("avgScore");
-                Hotel h = new Hotel(d_hotel.getString("name"), d_hotel.getString("city"), d_hotel.getString("country"), avg, d.getString("address"), d.getString("website"));
+                Hotel h = new Hotel(d_hotel.getString("name"), d_hotel.getString("city"), d_hotel.getString("country"), avg, d.getString("address"), d.getString("websites"));
                 hotels.add(h);
             }
         } catch (Exception ex){
@@ -228,6 +231,7 @@ public class MongoDBHandle {
     }
 
     // Customer Interface (Hotel)
+	// Retrieve the reviews for a certain hotel
     public static List<Review> selectReviews(String hotelName, String city, String country) {
         List<Review> reviews = new ArrayList<>();
         MongoCursor<Document> cursor = reviewCollection.find(Filters.and(Filters.eq("hotelId.name", hotelName), Filters.eq("hotelId.city", city), Filters.eq("hotelId.country", country))).iterator();
@@ -239,7 +243,8 @@ public class MongoDBHandle {
                 DateFormat osLocalizedDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 LocalDate date = LocalDate.parse(osLocalizedDateFormat.format(d.getDate("date")));
 
-                Review r = new Review(d.getString("username"), d.getString("nationality"), d.getInteger("rating"), d.getString("text"), date, d_hotel.getString("name"), d_hotel.getString("city"), d_hotel.getString("country"));
+                String username = d.getString("username")==null?"Anonymous":d.getString("username");
+                Review r = new Review(username, d.getInteger("rating"), d.getString("text"), date, d_hotel.getString("name"), d_hotel.getString("city"), d_hotel.getString("country"));
                 reviews.add(r);
             }
         } catch (Exception ex){
@@ -248,13 +253,14 @@ public class MongoDBHandle {
         return reviews;
     }
 
+    //Insert the review in the DB
     public static boolean createReview(Review review) {
         Document rv = new Document("username", review.getUsername())
-                        .append("nationality", review.getNationality())
                         .append("rating", review.getRating())
-                        .append("text", review.getText())
                         .append("date", review.getDate())
                         .append("hotelId", new Document("name", review.getHotelName()).append("city", review.getCityName()).append("country", review.getCountryName()));
+        if(review.getText() != null)
+        	rv.append("text", review.getText());
         try {
             reviewCollection.insertOne(rv);
         } catch (MongoWriteException ex) {
@@ -265,11 +271,12 @@ public class MongoDBHandle {
     }
 
     // Personal Area
+    // Update customer preferences
     public static boolean updatePreferences(Customer customer) {
     	UpdateResult result = userCollection.updateOne(Filters.eq("email", customer.getEmail()), new Document("$set",
-    			new Document(Utils.cityAttributes.get(Utils.cityNames.PREFERENCES), customer.getPreferences())));
+    			new Document(Utils.PREFERENCES, customer.getPreferences())));
     	if(result.getModifiedCount() == 0) {
-    		System.out.println("Update preferences failed: Customer not found");
+    		System.out.println("Customer preferences update operation failed: There's nothing to change");
     		return false;
     	}
         return true;
@@ -293,15 +300,139 @@ public class MongoDBHandle {
         return false;
     }
 
+    /*
+     * Create a new hotel
+     * Return:
+     * 0 if everything goes right
+     * 1 if the hotel already exists
+     * 2 if an error occurs
+     * */
     public static int createHotel(Hotel hotel) {
+    	try {
+	    	Document hotelDoc = new Document(
+	    			"_id", new Document(
+	    					"name", hotel.getHotelName())
+	    					.append("city", hotel.getCityName())
+	    					.append("country", hotel.getCountryName()))
+	    			.append("address", hotel.getAddress());
+	    	if(hotel.getWebsite() != null)
+	    		hotelDoc.append("websites", hotel.getWebsite());
+	    	hotelCollection.insertOne(hotelDoc);
+    	} catch(Exception ex) {
+    		if(ex.toString().contains("E11000")) { // Hotel already exists, so it is updated
+    			return updateHotel(hotel);
+    		}
+    		return 2;
+    	}
+        return 0;
+    }
+    
+    // Updates the fields address and websites of an hotel
+    private static int updateHotel(Hotel hotel) {
+    	Document id = new Document(
+				"name", hotel.getHotelName())
+				.append("city", hotel.getCityName())
+				.append("country", hotel.getCountryName());
+    	Document updatedFields = new Document("address", hotel.getAddress()); // Fields to update
+    	if(hotel.getWebsite() != null)
+    		updatedFields.append("websites", hotel.getWebsite());
+    	UpdateResult result = hotelCollection.updateOne(Filters.eq("_id", id), new Document("$set", updatedFields));
+    	if(result.getModifiedCount() == 0) {
+    		System.out.println("Hotel update operation failed: There's nothing to change");
+    		return 2;
+    	}
         return 0;
     }
 
-    public static List<Integer> aggregateCustomersPreferences() {
-        return null;
+    // For each city characteristics, computes the number of customers that have that preference
+    public static HashMap<String, Integer> aggregateCustomersPreferences() {
+    	HashMap<String, Integer> result = new HashMap<String, Integer>();
+    	MongoCursor<Document> cursor = null;
+    	try {
+    		for(Map.Entry<Utils.cityNames, String> attribute : Utils.cityAttributes.entrySet()) {
+    			// Count the customers that has the attribute
+    			cursor = userCollection.aggregate(
+    					Arrays.asList(
+    							Aggregates.match(Filters.eq(Utils.PREFERENCES, Utils.cityAttributes.get(attribute.getKey()))),
+    							Aggregates.count()
+    							)).iterator();
+    			if(cursor.hasNext()) {
+    				result.put(Utils.cityAttributes.get(attribute.getKey()), (Integer) cursor.next().get("count"));
+    			}
+    			else {
+    				result.put(Utils.cityAttributes.get(attribute.getKey()), 0);
+    			}
+    		}
+    	}
+    	catch(Exception ex) {
+    		System.out.println("Customers' preferences aggregation exception: " + ex.getMessage());
+    		return null;
+    	}
+    	finally {
+    		if(cursor != null)
+    			cursor.close();
+    	}
+        return result;
     }
 
-    public static List<Integer> aggregateCitiesAttributes() {
-        return null;
+    // For each city characteristics, computes the number of cities that have that characteristic
+    public static HashMap<String, Integer> aggregateCitiesCharacteristics() {
+    	HashMap<String, Integer> result = new HashMap<String, Integer>();
+    	MongoCursor<Document> cursor = null;
+    	try {
+	    	for(Map.Entry<Utils.cityNames, String> attribute : Utils.cityAttributes.entrySet()) { // For each attribute
+	    		if(attribute.getKey() == Utils.cityNames.COST) { // Count costs less or equal 2000
+	    			cursor = cityCollection.aggregate(
+	    	    			Arrays.asList(
+	    	    					Aggregates.match(Filters.lte(Utils.cityAttributes.get(Utils.cityNames.COST), 2000)),
+	    	    					Aggregates.count()
+	    	    					)).iterator();
+	    			if(cursor.hasNext()) {
+	    				result.put(Utils.cityAttributes.get(Utils.cityNames.COST), (Integer) cursor.next().get("count"));
+	    			}
+	    			else {
+	    				result.put(Utils.cityAttributes.get(Utils.cityNames.COST), 0);
+	    			}
+	    		}
+	    		else if(attribute.getKey() == Utils.cityNames.TEMPERATURE) { // Count temperatures between 15 and 25
+	    			cursor = cityCollection.aggregate(
+	    	    			Arrays.asList(
+	    	    					Aggregates.match(Filters.and(
+	    	    							Filters.gte(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 15),
+	    	    							Filters.lte(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 25)
+	    	    							)),
+	    	    					Aggregates.count()
+	    	    					)).iterator();
+	    			if(cursor.hasNext()) {
+	    				result.put(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), (Integer) cursor.next().get("count"));
+	    			}
+	    			else {
+	    				result.put(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 0);
+	    			}
+	    		}
+	    		else { // Count attributes greater or equal to 3
+	    			cursor = cityCollection.aggregate(
+	    					Arrays.asList(
+	    	    					Aggregates.match(Filters.gte(Utils.cityAttributes.get(attribute.getKey()), 3)),
+	    	    					Aggregates.count()
+	    	    					)).iterator();
+	    			if(cursor.hasNext()) {
+	    				result.put(Utils.cityAttributes.get(attribute.getKey()), (Integer) cursor.next().get("count"));
+	    			}
+	    			else {
+	    				result.put(Utils.cityAttributes.get(attribute.getKey()), 0);
+	    			}
+	    		}
+	    	}
+    	}
+    	catch(Exception ex) {
+    		System.out.println("Cities' characteristics aggregation exception: " + ex.getMessage());
+    		return null;
+    	}
+    	finally {
+    		if(cursor != null)
+    			cursor.close();
+    	}
+        return result;
     }
 }
