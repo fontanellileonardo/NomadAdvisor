@@ -256,11 +256,12 @@ public class MongoDBHandle {
     }
 
     // Personal Area
+    // Update customer preferences
     public static boolean updatePreferences(Customer customer) {
     	UpdateResult result = userCollection.updateOne(Filters.eq("email", customer.getEmail()), new Document("$set",
     			new Document(Utils.PREFERENCES, customer.getPreferences())));
     	if(result.getModifiedCount() == 0) {
-    		System.out.println("Update preferences failed: Customer not found");
+    		System.out.println("Customer preferences update operation failed: There's nothing to change");
     		return false;
     	}
         return true;
@@ -284,15 +285,57 @@ public class MongoDBHandle {
         return false;
     }
 
+    /*
+     * Create a new hotel
+     * Return:
+     * 0 if everything goes right
+     * 1 if the hotel already exists
+     * 2 if an error occurs
+     * */
     public static int createHotel(Hotel hotel) {
+    	try {
+	    	Document hotelDoc = new Document(
+	    			"_id", new Document(
+	    					"name", hotel.getHotelName())
+	    					.append("city", hotel.getCityName())
+	    					.append("country", hotel.getCountryName()))
+	    			.append("address", hotel.getAddress());
+	    	if(hotel.getWebsite() != null)
+	    		hotelDoc.append("websites", hotel.getWebsite());
+	    	hotelCollection.insertOne(hotelDoc);
+    	} catch(Exception ex) {
+    		if(ex.toString().contains("E11000")) { // Hotel already exists, so it is updated
+    			return updateHotel(hotel);
+    		}
+    		return 2;
+    	}
+        return 0;
+    }
+    
+    // Updates the fields address and websites of an hotel
+    private static int updateHotel(Hotel hotel) {
+    	Document id = new Document(
+				"name", hotel.getHotelName())
+				.append("city", hotel.getCityName())
+				.append("country", hotel.getCountryName());
+    	Document updatedFields = new Document("address", hotel.getAddress()); // Fields to update
+    	if(hotel.getWebsite() != null)
+    		updatedFields.append("websites", hotel.getWebsite());
+    	UpdateResult result = hotelCollection.updateOne(Filters.eq("_id", id), new Document("$set", updatedFields));
+    	if(result.getModifiedCount() == 0) {
+    		System.out.println("Hotel update operation failed: There's nothing to change");
+    		return 2;
+    	}
         return 0;
     }
 
+    // For each city characteristics, computes the number of customers that have that preference
     public static HashMap<String, Integer> aggregateCustomersPreferences() {
     	HashMap<String, Integer> result = new HashMap<String, Integer>();
     	MongoCursor<Document> cursor = null;
     	try {
     		for(Map.Entry<Utils.cityNames, String> attribute : Utils.cityAttributes.entrySet()) {
+    			// Count the customers that has the attribute
     			cursor = userCollection.aggregate(
     					Arrays.asList(
     							Aggregates.match(Filters.eq(Utils.PREFERENCES, Utils.cityAttributes.get(attribute.getKey()))),
@@ -317,15 +360,16 @@ public class MongoDBHandle {
         return result;
     }
 
+    // For each city characteristics, computes the number of cities that have that characteristic
     public static HashMap<String, Integer> aggregateCitiesCharacteristics() {
     	HashMap<String, Integer> result = new HashMap<String, Integer>();
     	MongoCursor<Document> cursor = null;
     	try {
-	    	for(Map.Entry<Utils.cityNames, String> attribute : Utils.cityAttributes.entrySet()) {
-	    		if(attribute.getKey() == Utils.cityNames.COST) {
+	    	for(Map.Entry<Utils.cityNames, String> attribute : Utils.cityAttributes.entrySet()) { // For each attribute
+	    		if(attribute.getKey() == Utils.cityNames.COST) { // Count costs less or equal 2000
 	    			cursor = cityCollection.aggregate(
 	    	    			Arrays.asList(
-	    	    					Aggregates.match(Filters.lt(Utils.cityAttributes.get(Utils.cityNames.COST), 2000)),
+	    	    					Aggregates.match(Filters.lte(Utils.cityAttributes.get(Utils.cityNames.COST), 2000)),
 	    	    					Aggregates.count()
 	    	    					)).iterator();
 	    			if(cursor.hasNext()) {
@@ -335,12 +379,12 @@ public class MongoDBHandle {
 	    				result.put(Utils.cityAttributes.get(Utils.cityNames.COST), 0);
 	    			}
 	    		}
-	    		else if(attribute.getKey() == Utils.cityNames.TEMPERATURE) {
+	    		else if(attribute.getKey() == Utils.cityNames.TEMPERATURE) { // Count temperatures between 15 and 25
 	    			cursor = cityCollection.aggregate(
 	    	    			Arrays.asList(
 	    	    					Aggregates.match(Filters.and(
-	    	    							Filters.gt(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 15),
-	    	    							Filters.lt(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 25)
+	    	    							Filters.gte(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 15),
+	    	    							Filters.lte(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 25)
 	    	    							)),
 	    	    					Aggregates.count()
 	    	    					)).iterator();
@@ -351,10 +395,10 @@ public class MongoDBHandle {
 	    				result.put(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 0);
 	    			}
 	    		}
-	    		else {
+	    		else { // Count attributes greater or equal to 3
 	    			cursor = cityCollection.aggregate(
 	    					Arrays.asList(
-	    	    					Aggregates.match(Filters.gt(Utils.cityAttributes.get(attribute.getKey()), 3)),
+	    	    					Aggregates.match(Filters.gte(Utils.cityAttributes.get(attribute.getKey()), 3)),
 	    	    					Aggregates.count()
 	    	    					)).iterator();
 	    			if(cursor.hasNext()) {

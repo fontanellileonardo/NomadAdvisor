@@ -64,6 +64,7 @@ public class NomadHandler {
     	return MongoDBHandle.selectHotels(city.getCityName(), city.getCountryName());
 	}
 	
+    // Updates the customer preferences and return the message to show in the interface
 	public static String updatePreferences(Customer customer, List<String> preferences) {
 		customer.setPreferences(preferences);
 		String result;
@@ -71,11 +72,27 @@ public class NomadHandler {
 			result = "Success!!!";
 		}
 		else {
-			result = "Update operation failed";
+			result = "There's nothing to change";
 		}
 		return result;
 	}
 	
+	// Calls the database handler to create a new hotel and returns a string to show on the interface
+	public static String createHotel(String name, String city, String country, String address, String website) {
+		Hotel hotel = new Hotel(name, city, country, 0, address, website);
+		int result = MongoDBHandle.createHotel(hotel);
+		switch(result) {
+			case 0:
+				return "Operation successfully completed";
+			case 1:
+				return "Operation failed: the hotel already exists";
+			case 2:
+				return "Ooops, something went wrong. Please, try again later";
+		}
+		return null;
+	}
+	
+	// Computes the data to show in the pie charts
 	public static List<HashMap<String, Integer>> computePieChartsData() {
 		List<HashMap<String, Integer>> pieChartsData = new ArrayList();
 		pieChartsData.add(MongoDBHandle.aggregateCitiesCharacteristics());
