@@ -230,7 +230,31 @@ public class MongoDBHandle {
         return false;
     }
 
+    /*
+     * Create a new hotel
+     * Return:
+     * 0 if everything goes right
+     * 1 if the hotel already exists
+     * 2 if an error occurs
+     * */
     public static int createHotel(Hotel hotel) {
+    	try {
+	    	Document hotelDoc = new Document(
+	    			"_id", new Document(
+	    					"name", hotel.getHotelName())
+	    					.append("city", hotel.getCityName())
+	    					.append("country", hotel.getCountryName()))
+	    			.append("address", hotel.getAddress());
+	    	if(hotel.getWebsite() != null)
+	    		hotelDoc.append("websites", hotel.getWebsite());
+	    	hotelCollection.insertOne(hotelDoc);
+    	} catch(Exception ex) {
+    		System.out.println("Error inserting a new hotel: "+ex.getMessage());
+    		if(ex.toString().contains("E11000")) { // Hotel already exists
+    			return 1;
+    		}
+    		return 2;
+    	}
         return 0;
     }
 
