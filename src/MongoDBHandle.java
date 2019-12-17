@@ -145,15 +145,17 @@ public class MongoDBHandle {
     	return new City(charact,cityName, countryName);
     }
 
+    //Retrieve the hotels of a certain City (specifying also the country)
     public static List<Hotel> selectHotels(String city, String country) {
         List<Hotel> hotels = new ArrayList<>();
+        //Query the Hotel Collection DB for a City name and a Country
         MongoCursor<Document> cursor = hotelCollection.find(Filters.and(Filters.eq("_id.city", city), Filters.eq("_id.country", country))).iterator();
         try{
-            while(cursor.hasNext()){
+            while(cursor.hasNext()){ //Iterates on the documents
                 Document d = cursor.next();
                 Document d_hotel = (Document) d.get("_id");
                 int avg = d.getInteger("avgScore")==null?0:d.getInteger("avgScore");
-                Hotel h = new Hotel(d_hotel.getString("name"), d_hotel.getString("city"), d_hotel.getString("country"), avg, d.getString("address"), d.getString("website"));
+                Hotel h = new Hotel(d_hotel.getString("name"), d_hotel.getString("city"), d_hotel.getString("country"), avg, d.getString("address"), d.getString("websites"));
                 hotels.add(h);
             }
         } catch (Exception ex){
@@ -163,6 +165,7 @@ public class MongoDBHandle {
     }
 
     // Customer Interface (Hotel)
+	// Retrieve the reviews for a certain hotel
     public static List<Review> selectReviews(String hotelName, String city, String country) {
         List<Review> reviews = new ArrayList<>();
         MongoCursor<Document> cursor = reviewCollection.find(Filters.and(Filters.eq("hotelId.name", hotelName), Filters.eq("hotelId.city", city), Filters.eq("hotelId.country", country))).iterator();
@@ -184,6 +187,7 @@ public class MongoDBHandle {
         return reviews;
     }
 
+    //Insert the review in the DB
     public static boolean createReview(Review review) {
         Document rv = new Document("username", review.getUsername())
                         .append("rating", review.getRating())
@@ -200,7 +204,6 @@ public class MongoDBHandle {
         return true;
     }
 
-    /*
     // Personal Area
     public static boolean updatePreferences(Customer customer) {
     	UpdateResult result = userCollection.updateOne(Filters.eq("email", customer.getEmail()), new Document("$set",
@@ -210,7 +213,7 @@ public class MongoDBHandle {
     		return false;
     	}
         return true;
-    }*/
+    }
   
     // Employee Interface
     public static List<Customer> selectCustomers() {
@@ -234,7 +237,6 @@ public class MongoDBHandle {
         return 0;
     }
 
-    /*
     public static HashMap<String, Integer> aggregateCustomersPreferences() {
     	HashMap<String, Integer> result = new HashMap<String, Integer>();
     	MongoCursor<Document> cursor = null;
@@ -262,7 +264,7 @@ public class MongoDBHandle {
     			cursor.close();
     	}
         return result;
-    }*/
+    }
 
     public static HashMap<String, Integer> aggregateCitiesCharacteristics() {
     	HashMap<String, Integer> result = new HashMap<String, Integer>();
