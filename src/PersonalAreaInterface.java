@@ -170,7 +170,7 @@ public class PersonalAreaInterface {
     }
     
     // Get the logged Customer from NomadAdvisor and sets the fields of the interface
-    public void initialize() {
+    public void initInterface() {
     	Customer customer = null;
     	if(nomadAdvisor != null)
     		customer = (Customer) nomadAdvisor.getUser();

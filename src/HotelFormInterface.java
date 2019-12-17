@@ -60,7 +60,7 @@ public class HotelFormInterface {
     }
     
     // Initialize the interface fields
-    public void initialize(String city, String country) {
+    public void initInterface(String city, String country) {
     	outcomeLabel.setText("");
     	cityNameLabel.setText(city);
     	countryNameLabel.setText(country);

@@ -62,7 +62,7 @@ public class StatisticsInterface {
     }
     
     // Computes the data to show and inserts them in the pie charts
-    public void initialize() {
+    public void initInterface() {
     	List<HashMap<String, Integer>> pieChartsData = NomadHandler.computePieChartsData();
     	if(pieChartsData == null) {
     		errorLabel.setText("An error occurred during data loading");
