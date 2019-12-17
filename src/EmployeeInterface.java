@@ -1,17 +1,29 @@
+import java.io.IOException;
 import java.util.List;
 
 import javafx.collections.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
 
-public class employeeInterface {
+public class EmployeeInterface {
 	
 	City selectedCity;
+	private FXMLLoader fxmlStatLoader;
+	private FXMLLoader fxmlCityFormLoader;
+	private FXMLLoader fxmlHotelFormLoader;
+	private Scene statScene;
+	private Scene cityFormScene;
+	private Scene hotelFormScene;
+	
 
     @FXML private AnchorPane backgroundPane;
     @FXML private ImageView logo;
@@ -63,11 +75,25 @@ public class employeeInterface {
     @FXML private Button logoutButton;
     @FXML private Text title;
     
-    @FXML public void initialize() {
+    @FXML
+    private void initialize() {
     	chooseView.setItems(viewList);
     	initializeCustomerTable();
     	initializeCityTable();
     	initializeHotelTable();
+    	
+    	//retrieve the fxml for the popup windows related to city's form, hotel's form and statistics
+    	try {
+    	fxmlStatLoader = new FXMLLoader(EmployeeInterface.class.getResource("resources/StatisticsInterface.fxml"));
+    	fxmlCityFormLoader = new FXMLLoader(EmployeeInterface.class.getResource("resources/CityForm.fxml"));
+    	statScene = new Scene(fxmlStatLoader.load());
+    	cityFormScene = new Scene(fxmlCityFormLoader.load());
+    	
+    	} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+    	}
+    	
     }
 
     private void initializeCustomerTable() {
@@ -126,7 +152,11 @@ public class employeeInterface {
     
     @FXML
     void addCity(ActionEvent event) {
-    	System.out.println("New City added: "+selectedCity.getCityName());
+    	
+    	Stage popupStage = new Stage();
+
+    	popupStage.setScene(cityFormScene);
+    	popupStage.show();
     	
     }
 

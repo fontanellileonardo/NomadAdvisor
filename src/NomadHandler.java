@@ -38,10 +38,18 @@ public class NomadHandler {
         return "You didn't complete the registration fields";
 	}
 	
+	// Search the city by a given preferences
+	public static List<City> getCity(HashMap<String,Integer> pref) {
+		if(pref.isEmpty())
+			return MongoDBHandle.selectCities();
+		return MongoDBHandle.selectCities(pref);
+	}
+	
 	// Search the city by a given name
 	public static List<City> getCity(String cityName) {
-		List<City> cities = new ArrayList<City>();
-		return cities = MongoDBHandle.selectCities(cityName);
+		if(cityName.isEmpty())
+			return MongoDBHandle.selectCities();
+		return MongoDBHandle.selectCities(cityName);
 	}
 
     public static boolean addReview(Review newReview){
