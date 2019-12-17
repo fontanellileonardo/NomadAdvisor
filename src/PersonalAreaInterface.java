@@ -77,28 +77,30 @@ public class PersonalAreaInterface {
     private Label emailLabel;
     
     @FXML
-    private Label errorLabel;
+    private Label outcomeLabel;
     
     private NomadAdvisor nomadAdvisor;
 
     @FXML
+    // Comes back to the city interface
     void comeBack(ActionEvent event) {
-    	errorLabel.setText("");
-    	//nomadAdvisor.changeScene("cityInterface");
-    	nomadAdvisor.changeScene("statisticsInterface");
+    	outcomeLabel.setText("");
+    	nomadAdvisor.changeScene("cityInterface");
     }
 
     @FXML
+    // Logout and returns to login interface
     void logout(ActionEvent event) {
-    	errorLabel.setText("");
+    	outcomeLabel.setText("");
     	nomadAdvisor.changeScene("loginInterface");
     }
 
     @FXML
+    // Saves the preferences added from the customer
     void savePreferences(ActionEvent event) {
     	List<String> preferences = this.getPreferences();
     	Customer customer = (Customer) nomadAdvisor.getUser();
-    	errorLabel.setText(NomadHandler.updatePreferences(customer, preferences));
+    	outcomeLabel.setText(NomadHandler.updatePreferences(customer, preferences));
     }
     
     // Sets the username label with the username of the logged user
