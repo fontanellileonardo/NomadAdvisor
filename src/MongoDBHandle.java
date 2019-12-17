@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.logging.Filter;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 public class MongoDBHandle {
 
@@ -45,8 +46,11 @@ public class MongoDBHandle {
   
     // Login interface
 
-    // It creates an Employee or a Customer object, but it returns a User object. In this way it can be used to read
-    // both Customers and Employees.
+    /* It creates an Employee or a Customer object, but it returns a User object. In this way it can be used to read both Customers and Employees.
+     * 
+     * return: null in case of errors, the desired user. 
+     * In msg set the result of the method, this is needed for the loginInterface
+     */
     public static User readUser(User user, StringBuilder msg) {
     	Customer customer;
     	Employee employee;
@@ -102,26 +106,88 @@ public class MongoDBHandle {
     	}
         return 0;
     }
-
-    // Customer interface (City)
-    // If the fields are null, search all the cities
-    public static List<City> selectCities(String name) {
-    	return selectCities(name, null, null);
-    }
-    public static List<City> selectCities(String name, String country, List<String> filters) {
+    
+    // Customer Interface (City)
+    
+    /* Retrieve all the cities
+     * return: null if an error occurs, empty list if no city is found or the full list
+     */
+    public static List<City> selectCities() {
     	List<City> cities = new ArrayList<City>();
-    	MongoCursor<Document> cursor = cityCollection.find(Filters.eq("_id.city", name)).iterator();
+    	MongoCursor<Document> cursor = cityCollection.find().limit(30).iterator();
     	try {
     		while(cursor.hasNext()) {
     			 Document dc = cursor.next();
-    			 cities.add(buildCity(dc));
+    			 City city = buildCity(dc);
+    			 if(city != null)
+    				 cities.add(city);
     		}
     	}catch(Exception ex) {
     		System.out.println("Error: "+ex);
+    		return null;
     	}
         return cities;
     }
     
+    /* Search the first 30 cities that satisfies the preferences inserted
+     * return: null if an error occurs, empty list if no city is found or the full list
+     */
+    public static List<City> selectCities(HashMap<String,Integer> pref) {
+    	List<City> cities = new ArrayList<City>();
+    	List<Bson> filters = new ArrayList<Bson>();
+    	// set the filter for the research
+    	if(pref.get("temp_lower") != null) {	// if the filter's temperature is set
+    		filters.add(Filters.and(
+					Filters.gte(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), pref.get("temp_lower")),
+					Filters.lte(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), pref.get("temp_greater"))
+					));
+    		pref.remove("temp_lower");
+    		pref.remove("temp_greater");
+    	}
+	    	
+    	for(Map.Entry<String, Integer> entry: pref.entrySet()) {
+    		if(entry.getKey().equals(Utils.cityAttributes.get(Utils.cityNames.COST))) { // filter's cost
+    			filters.add(Filters.lte(entry.getKey(), entry.getValue()));
+    		} else
+    			filters.add(Filters.gte(entry.getKey(),entry.getValue()));	// all the other filters
+    	}
+    	
+    	// Show the first 30 cities
+    	MongoCursor<Document> cursor = cityCollection.find(Filters.and(filters)).limit(30).iterator();
+    	try {
+    		while(cursor.hasNext()) {
+    			 Document dc = cursor.next();
+    			 City city= buildCity(dc);
+    			 if( city != null)
+    				 cities.add(city);
+    		}
+    	}catch(Exception ex) {
+    		System.out.println("Error: "+ex);
+    		return null;
+    	}
+    	return cities;
+    }
+    
+	/* Find the cities by a given name
+	 * return: null if an error occurs, empty list if no city is found or the full list
+	 */
+    public static List<City> selectCities(String name) {
+    	List<City> cities = new ArrayList<City>();
+    	MongoCursor<Document> cursor = cityCollection.find(Filters.eq("_id.city", name)).limit(30).iterator();
+    	try {
+    		while(cursor.hasNext()) {
+    			 Document dc = cursor.next();
+    			 City city = buildCity(dc);
+    			 if(city != null)
+    				 cities.add(city);
+    		}
+    	}catch(Exception ex) {
+    		System.out.println("Error: "+ex);
+    		return null;
+    	}
+        return cities;
+    }
+
     // initialize city with the values taken from the DB
     static City buildCity(Document dc) {
     	HashMap<String,Integer> charact = new HashMap<String,Integer>();
@@ -135,14 +201,14 @@ public class MongoDBHandle {
     	Document id = (Document)dc.get(Utils.ID);
     	String cityName = " ";
     	String countryName = " ";
-    	// Check if the id is a Document
-    	if(id!=null) {
-    		cityName = id.getString(Utils.CITY) != null ?
-        			id.getString(Utils.CITY) : " ";
-        	countryName = id.getString(Utils.COUNTRY) != null ?
-        			id.getString(Utils.COUNTRY) : " ";
+    	// Check if the id is not null
+    	if(id != null) {
+    		cityName = id.getString(Utils.CITY);
+        	countryName = id.getString(Utils.COUNTRY);
+        	if(cityName == null || countryName == null)
+        		return null;
     	}
-    	return new City(charact,cityName, countryName);
+    	return new City(charact, cityName, countryName);
     }
 
     //Retrieve the hotels of a certain City (specifying also the country)
@@ -205,11 +271,12 @@ public class MongoDBHandle {
     }
 
     // Personal Area
+    // Update customer preferences
     public static boolean updatePreferences(Customer customer) {
     	UpdateResult result = userCollection.updateOne(Filters.eq("email", customer.getEmail()), new Document("$set",
     			new Document(Utils.PREFERENCES, customer.getPreferences())));
     	if(result.getModifiedCount() == 0) {
-    		System.out.println("Update preferences failed: Customer not found");
+    		System.out.println("Customer preferences update operation failed: There's nothing to change");
     		return false;
     	}
         return true;
@@ -233,15 +300,57 @@ public class MongoDBHandle {
         return false;
     }
 
+    /*
+     * Create a new hotel
+     * Return:
+     * 0 if everything goes right
+     * 1 if the hotel already exists
+     * 2 if an error occurs
+     * */
     public static int createHotel(Hotel hotel) {
+    	try {
+	    	Document hotelDoc = new Document(
+	    			"_id", new Document(
+	    					"name", hotel.getHotelName())
+	    					.append("city", hotel.getCityName())
+	    					.append("country", hotel.getCountryName()))
+	    			.append("address", hotel.getAddress());
+	    	if(hotel.getWebsite() != null)
+	    		hotelDoc.append("websites", hotel.getWebsite());
+	    	hotelCollection.insertOne(hotelDoc);
+    	} catch(Exception ex) {
+    		if(ex.toString().contains("E11000")) { // Hotel already exists, so it is updated
+    			return updateHotel(hotel);
+    		}
+    		return 2;
+    	}
+        return 0;
+    }
+    
+    // Updates the fields address and websites of an hotel
+    private static int updateHotel(Hotel hotel) {
+    	Document id = new Document(
+				"name", hotel.getHotelName())
+				.append("city", hotel.getCityName())
+				.append("country", hotel.getCountryName());
+    	Document updatedFields = new Document("address", hotel.getAddress()); // Fields to update
+    	if(hotel.getWebsite() != null)
+    		updatedFields.append("websites", hotel.getWebsite());
+    	UpdateResult result = hotelCollection.updateOne(Filters.eq("_id", id), new Document("$set", updatedFields));
+    	if(result.getModifiedCount() == 0) {
+    		System.out.println("Hotel update operation failed: There's nothing to change");
+    		return 2;
+    	}
         return 0;
     }
 
+    // For each city characteristics, computes the number of customers that have that preference
     public static HashMap<String, Integer> aggregateCustomersPreferences() {
     	HashMap<String, Integer> result = new HashMap<String, Integer>();
     	MongoCursor<Document> cursor = null;
     	try {
     		for(Map.Entry<Utils.cityNames, String> attribute : Utils.cityAttributes.entrySet()) {
+    			// Count the customers that has the attribute
     			cursor = userCollection.aggregate(
     					Arrays.asList(
     							Aggregates.match(Filters.eq(Utils.PREFERENCES, Utils.cityAttributes.get(attribute.getKey()))),
@@ -266,15 +375,16 @@ public class MongoDBHandle {
         return result;
     }
 
+    // For each city characteristics, computes the number of cities that have that characteristic
     public static HashMap<String, Integer> aggregateCitiesCharacteristics() {
     	HashMap<String, Integer> result = new HashMap<String, Integer>();
     	MongoCursor<Document> cursor = null;
     	try {
-	    	for(Map.Entry<Utils.cityNames, String> attribute : Utils.cityAttributes.entrySet()) {
-	    		if(attribute.getKey() == Utils.cityNames.COST) {
+	    	for(Map.Entry<Utils.cityNames, String> attribute : Utils.cityAttributes.entrySet()) { // For each attribute
+	    		if(attribute.getKey() == Utils.cityNames.COST) { // Count costs less or equal 2000
 	    			cursor = cityCollection.aggregate(
 	    	    			Arrays.asList(
-	    	    					Aggregates.match(Filters.lt(Utils.cityAttributes.get(Utils.cityNames.COST), 2000)),
+	    	    					Aggregates.match(Filters.lte(Utils.cityAttributes.get(Utils.cityNames.COST), 2000)),
 	    	    					Aggregates.count()
 	    	    					)).iterator();
 	    			if(cursor.hasNext()) {
@@ -284,12 +394,12 @@ public class MongoDBHandle {
 	    				result.put(Utils.cityAttributes.get(Utils.cityNames.COST), 0);
 	    			}
 	    		}
-	    		else if(attribute.getKey() == Utils.cityNames.TEMPERATURE) {
+	    		else if(attribute.getKey() == Utils.cityNames.TEMPERATURE) { // Count temperatures between 15 and 25
 	    			cursor = cityCollection.aggregate(
 	    	    			Arrays.asList(
 	    	    					Aggregates.match(Filters.and(
-	    	    							Filters.gt(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 15),
-	    	    							Filters.lt(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 25)
+	    	    							Filters.gte(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 15),
+	    	    							Filters.lte(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 25)
 	    	    							)),
 	    	    					Aggregates.count()
 	    	    					)).iterator();
@@ -300,10 +410,10 @@ public class MongoDBHandle {
 	    				result.put(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE), 0);
 	    			}
 	    		}
-	    		else {
+	    		else { // Count attributes greater or equal to 3
 	    			cursor = cityCollection.aggregate(
 	    					Arrays.asList(
-	    	    					Aggregates.match(Filters.gt(Utils.cityAttributes.get(attribute.getKey()), 3)),
+	    	    					Aggregates.match(Filters.gte(Utils.cityAttributes.get(attribute.getKey()), 3)),
 	    	    					Aggregates.count()
 	    	    					)).iterator();
 	    			if(cursor.hasNext()) {

@@ -77,60 +77,82 @@ public class PersonalAreaInterface {
     private Label emailLabel;
     
     @FXML
-    private Label errorLabel;
+    private Label outcomeLabel;
     
     private NomadAdvisor nomadAdvisor;
 
     @FXML
+    // Comes back to the city interface
     void comeBack(ActionEvent event) {
-    	errorLabel.setText("");
-    	System.out.println("Add city interface in the code!");
-    	//nomadAdvisor.changeScene("cityInterface");
+    	outcomeLabel.setText("");
+    	nomadAdvisor.changeScene("cityInterface");
     }
 
     @FXML
+    // Logout and returns to login interface
     void logout(ActionEvent event) {
-    	errorLabel.setText("");
+    	outcomeLabel.setText("");
     	nomadAdvisor.changeScene("loginInterface");
     }
 
     @FXML
+    // Saves the preferences added from the customer
     void savePreferences(ActionEvent event) {
     	List<String> preferences = this.getPreferences();
-    	Customer customer = (Customer) nomadAdvisor.getLoggedUser();
-    	errorLabel.setText(nomadAdvisor.getNomadHandler().updatePreferences(customer, preferences));
+    	Customer customer = (Customer) nomadAdvisor.getUser();
+    	outcomeLabel.setText(NomadHandler.updatePreferences(customer, preferences));
     }
     
+    // Sets the username label with the username of the logged user
     private void setUsernameLabel(String username) {
-    	usernameLabel.setText(username);
+    	if(username == null)
+    		usernameLabel.setText("");
+    	else
+    		usernameLabel.setText(username);
     }
     
-    private void setNameLabel(String username) {
-    	nameLabel.setText("Name: " + username);
+ // Sets the name label with the name of the logged user
+    private void setNameLabel(String name) {
+    	if(name == null)
+    		nameLabel.setText("Name: not available");
+    	else
+    		nameLabel.setText("Name: " + name);
     }
     
-    private void setSurnameLabel(String username) {
-    	surnameLabel.setText("Surname: " + username);
+ // Sets the surname label with the surname of the logged user
+    private void setSurnameLabel(String surname) {
+    	if(surname == null)
+    		surnameLabel.setText("Surname: not available");
+    	else
+    		surnameLabel.setText("Surname: " + surname);
     }
     
-    private void setEmailLabel(String username) {
-    	emailLabel.setText("Email: " + username);
+ // Sets the email label with the email of the logged user
+    private void setEmailLabel(String email) {
+    	if(email == null)
+    		emailLabel.setText("Email: not available");
+    	else
+    		emailLabel.setText("Email: " + email);
     }
     
+    // Select the checkbox fields depending on the preferences of the logged customer
     private void setPreferences(List<String> preferences) {
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE))) tempCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.AIR_QUALITY))) airCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.QUALITY_LIFE))) qualityLifeCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.FOREIGNERS))) foreignersCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.HEALTHCARE))) healthcareCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.NIGHTLIFE))) nightlifeCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.COST))) costCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.SAFETY))) safetyCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.WALKABILITY))) walkabilityCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.WIFI))) wifiCheckBox.setSelected(true);
-    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.ENGLISH))) englishCheckBox.setSelected(true);
+    	if(preferences != null) {
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE))) tempCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.AIR_QUALITY))) airCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.QUALITY_LIFE))) qualityLifeCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.FOREIGNERS))) foreignersCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.HEALTHCARE))) healthcareCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.NIGHTLIFE))) nightlifeCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.COST))) costCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.SAFETY))) safetyCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.WALKABILITY))) walkabilityCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.WIFI))) wifiCheckBox.setSelected(true);
+	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.ENGLISH))) englishCheckBox.setSelected(true);
+    	}
     }
     
+    // Creating a list of preferences depending on what the customer selects on the interface
     private List<String> getPreferences() {
     	List<String> preferences = new ArrayList<>();
     	if(tempCheckBox.isSelected()) preferences.add(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE));
@@ -147,7 +169,12 @@ public class PersonalAreaInterface {
     	return preferences;
     }
     
-    public void initialize(Customer customer, NomadAdvisor nomadAdvisor) {
+    // Get the logged Customer from NomadAdvisor and sets the fields of the interface
+    public void initInterface() {
+    	outcomeLabel.setText("");
+    	Customer customer = null;
+    	if(nomadAdvisor != null)
+    		customer = (Customer) nomadAdvisor.getUser();
     	if(customer != null) {
 	    	this.setUsernameLabel(customer.getUsername());
 	    	this.setNameLabel(customer.getName());
@@ -155,6 +182,10 @@ public class PersonalAreaInterface {
 	    	this.setEmailLabel(customer.getEmail());
 	    	this.setPreferences(customer.getPreferences());
     	}
+    }
+    
+ // Sets the reference to the NomadAdvisor object
+    public void setNomadAdvisor(NomadAdvisor nomadAdvisor) {
     	this.nomadAdvisor = nomadAdvisor;
     }
 

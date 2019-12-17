@@ -6,14 +6,15 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="551.0" prefWidth="760.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StatisticsInterface">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="551.0" prefWidth="760.0" style="-fx-background-color: #ffebcc;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StatisticsInterface">
    <children>
-      <Separator fx:id="hSeparator" layoutX="-1.0" layoutY="115.0" minHeight="-Infinity" minWidth="-Infinity" prefWidth="761.0" />
-      <PieChart fx:id="citiesPieChart" labelsVisible="false" layoutX="10.0" layoutY="151.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="344.0" prefWidth="357.0" title="Cities attributes distribution" />
-      <PieChart fx:id="customerPieChart" labelsVisible="false" layoutX="389.0" layoutY="151.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="344.0" prefWidth="357.0" title="Customer preferences distribution" />
-      <Separator fx:id="vSeparator" layoutX="379.0" layoutY="115.0" orientation="VERTICAL" prefHeight="435.0" prefWidth="0.0" />
+      <Separator fx:id="hSeparator" layoutX="-1.0" layoutY="124.0" minHeight="-Infinity" minWidth="-Infinity" prefWidth="761.0" />
+      <PieChart fx:id="citiesPieChart" labelsVisible="false" layoutX="10.0" layoutY="151.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="344.0" prefWidth="357.0" stylesheets="@style/PieCharts.css" title="Cities characteristics distribution" />
+      <PieChart fx:id="customerPieChart" labelsVisible="false" layoutX="389.0" layoutY="151.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="344.0" prefWidth="357.0" stylesheets="@style/PieCharts.css" title="Customer preferences distribution" />
+      <Separator fx:id="vSeparator" layoutX="379.0" layoutY="125.0" orientation="VERTICAL" prefHeight="425.0" prefWidth="4.0" />
       <Label fx:id="titleLabel" layoutX="339.0" layoutY="46.0" text="Statistics Area">
          <font>
             <Font size="36.0" />
@@ -24,5 +25,10 @@
             <Image url="@images/Statistics.png" />
          </image>
       </ImageView>
+      <HBox alignment="CENTER" layoutY="106.0" prefHeight="17.0" prefWidth="760.0">
+         <children>
+            <Label fx:id="outcomeLabel" text="Outcome" textFill="#045491" />
+         </children>
+      </HBox>
    </children>
 </AnchorPane>
