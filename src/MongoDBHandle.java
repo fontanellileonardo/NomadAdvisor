@@ -4,6 +4,7 @@ import com.mongodb.WriteConcern;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Sorts;
 import com.mongodb.client.result.UpdateResult;
 
 import java.awt.Desktop.Action;
@@ -220,7 +221,7 @@ public class MongoDBHandle {
     public static List<Hotel> selectHotels(String city, String country) {
         List<Hotel> hotels = new ArrayList<>();
         //Query the Hotel Collection DB for a City name and a Country
-        MongoCursor<Document> cursor = hotelCollection.find(Filters.and(Filters.eq("_id.city", city), Filters.eq("_id.country", country))).iterator();
+        MongoCursor<Document> cursor = hotelCollection.find(Filters.and(Filters.eq("_id.city", city), Filters.eq("_id.country", country))).limit(30).iterator();
         try{
             while(cursor.hasNext()){ //Iterates on the documents
                 Document d = cursor.next();
@@ -239,7 +240,7 @@ public class MongoDBHandle {
 	// Retrieve the reviews for a certain hotel
     public static List<Review> selectReviews(String hotelName, String city, String country) {
         List<Review> reviews = new ArrayList<>();
-        MongoCursor<Document> cursor = reviewCollection.find(Filters.and(Filters.eq("hotelId.name", hotelName), Filters.eq("hotelId.city", city), Filters.eq("hotelId.country", country))).iterator();
+        MongoCursor<Document> cursor = reviewCollection.find(Filters.and(Filters.eq("hotelId.name", hotelName), Filters.eq("hotelId.city", city), Filters.eq("hotelId.country", country))).sort(Sorts.descending("date")).limit(30).iterator();
         try{
             while(cursor.hasNext()){
                 Document d = cursor.next();
