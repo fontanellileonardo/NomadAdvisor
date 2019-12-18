@@ -181,16 +181,19 @@ public class HotelInterface {
         });
     }
 
+    public void initialize(){
+        chooseMarkBox.getItems().removeAll(chooseMarkBox.getItems());
+        chooseMarkBox.getItems().addAll(scores); //Populate the combo-box of the review scores
+        initReviewTable();  //Initialize the Review Table
+    }
+
     /*
      * This method initialize the tables
      */
     public void initInterface() {
         userMsg.setText("");
         city = nomadAdvisor.getCity();   // Retrieve the City object from nomadAdvisor
-        chooseMarkBox.getItems().removeAll(chooseMarkBox.getItems());
-        chooseMarkBox.getItems().addAll(scores); //Populate the combo-box of the review scores
         initHotelTable(); //Initialize the Hotel Table
-        initReviewTable();  //Initialize the Review Table
         setHotelListener(); //This method sets the listener for the Hotel selection in the table
         hotelTable.setItems(hotelList);   //Populate the Hotel table
         reviewTable.setItems(reviewList);   //Populate the Review table
