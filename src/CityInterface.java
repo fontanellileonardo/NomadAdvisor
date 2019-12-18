@@ -92,23 +92,78 @@ public class CityInterface {
     @FXML private TableColumn<City, String> characteristicsColumn;
     @FXML private Button hotelButton;
     
-    @FXML public void initInterface() {
+    // Initialize all the interface's elements
+    @FXML void initialize() {
     	initializeCityTable();
-    	initializeComboBox();
+    	initializeComboBox();	
     	hotelButton.setDisable(true);
+    }
+    
+    // Update the interface's elements
+    public void initInterface() {
+    	updateCityTable();
+    	resetInterfaceElements();
     	notificationMsg.setText("");
     	costField.setText("");
+    	hotelButton.setDisable(true);
     }
-     
-    // City Table initialization
+    
+    // Search cities by Name
+    @FXML void cityNameButton(ActionEvent event) {
+    	String name = cityText.getText().trim();
+    	List<City> cities = NomadHandler.getCity(name);
+    	if(cities == null)
+    		notificationMsg.setText("Oops, something went wrong!");
+    	else
+    		cityListUpdate(cities);
+    }
+    
+    // Search cities by attributes
+    @FXML void cityPrefButton(ActionEvent event) {
+    	// pref has as keys the names in the document cities except the temperature
+    	HashMap<String,Integer> preferences = buildPrefMap(temperatureBox.getValue(),qualityLifeBox.getValue(), englishBox.getValue(),
+    			friendlyBox.getValue(), nigthlifeBox.getValue(), costField.getText(), healthBox.getValue(), safetyBox.getValue(),
+    			walkabilityBox.getValue(), airQualityBox.getValue(), wifiBox.getValue());
+    	if(preferences != null) {
+    		List<City> cities = NomadHandler.getCity(preferences);
+        	if(cities == null)
+        		notificationMsg.setText("Oops, something went wrong!");
+        	else
+        		cityListUpdate(cities);
+    	}	
+    }
+    
+    // Go to the customer's personal area interface
+    @FXML void profileButton(ActionEvent event) {
+    	nomadAdvisor.changeScene("personalAreaInterface");
+    }
+
+    // Go back to the Login interface
+    @FXML void logOutButton(ActionEvent event) {
+    	nomadAdvisor.changeScene("loginInterface");
+    }
+    
+    // Search the hotels related to the selected city and go to the relative interface
+    @FXML void hotelButton(ActionEvent event) {
+    	// take the field selected from the car table
+    	nomadAdvisor.setCity(cityTable.getSelectionModel().getSelectedItem());
+        System.out.println("Selected city name: "+nomadAdvisor.getCity().getCityName());
+        nomadAdvisor.changeScene("hotelInterface");
+    } 
+    
+    // Initialize the city table
     private void initializeCityTable() {
+    	// Initialize the city table
     	cityColumn.setCellValueFactory(new PropertyValueFactory<City, String>("cityName")); 
     	countryColumn.setCellValueFactory(new PropertyValueFactory<City, String>("countryName")); 
     	characteristicsColumn.setCellValueFactory(new PropertyValueFactory<City, String>("characteristics")); 
     	characteristicsColumn.setCellFactory(Utils.WRAPPING_CELL_FACTORY);
 
     	cityTable.setItems(cityList);
-    	
+    }
+    
+    // Update city table
+    private void updateCityTable() {
     	// Retrieve the preferences of the logged Customer and retrieve the cities more appropriate to him
     	List<String> userPreferences = ((Customer) nomadAdvisor.getUser()).getPreferences();
     	HashMap<String,Integer> pref = new HashMap<String,Integer>();
@@ -119,7 +174,7 @@ public class CityInterface {
     				pref.put("temp_lower",15);
     				pref.put("temp_greater", 25);
     			} else if(userPreferences.get(i).equals(Utils.cityAttributes.get(Utils.cityNames.COST)))
-    				pref.put(Utils.cityAttributes.get(Utils.cityNames.COST), 1000);
+    				pref.put(Utils.cityAttributes.get(Utils.cityNames.COST), 2000);
     			else
     				pref.put(userPreferences.get(i), 3);
     		}
@@ -159,47 +214,9 @@ public class CityInterface {
     	}
     }
     
-    // Search city by Name
-    @FXML void cityNameButton(ActionEvent event) {
-    	String name = cityText.getText().trim();
-    	List<City> cities = NomadHandler.getCity(name);
-    	if(cities == null)
-    		notificationMsg.setText("Oops, something went wrong!");
-    	else
-    		cityListUpdate(cities);
-    }
     
-    // Search city by attributes
-    @FXML void cityPrefButton(ActionEvent event) {
-    	// Costruisci pref HashMap con i valori della chiave esattamente uguali ai campi del documento esclusa la temperatura
-    	HashMap<String,Integer> preferences = buildPrefMap(temperatureBox.getValue(),qualityLifeBox.getValue(), englishBox.getValue(),
-    			friendlyBox.getValue(), nigthlifeBox.getValue(), costField.getText(), healthBox.getValue(), safetyBox.getValue(),
-    			walkabilityBox.getValue(), airQualityBox.getValue(), wifiBox.getValue());
-    	List<City> cities = NomadHandler.getCity(preferences);
-    	if(cities == null)
-    		notificationMsg.setText("Oops, something went wrong!");
-    	else
-    		cityListUpdate(cities);
-    }
     
-    // Go to the customer's personal area interface
-    @FXML void profileButton(ActionEvent event) {
-    	nomadAdvisor.changeScene("personalAreaInterface");
-    }
-
-    // Go back to the Login interface
-    @FXML void logOutButton(ActionEvent event) {
-    	nomadAdvisor.changeScene("loginInterface");
-    }
-    
-    // Search the hotels related to the selected city and go to the relative interface
-    @FXML void hotelButton(ActionEvent event) {
-    	// take the field selected from the car table
-    	nomadAdvisor.setCity(cityTable.getSelectionModel().getSelectedItem());
-        System.out.println("Selected city name: "+nomadAdvisor.getCity().getCityName());
-        nomadAdvisor.changeScene("hotelInterface");
-    } 
-    
+    // Add a Listener to the city table, listen when a city is selected
     void addCityTableListener() {
     	// Listen when the customer select a city from city table
         cityTable.getSelectionModel().selectedIndexProperty().addListener((num) ->
@@ -274,12 +291,26 @@ public class CityInterface {
         	return preferences;
     		
     	}catch(NumberFormatException ex) {
-    		notificationMsg.setText("Oops, something went wrong!");
+    		notificationMsg.setText("Please, insert only numbers in the cost field");
     		System.out.println("error in building the hash map containing the preferences: "+ex.getMessage());
     		return null;
     	}
     }
     
+    // Reset all the TextField, ComboBoxes and buttons in the interface
+    private void resetInterfaceElements() {
+    	notificationMsg.setText("");
+    	costField.setText("");
+    	cityText.clear();
+    	ComboBox[] cb = {wifiBox, airQualityBox, walkabilityBox, safetyBox, healthBox, 
+    			nigthlifeBox, friendlyBox, englishBox, qualityLifeBox, };
+    	for(int i = 0; i<cb.length; i++) {
+    		cb[i].setValue("");
+    	}
+    	hotelButton.setDisable(true);
+    }
+    
+    // Set the nomadAdvisor object
     public void setNomadAdvisor(NomadAdvisor nomadAdvisor) {
     	this.nomadAdvisor = nomadAdvisor;
     }
