@@ -1,5 +1,6 @@
 import com.mongodb.Block;
 import com.mongodb.MongoWriteException;
+import com.mongodb.WriteConcern;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
@@ -28,9 +29,13 @@ public class MongoDBHandle {
     private static MongoCollection<Document> hotelCollection;
     private static MongoCollection<Document> reviewCollection;
 
-    static{
+    public static void openConnection() {
         mongoClient = DBConnection.getInstance().mongoClient;
-        database = mongoClient.getDatabase("task2");
+        /* new WriteConcern(1,100): 1 represents the w:1 so the ack is returned after the write is done on the primary server
+        *  100 represents the time in ms. If the application doesn't receive any response from the DB after
+        *  this period of time, it generates an error. 
+        */
+        database = mongoClient.getDatabase("task2").withWriteConcern(new WriteConcern(1,100));
         userCollection = database.getCollection("user");
         cityCollection = database.getCollection("city");
         hotelCollection = database.getCollection("hotel");

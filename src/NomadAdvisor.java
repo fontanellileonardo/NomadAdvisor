@@ -38,6 +38,7 @@ public class NomadAdvisor extends Application {
     }
 
     public void start(Stage stage) {
+    	NomadHandler.openConnection();
         nomadHandler = new NomadHandler();
         this.stage = stage;
         this.stage.setTitle("Nomad Advisor");
@@ -70,6 +71,9 @@ public class NomadAdvisor extends Application {
 	    personalAreaInterface.setNomadAdvisor(this);
 	
 	    changeScene("loginInterface");
+	    this.stage.setOnCloseRequest((WindowEvent we) -> {
+        	NomadHandler.closeConnection();
+        });
 	    this.stage.show();
     }
 
