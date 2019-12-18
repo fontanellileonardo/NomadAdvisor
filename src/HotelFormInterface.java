@@ -61,9 +61,17 @@ public class HotelFormInterface {
     
     // Initialize the interface fields
     public void initInterface(String city, String country) {
-    	outcomeLabel.setText("");
+    	clearAll();
     	cityNameLabel.setText(city);
     	countryNameLabel.setText(country);
+    }
+    
+    // Clears all the interface fields
+    private void clearAll() {
+    	outcomeLabel.setText("");
+    	nameTextField.setText("");
+    	addressTextField.setText("");
+    	websiteTextField.setText("");
     }
 
 }
