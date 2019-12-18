@@ -104,4 +104,12 @@ public class NomadHandler {
 			return null;
 		return pieChartsData;
 	}
+	
+	public static void openConnection() {
+		MongoDBHandle.openConnection();
+	}
+	
+	public static void closeConnection() {
+		MongoDBHandle.finish();
+	}
 }
