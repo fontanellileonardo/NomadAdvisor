@@ -12,7 +12,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <VBox fx:id="cityForm" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="508.0" prefWidth="368.0" spacing="5.0" style="-fx-background-color: #ffebcc;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CityFormController">
    <children>
       <Label fx:id="title" alignment="CENTER" prefHeight="27.0" prefWidth="138.0" text="Add a new City: " textAlignment="CENTER">
@@ -67,8 +66,8 @@
             </Label>
             <TextField fx:id="cityField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="127.0" promptText="city Name" GridPane.rowIndex="1" />
             <TextField fx:id="countryField" layoutX="10.0" layoutY="37.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="129.0" promptText="country Name" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Label fx:id="wifiLabel" text="Free WiFi: " GridPane.halignment="LEFT" GridPane.rowIndex="3" />
-            <Label fx:id="temperatureLabel" layoutX="10.0" layoutY="125.0" text="Temperature (°C):" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
+            <Label fx:id="wifiLabel" text="Free WiFi: " GridPane.halignment="LEFT" GridPane.rowIndex="4" />
+            <Label fx:id="temperatureLabel" layoutX="10.0" layoutY="125.0" text="Temperature (°C):" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
             <Label fx:id="qolLabel" layoutX="62.0" layoutY="169.0" text="Quality of Life: " GridPane.halignment="LEFT" GridPane.rowIndex="5" />
             <Label fx:id="engLabel" layoutX="62.0" layoutY="212.0" text="English Speaking:" GridPane.halignment="LEFT" GridPane.rowIndex="6" />
             <Label fx:id="friendlyLabel" layoutX="62.0" layoutY="254.0" text="Nightlife:" GridPane.halignment="LEFT" GridPane.rowIndex="7" />
@@ -78,9 +77,7 @@
             <Label fx:id="safetyLabel" layoutX="221.0" layoutY="169.0" text="Safety:" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="5" />
             <Label fx:id="walkLabel" layoutX="221.0" layoutY="212.0" text="Walkability:" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="6" />
             <Label fx:id="airLabel" layoutX="221.0" layoutY="254.0" text="Air Quality:" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="7" />
-            <ComboBox fx:id="wifiScore" prefHeight="25.0" prefWidth="42.0" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-            <ComboBox fx:id="costScore" layoutX="65.0" layoutY="121.0" prefHeight="25.0" prefWidth="42.0" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-            <ComboBox fx:id="tempScore" layoutX="224.0" layoutY="121.0" prefHeight="25.0" prefWidth="42.0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+            <ComboBox fx:id="wifiScore" layoutX="224.0" layoutY="121.0" prefHeight="25.0" prefWidth="42.0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
             <ComboBox fx:id="healthScore" layoutX="65.0" layoutY="165.0" prefHeight="25.0" prefWidth="42.0" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
             <ComboBox fx:id="qolScore" layoutX="224.0" layoutY="165.0" prefHeight="25.0" prefWidth="42.0" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
             <ComboBox fx:id="safetyScore" layoutX="65.0" layoutY="208.0" prefHeight="25.0" prefWidth="42.0" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
@@ -94,6 +91,8 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
+            <TextField fx:id="costField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="51.0" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+            <TextField fx:id="tempField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="51.0" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
          </children>
          <padding>
             <Insets right="5.0" />
