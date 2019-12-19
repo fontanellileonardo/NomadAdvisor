@@ -20,16 +20,19 @@ public class NomadAdvisor extends Application {
     private HotelInterface hotelInterface;
     private PersonalAreaInterface personalAreaInterface;
     private CityInterface cityInterface;
+    private EmployeeInterface employeeInterface;
     private Stage stage;
     private FXMLLoader fxmlLoaderHotel;
     private FXMLLoader fxmlLoaderLogin;
     private FXMLLoader fxmlLoaderCity;
     private FXMLLoader fxmlLoaderPersonalArea;
+    private FXMLLoader fxmlLoaderEmployee;
     private NomadHandler nomadHandler;
     private Scene loginScene;
     private Scene personalAreaScene;
     private Scene cityScene;
     private Scene hotelScene;
+    private Scene employeeScene;
     private User loggedUser;
     private City selectedCity;
 
@@ -48,11 +51,13 @@ public class NomadAdvisor extends Application {
         	fxmlLoaderLogin = new FXMLLoader(NomadAdvisor.class.getResource("resources/LoginInterface.fxml"));
         	fxmlLoaderHotel = new FXMLLoader(NomadAdvisor.class.getResource("resources/HotelInterface.fxml"));
         	fxmlLoaderPersonalArea = new FXMLLoader(NomadAdvisor.class.getResource("resources/PersonalAreaInterface.fxml"));
+        	fxmlLoaderEmployee = new FXMLLoader(NomadAdvisor.class.getResource("resources/EmployeeInterface.fxml"));
         	// Create Scenes
         	this.loginScene = new Scene(fxmlLoaderLogin.load());
         	this.cityScene = new Scene(fxmlLoaderCity.load());
         	this.hotelScene = new Scene(fxmlLoaderHotel.load());
         	this.personalAreaScene = new Scene(fxmlLoaderPersonalArea.load());
+        	this.employeeScene = new Scene(fxmlLoaderEmployee.load());
           
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -64,11 +69,13 @@ public class NomadAdvisor extends Application {
 	    cityInterface = (CityInterface) fxmlLoaderCity.getController();
 	    hotelInterface = (HotelInterface) fxmlLoaderHotel.getController();
 	    personalAreaInterface = (PersonalAreaInterface) fxmlLoaderPersonalArea.getController();
+	    employeeInterface = (EmployeeInterface) fxmlLoaderEmployee.getController();
 	    // Set the NomadAdvisor reference
 	    cityInterface.setNomadAdvisor(this);
 	    loginInterface.setNomadAdvisor(this);
 	    hotelInterface.setNomadAdvisor(this);
 	    personalAreaInterface.setNomadAdvisor(this);
+	    employeeInterface.setNomadAdvisor(this);
 	
 	    changeScene("loginInterface");
 	    this.stage.setOnCloseRequest((WindowEvent we) -> {
@@ -94,6 +101,9 @@ public class NomadAdvisor extends Application {
             	hotelInterface.initInterface();
             	this.stage.setScene(hotelScene);
             	break;
+            case "employeeInterface":
+            	hotelInterface.initInterface();
+            	this.stage.setScene(employeeScene);
             default:
                 System.out.println("Not Implemented");
         }
