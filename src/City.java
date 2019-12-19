@@ -29,6 +29,10 @@ public class City {
     public String getCharacteristics() {
     	return characteristics.get().toString();
     }
+    
+    public HashMap<String,Integer> getHashedCharacteristics() {
+    	return characteristics.get();
+    }
 
 
     public String getCountryName() {
