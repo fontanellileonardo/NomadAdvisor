@@ -77,29 +77,33 @@ public class PersonalAreaInterface {
     private Label emailLabel;
     
     @FXML
-    private Label errorLabel;
+    private Label outcomeLabel;
     
     private NomadAdvisor nomadAdvisor;
 
     @FXML
+    // Comes back to the city interface
     void comeBack(ActionEvent event) {
-    	errorLabel.setText("");
+    	clearAll();
     	nomadAdvisor.changeScene("cityInterface");
     }
 
     @FXML
+    // Logout and returns to login interface
     void logout(ActionEvent event) {
-    	errorLabel.setText("");
+    	clearAll();
     	nomadAdvisor.changeScene("loginInterface");
     }
 
     @FXML
+    // Saves the preferences added from the customer
     void savePreferences(ActionEvent event) {
     	List<String> preferences = this.getPreferences();
     	Customer customer = (Customer) nomadAdvisor.getUser();
-    	errorLabel.setText(NomadHandler.updatePreferences(customer, preferences));
+    	outcomeLabel.setText(NomadHandler.updatePreferences(customer, preferences));
     }
     
+    // Sets the username label with the username of the logged user
     private void setUsernameLabel(String username) {
     	if(username == null)
     		usernameLabel.setText("");
@@ -107,6 +111,7 @@ public class PersonalAreaInterface {
     		usernameLabel.setText(username);
     }
     
+    // Sets the name label with the name of the logged user
     private void setNameLabel(String name) {
     	if(name == null)
     		nameLabel.setText("Name: not available");
@@ -114,6 +119,7 @@ public class PersonalAreaInterface {
     		nameLabel.setText("Name: " + name);
     }
     
+    // Sets the surname label with the surname of the logged user
     private void setSurnameLabel(String surname) {
     	if(surname == null)
     		surnameLabel.setText("Surname: not available");
@@ -121,6 +127,7 @@ public class PersonalAreaInterface {
     		surnameLabel.setText("Surname: " + surname);
     }
     
+    // Sets the email label with the email of the logged user
     private void setEmailLabel(String email) {
     	if(email == null)
     		emailLabel.setText("Email: not available");
@@ -128,6 +135,7 @@ public class PersonalAreaInterface {
     		emailLabel.setText("Email: " + email);
     }
     
+    // Select the checkbox fields depending on the preferences of the logged customer
     private void setPreferences(List<String> preferences) {
     	if(preferences != null) {
 	    	if(preferences.contains(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE))) tempCheckBox.setSelected(true);
@@ -144,6 +152,7 @@ public class PersonalAreaInterface {
     	}
     }
     
+    // Creating a list of preferences depending on what the customer selects on the interface
     private List<String> getPreferences() {
     	List<String> preferences = new ArrayList<>();
     	if(tempCheckBox.isSelected()) preferences.add(Utils.cityAttributes.get(Utils.cityNames.TEMPERATURE));
@@ -160,7 +169,9 @@ public class PersonalAreaInterface {
     	return preferences;
     }
     
-    public void initialize() {
+    // Get the logged Customer from NomadAdvisor and sets the fields of the interface
+    public void initInterface() {
+    	outcomeLabel.setText("");
     	Customer customer = null;
     	if(nomadAdvisor != null)
     		customer = (Customer) nomadAdvisor.getUser();
@@ -173,8 +184,25 @@ public class PersonalAreaInterface {
     	}
     }
     
+    // Sets the reference to the NomadAdvisor object
     public void setNomadAdvisor(NomadAdvisor nomadAdvisor) {
     	this.nomadAdvisor = nomadAdvisor;
+    }
+    
+    // Clears all the fields of the interface
+    private void clearAll() {
+    	outcomeLabel.setText("");
+    	tempCheckBox.setSelected(false);
+    	airCheckBox.setSelected(false);
+    	qualityLifeCheckBox.setSelected(false);
+    	foreignersCheckBox.setSelected(false);
+    	healthcareCheckBox.setSelected(false);
+    	nightlifeCheckBox.setSelected(false);
+    	costCheckBox.setSelected(false);
+    	safetyCheckBox.setSelected(false);
+    	walkabilityCheckBox.setSelected(false);
+    	wifiCheckBox.setSelected(false);
+    	englishCheckBox.setSelected(false);
     }
 
 }

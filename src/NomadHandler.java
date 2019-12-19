@@ -94,18 +94,22 @@ public class NomadHandler {
 		return MongoDBHandle.selectCities(cityName);
 	}
 
+	//Add a review for a certain hotel
     public static boolean addReview(Review newReview){
         return MongoDBHandle.createReview(newReview);
     }
 
+    //Gets the reviews of a certain hotel
     public static List<Review> getReviews(Hotel hotel){
         return MongoDBHandle.selectReviews(hotel.getHotelName(), hotel.getCityName(), hotel.getCountryName());
     }
 
+    //Get the hotels of a certain city
     public static List<Hotel> getHotels(City city){
     	return MongoDBHandle.selectHotels(city.getCityName(), city.getCountryName());
 	}
 	
+    // Updates the customer preferences and return the message to show in the interface
 	public static String updatePreferences(Customer customer, List<String> preferences) {
 		customer.setPreferences(preferences);
 		String result;
@@ -113,11 +117,27 @@ public class NomadHandler {
 			result = "Success!!!";
 		}
 		else {
-			result = "Update operation failed";
+			result = "There's nothing to change";
 		}
 		return result;
 	}
 	
+	// Calls the database handler to create a new hotel and returns a string to show on the interface
+	public static String createHotel(String name, String city, String country, String address, String website) {
+		Hotel hotel = new Hotel(name, city, country, 0, address, website);
+		int result = MongoDBHandle.createHotel(hotel);
+		switch(result) {
+			case 0:
+				return "Operation successfully completed";
+			case 1:
+				return "Operation failed: the hotel already exists";
+			case 2:
+				return "Ooops, something went wrong. Please, try again later";
+		}
+		return null;
+	}
+	
+	// Computes the data to show in the pie charts
 	public static List<HashMap<String, Integer>> computePieChartsData() {
 		List<HashMap<String, Integer>> pieChartsData = new ArrayList();
 		pieChartsData.add(MongoDBHandle.aggregateCitiesCharacteristics());
@@ -125,5 +145,13 @@ public class NomadHandler {
 		if((pieChartsData.get(0) == null) || (pieChartsData.get(1) == null))
 			return null;
 		return pieChartsData;
+	}
+	
+	public static void openConnection() {
+		MongoDBHandle.openConnection();
+	}
+	
+	public static void closeConnection() {
+		MongoDBHandle.finish();
 	}
 }

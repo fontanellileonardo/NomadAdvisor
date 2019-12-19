@@ -17,8 +17,9 @@ public class StatisticsInterface {
     private PieChart customerPieChart;
     
     @FXML
-    private Label errorLabel;
+    private Label outcomeLabel;
     
+    // Creates the slices of the pie chart using the key of the map as label and the value of the map as value of the slice
     private ObservableList<PieChart.Data> setPieChartData(HashMap<String, Integer> slices) {
     	ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
     	for(Map.Entry<String, Integer> slice : slices.entrySet()) {
@@ -48,20 +49,24 @@ public class StatisticsInterface {
     	return pieChartData;
     }
     
+    // Gets the data from the map and inserts them in the cities pie chart
     private void setCityPieChart(HashMap<String, Integer> slices) {
     	ObservableList<PieChart.Data> pieChartData = setPieChartData(slices);
     	citiesPieChart.setData(pieChartData);
     }
     
+    // Gets the data from the map and inserts them in the customers pie chart
     private void setCustomerPieChart(HashMap<String, Integer> slices) {
     	ObservableList<PieChart.Data> pieChartData = setPieChartData(slices);
     	customerPieChart.setData(pieChartData);
     }
     
-    public void initialize() {
+    // Computes the data to show and inserts them in the pie charts
+    public void initInterface() {
+    	outcomeLabel.setText("");
     	List<HashMap<String, Integer>> pieChartsData = NomadHandler.computePieChartsData();
     	if(pieChartsData == null) {
-    		errorLabel.setText("An error occurred during data loading");
+    		outcomeLabel.setText("An error occurred during data loading");
     		return;
     	}
     	this.setCityPieChart(pieChartsData.get(0));

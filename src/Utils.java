@@ -18,6 +18,7 @@ public class Utils {
 	// HashMap where the key is the cityNames and the value is the key in the DB related to the characteristics
 	public static HashMap<cityNames,String> cityAttributes = new HashMap();
 
+	// Initialize cityAttributes
 	static {
 		cityAttributes.put(cityNames.TEMPERATURE,"temperature");
 		cityAttributes.put(cityNames.COST,"cost");
