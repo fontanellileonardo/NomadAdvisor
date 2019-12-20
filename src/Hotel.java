@@ -6,7 +6,6 @@ public class Hotel {
     private final SimpleStringProperty hotelName;
     private final SimpleStringProperty cityName;
     private final SimpleStringProperty countryName;
-    private final SimpleIntegerProperty avgScore;
     private final SimpleStringProperty address;
     private final SimpleStringProperty website;
 
@@ -14,16 +13,14 @@ public class Hotel {
         this.hotelName = new SimpleStringProperty("");
         this.cityName = new SimpleStringProperty("");
         this.countryName = new SimpleStringProperty("");
-        this.avgScore = new SimpleIntegerProperty(0);
         this.address = new SimpleStringProperty("");
         this.website = new SimpleStringProperty("");
     }
 
-    public Hotel(String hotelName, String cityName, String countryName, int avgScore, String address, String website) {
+    public Hotel(String hotelName, String cityName, String countryName, String address, String website) {
         this.hotelName = new SimpleStringProperty(hotelName);
         this.cityName = new SimpleStringProperty(cityName);
         this.countryName = new SimpleStringProperty(countryName);
-        this.avgScore = new SimpleIntegerProperty(avgScore);
         this.address = new SimpleStringProperty(address);
         this.website = new SimpleStringProperty(website);
     }
@@ -62,18 +59,6 @@ public class Hotel {
 
     public void setCountryName(String countryName) {
         this.countryName.set(countryName);
-    }
-
-    public int getAvgScore() {
-        return avgScore.get();
-    }
-
-    public SimpleIntegerProperty avgScoreProperty() {
-        return avgScore;
-    }
-
-    public void setAvgScore(int avgScore) {
-        this.avgScore.set(avgScore);
     }
 
     public String getAddress() {

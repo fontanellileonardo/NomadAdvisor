@@ -71,11 +71,11 @@ public class MongoDBHandle {
     		System.out.println("Document retrieved in readUser: " + document.toString());
     		// Check if the role field exists
 			if(document.getString("role") != null) {
-				if(document.getString("role").equals("customer")) {	// customer
-					msg.append("Success!");
+				msg.append("Success!");
+				if(document.getString("role").equals("customer"))	// customer
 	    			return customer = new Customer(document.getString("name"), document.getString("surname"), user.getEmail(), user.getPassword(), 
 	    					document.getString("username"), (List<String>) document.get("preferences"));
-	    		} else // employee
+	    		else // employee
 	    			return employee = new Employee(document.getString("name"), document.getString("surname"), user.getEmail(), user.getPassword());
 			}
     	}catch(Exception ex) {
@@ -227,8 +227,7 @@ public class MongoDBHandle {
             while(cursor.hasNext()){ //Iterates on the documents
                 Document d = cursor.next();
                 Document d_hotel = (Document) d.get("_id");
-                int avg = d.getInteger("avgScore")==null?0:d.getInteger("avgScore");
-                Hotel h = new Hotel(d_hotel.getString("name"), d_hotel.getString("city"), d_hotel.getString("country"), avg, d.getString("address"), d.getString("websites"));
+                Hotel h = new Hotel(d_hotel.getString("name"), d_hotel.getString("city"), d_hotel.getString("country"), d.getString("address"), d.getString("websites"));
                 hotels.add(h);
             }
         } catch (Exception ex){

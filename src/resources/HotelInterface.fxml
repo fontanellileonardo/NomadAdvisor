@@ -20,8 +20,7 @@
         <columns>
           <TableColumn fx:id="hotelNameColumn" prefWidth="90.0" text="Name" />
           <TableColumn fx:id="addressNameColumn" prefWidth="110.0" text="Address" />
-            <TableColumn fx:id="avgColumn" prefWidth="61.0" text="AvgScore" />
-            <TableColumn fx:id="websiteColumn" prefWidth="106.0" text="Website" />
+            <TableColumn fx:id="websiteColumn" prefWidth="158.0" text="Website" />
         </columns>
       </TableView>
       <TableView fx:id="reviewTable" layoutX="514.0" layoutY="179.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="395.0" prefWidth="383.0">

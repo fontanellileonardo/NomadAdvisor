@@ -275,7 +275,7 @@ public class EmployeeInterface {
     	Stage popupStage = new Stage();
 
     	popupStage.setScene(statScene);
-    	statInterface.initialize();
+    	statInterface.initInterface();
     	popupStage.setOnCloseRequest((WindowEvent we) -> {
            	cityListUpdate("");
     	});
