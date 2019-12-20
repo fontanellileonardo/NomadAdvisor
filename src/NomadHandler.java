@@ -124,7 +124,7 @@ public class NomadHandler {
 	
 	// Calls the database handler to create a new hotel and returns a string to show on the interface
 	public static String createHotel(String name, String city, String country, String address, String website) {
-		Hotel hotel = new Hotel(name, city, country, 0, address, website);
+		Hotel hotel = new Hotel(name, city, country, address, website);
 		int result = MongoDBHandle.createHotel(hotel);
 		switch(result) {
 			case 0:
