@@ -71,11 +71,11 @@ public class MongoDBHandle {
     		System.out.println("Document retrieved in readUser: " + document.toString());
     		// Check if the role field exists
 			if(document.getString("role") != null) {
-				if(document.getString("role").equals("customer")) {	// customer
-					msg.append("Success!");
+				msg.append("Success!");
+				if(document.getString("role").equals("customer"))	// customer
 	    			return customer = new Customer(document.getString("name"), document.getString("surname"), user.getEmail(), user.getPassword(), 
 	    					document.getString("username"), (List<String>) document.get("preferences"));
-	    		} else // employee
+	    		else // employee
 	    			return employee = new Employee(document.getString("name"), document.getString("surname"), user.getEmail(), user.getPassword());
 			}
     	}catch(Exception ex) {

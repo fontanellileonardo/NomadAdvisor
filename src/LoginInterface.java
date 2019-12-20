@@ -53,6 +53,7 @@ public class LoginInterface {
     		clearNotificationMessages();
     		// Switch to CityInterface if is a customer or to EmployeeInterface if is a employee
     		nomadAdvisor.setUser(user);
+    		System.out.println("role: "+user.getRole());
     		if(user.getRole().equals("customer"))
     			nomadAdvisor.changeScene("cityInterface");
     		if(user.getRole().equals("employee"))
