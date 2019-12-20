@@ -104,6 +104,7 @@ public class NomadAdvisor extends Application {
             case "employeeInterface":
             	employeeInterface.init_interface();
             	this.stage.setScene(employeeScene);
+            	break;
             default:
                 System.out.println("Not Implemented");
         }
