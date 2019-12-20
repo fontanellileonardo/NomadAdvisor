@@ -33,7 +33,6 @@ public class HotelInterface {
     @FXML private Text hotelTableTitle;
     @FXML private TableColumn<Hotel, String> hotelNameColumn;
     @FXML private TableColumn<Hotel, String> addressNameColumn;
-    @FXML private TableColumn<Hotel, Integer> avgColumn;
     @FXML private TableColumn<Hotel, String> websiteColumn;
     @FXML private Text reviewMessage;
     @FXML private TableView<Review> reviewTable;
@@ -144,7 +143,6 @@ public class HotelInterface {
         listHotelsUpdate(NomadHandler.getHotels(city));
         hotelNameColumn.setCellValueFactory(new PropertyValueFactory("hotelName"));
         addressNameColumn.setCellValueFactory(new PropertyValueFactory("address"));
-        avgColumn.setCellValueFactory(new PropertyValueFactory("avgScore"));
         websiteColumn.setCellValueFactory(new PropertyValueFactory("website"));
     }
 
