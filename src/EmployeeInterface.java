@@ -13,10 +13,15 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class EmployeeInterface {
 	
-	City selectedCity;
+	private City selectedCity;
+	private Hotel selectedHotel;
+	private NomadAdvisor nomadAdvisor;
+	
+	private StatisticsInterface statInterface;
 	private FXMLLoader fxmlStatLoader;
 	private FXMLLoader fxmlCityFormLoader;
 	private FXMLLoader fxmlHotelFormLoader;
@@ -35,7 +40,7 @@ public class EmployeeInterface {
     @FXML private Button statButton; 
     
     @FXML private VBox customerPanel;
-    @FXML private Label customerTitle;
+    @FXML private Label customerTitle;   
     //Customer Table Section
     private ObservableList<Customer> customerList = 
     		FXCollections.observableArrayList();
@@ -55,6 +60,10 @@ public class EmployeeInterface {
     @FXML private TableColumn<City, String> cityCountryCol;
     @FXML private TableColumn<City, String> cityCharCol;
     
+    @FXML private HBox bottomPanel;
+    @FXML private Button searchButton;
+    @FXML private TextField cityNameField;
+    @FXML private HBox buttonBox;
     @FXML private Button newCityButton;
     @FXML private Button deleteCityButton;
     
@@ -84,16 +93,19 @@ public class EmployeeInterface {
     	
     	//retrieve the fxml for the popup windows related to city's form, hotel's form and statistics
     	try {
-    	fxmlStatLoader = new FXMLLoader(EmployeeInterface.class.getResource("resources/StatisticsInterface.fxml"));
-    	fxmlCityFormLoader = new FXMLLoader(EmployeeInterface.class.getResource("resources/CityForm.fxml"));
-    	statScene = new Scene(fxmlStatLoader.load());
-    	cityFormScene = new Scene(fxmlCityFormLoader.load());
-    	
+	    	fxmlStatLoader = new FXMLLoader(EmployeeInterface.class.getResource("resources/StatisticsInterface.fxml"));
+	    	fxmlCityFormLoader = new FXMLLoader(EmployeeInterface.class.getResource("resources/CityForm.fxml"));
+	    	//fxmlHotelFormLoader = new FXMLLoader(EmployeeInterface.class.getResource("resource/HotelForm.fxml"));
+	    	statScene = new Scene(fxmlStatLoader.load());
+	    	cityFormScene = new Scene(fxmlCityFormLoader.load());
+	    	//hotelFormScene = new Scene(fxmlHotelFormLoader.load());
     	} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
     	}
     	
+    	//get statisticsInterface controller in order to be able to reload statistics
+    	statInterface = (StatisticsInterface)fxmlStatLoader.getController();	
     }
 
     private void initializeCustomerTable() {
@@ -109,7 +121,8 @@ public class EmployeeInterface {
     	
     	cityNameCol.setCellValueFactory(new PropertyValueFactory<City, String>("cityName")); 
     	cityCountryCol.setCellValueFactory(new PropertyValueFactory<City, String>("countryName")); 
-    	cityCharCol.setCellValueFactory(new PropertyValueFactory<City, String>("attributes")); 
+    	cityCharCol.setCellValueFactory(new PropertyValueFactory<City, String>("characteristics")); 
+    	cityCharCol.setCellFactory(Utils.WRAPPING_CELL_FACTORY);
 
     	cityTable.setItems(cityList);
     	
@@ -126,6 +139,9 @@ public class EmployeeInterface {
                 
                 //show hotels related to the selectedCity or delete selected city
                 //call to the listUpdate with the choosen city for the hotelTable
+                hotelListUpdate(selectedCity);
+	            newHotelButton.setDisable(false);
+	            deleteHotelButton.setDisable(false);
            }
         });
     }
@@ -137,31 +153,81 @@ public class EmployeeInterface {
         webColumn.setCellValueFactory(new PropertyValueFactory<Hotel, String>("website"));
     
         hotelTable.setItems(hotelList);
+        
+        hotelTable.getSelectionModel().selectedIndexProperty().addListener((num) ->
+        {           
+            if(hotelTable.getSelectionModel().getSelectedItem() == null) {
+               hotelTable.getSelectionModel().clearSelection();
+
+            }
+            else {
+                selectedHotel = hotelTable.getSelectionModel().getSelectedItem();
+                System.out.println("I selected: "+selectedHotel.getHotelName());
+            }
+        });
+    }
+   
+    public void init_interface() {
+    	customerListUpdate();	
     }
     
-    public void cityListUpdate(List<City> cities){
-        cityList.clear();
-        cityList.addAll(cities);
+    private void customerListUpdate() {
+    	List<Customer> customers = NomadHandler.getCustomers();
+    	if(customers == null) 
+    		System.out.println("Oops! Something went wrong!");
+    	else {
+    		customerList.clear();
+    		customerList.addAll(customers);
+    	}
+    }
+    private void cityListUpdate(String name){
+    	List<City> cities = NomadHandler.getCity(name);
+    	if(cities == null) 
+    		System.out.println("Oops! Something went wrong!");
+    	else {
+    		cityList.clear();
+    		cityList.addAll(cities);
+    	}
     }
     
-    public void hotelListUpdate(List<Hotel> hotels){
-        hotelList.clear();
-        hotelList.addAll(hotels);
+    private void hotelListUpdate(City choosen){
+    	List<Hotel> hotels = NomadHandler.getHotels(choosen);
+    	if(hotels == null) 
+    		System.out.println("Oops! Something went wrong!");
+    	else {
+    		hotelList.clear();
+    		hotelList.addAll(hotels);
+    	}
     }
     
-    
+    @FXML
+    void searchCity(ActionEvent event) {
+    	String cityName = cityNameField.getText().trim();
+    	cityListUpdate(cityName);
+    		
+    } 
     @FXML
     void addCity(ActionEvent event) {
     	
     	Stage popupStage = new Stage();
 
     	popupStage.setScene(cityFormScene);
+    	popupStage.setOnCloseRequest((WindowEvent we) -> {
+    		cityListUpdate("");
+    	});
     	popupStage.show();
     	
     }
 
     @FXML
     void addHotel(ActionEvent event) {
+    	Stage popupStage = new Stage();
+
+    	popupStage.setScene(cityFormScene);
+    	popupStage.setOnCloseRequest((WindowEvent we) -> {
+           	hotelListUpdate(selectedCity);
+    	});
+    	popupStage.show();
 
     }
 
@@ -175,6 +241,7 @@ public class EmployeeInterface {
     		
     		//show the right table
     		((VBox)paneChildren.get(paneChildren.indexOf(customerPanel))).setVisible(true);
+    		customerListUpdate();
 
     	}
     	else {
@@ -183,7 +250,8 @@ public class EmployeeInterface {
     		
     		//show the right table
     		((VBox)paneChildren.get(paneChildren.indexOf(cityPanel))).setVisible(true);
-    		((VBox)paneChildren.get(paneChildren.indexOf(hotelPanel))).setVisible(true);	
+    		((VBox)paneChildren.get(paneChildren.indexOf(hotelPanel))).setVisible(true);
+    		cityListUpdate("");
     	}
     		
     		
@@ -191,22 +259,36 @@ public class EmployeeInterface {
 
     @FXML
     void deleteCity(ActionEvent event) {
-
+    	logMsg.setText(NomadHandler.deleteCity(selectedCity));
+    	cityListUpdate("");
+    	hotelListUpdate(selectedCity);
     }
 
     @FXML
     void deleteHotel(ActionEvent event) {
-
-    }
-
-    @FXML
-    void logout(ActionEvent event) {
-
+    	logMsg.setText(NomadHandler.deleteHotel(selectedHotel));
+    	hotelListUpdate(selectedCity);
     }
 
     @FXML
     void showStatistics(ActionEvent event) {
+    	Stage popupStage = new Stage();
 
+    	popupStage.setScene(statScene);
+    	statInterface.initInterface();
+    	popupStage.setOnCloseRequest((WindowEvent we) -> {
+           	cityListUpdate("");
+    	});
+    	popupStage.show();
+    }
+    
+    // Go back to the Login interface
+    @FXML void logout(ActionEvent event) {
+    	nomadAdvisor.changeScene("loginInterface");
+    }
+    
+    public void setNomadAdvisor(NomadAdvisor nomadAdvisor) {
+    	this.nomadAdvisor = nomadAdvisor;
     }
 
 }

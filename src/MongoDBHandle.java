@@ -4,6 +4,7 @@ import com.mongodb.WriteConcern;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.client.result.UpdateResult;
 
@@ -70,11 +71,11 @@ public class MongoDBHandle {
     		System.out.println("Document retrieved in readUser: " + document.toString());
     		// Check if the role field exists
 			if(document.getString("role") != null) {
-				if(document.getString("role").equals("customer")) {	// customer
-					msg.append("Success!");
+				msg.append("Success!");
+				if(document.getString("role").equals("customer"))	// customer
 	    			return customer = new Customer(document.getString("name"), document.getString("surname"), user.getEmail(), user.getPassword(), 
 	    					document.getString("username"), (List<String>) document.get("preferences"));
-	    		} else // employee
+	    		else // employee
 	    			return employee = new Employee(document.getString("name"), document.getString("surname"), user.getEmail(), user.getPassword());
 			}
     	}catch(Exception ex) {
@@ -211,7 +212,7 @@ public class MongoDBHandle {
     	if(id != null) {
     		cityName = id.getString(Utils.CITY);
         	countryName = id.getString(Utils.COUNTRY);
-        	if(cityName == null || countryName == null)
+        	if(cityName == null || countryName == null) 
         		return null;
     	}
     	return new City(charact, cityName, countryName);
@@ -294,16 +295,105 @@ public class MongoDBHandle {
   
     // Employee Interface
     public static List<Customer> selectCustomers() {
-        return null;
+    	List<Customer> customers = new ArrayList<Customer>();
+    	MongoCursor<Document> cursor = userCollection.find(Filters.eq("role","customer")).limit(30).iterator();
+    	try {
+    		while(cursor.hasNext()) {
+    			Document document = cursor.next();
+    			String name = document.getString("name")==null?"":document.getString("name");
+    			String surname = document.getString("surname")==null?"":document.getString("surname");
+                Customer c = new Customer(name, surname, document.getString("email"), document.getString("password"), 
+    					document.getString("username"), (List<String>) document.get("preferences"));
+                customers.add(c);
+    		}
+    	}catch(Exception ex) {
+    		System.out.println("Error: "+ex);
+    		return null;
+    	}
+        return customers;
     }
 
     // Delete also hotels and reviews connected
     public static boolean deleteCity(City city) {
-        return false;
+    	List<Hotel> hotels = selectHotels(city.getCityName(), city.getCountryName());
+    	Document cityId = new Document(
+				"city", city.getCityName())
+				.append("country",city.getCountryName());
+    	for(int i=0; i<hotels.size(); i++) {
+    		if(!deleteHotel( hotels.get(i).getHotelName(),city.getCityName(), city.getCountryName()))
+    			return false;
+    	}
+    	// If no errors occurs is possible to delete the city
+    	try {
+			DeleteResult deleteResult = cityCollection.deleteOne(Filters.eq("_id",cityId));
+			System.out.println("Result of deletion of city "+city.getCityName()+" is: "+deleteResult.getDeletedCount());
+		}catch(MongoWriteException e) {
+			System.out.println("Delete operation interrupted");
+			return false;
+		}
+    	return true;
+    }
+    
+    // delete also the reviews connected
+    public static boolean deleteHotel(String hotelName, String cityName, String country) {
+    	Document hotelId = new Document("name",hotelName)
+    						.append("city", cityName)
+    						.append("country", country);
+		//check for the correct deletion of all the review associated
+		try {
+			DeleteResult deleteResult = reviewCollection.deleteMany(Filters.eq("hotelId",hotelId));
+			System.out.println("For the hotel "+hotelName+" # of reviews deleted: "+deleteResult.getDeletedCount());
+			}catch(MongoWriteException e) {
+				System.out.println("Delete operation interrupted");
+				return false;
+		}
+		// check for the correct deletion of the hotel
+		try {
+			DeleteResult deleteResult = hotelCollection.deleteOne(Filters.eq("_id",hotelId));
+			System.out.println("Result of deletion of hotel "+hotelName+" is: "+deleteResult.getDeletedCount());
+			}catch(MongoWriteException e) {
+				System.out.println("Delete operation interrupted");
+				return false;
+			}
+		return true;
     }
 
-    public static int createCity(City city) {
+    /* Create new object. 
+	 * Return 0 -> everything is ok
+	 * Return 1 -> object already exists or a unique value already exists
+	 * Return 2 -> DB error
+	 */
+    public static int createCity(City cityAdded) {
+    	try {
+	    	Document cityDoc = new Document(
+	    			"_id", new Document(
+	    					"city", cityAdded.getCityName())
+	    					.append("country", cityAdded.getCountryName()));
+	    	for(Map.Entry<String,Integer> attribute: cityAdded.getHashedCharacteristics().entrySet()) 
+	    		cityDoc.append(attribute.getKey(), attribute.getValue());
+	    	cityCollection.insertOne(cityDoc);
+    	} catch(Exception ex) {
+    		if(ex.toString().contains("E11000")) { // City already exists, so it is updated
+    			return updateCity(cityAdded);
+    		}
+    		return 2;
+    	}
         return 0;
+    }
+    
+    public static int updateCity(City city) {
+    	Document id = new Document(
+				"city", city.getCityName())
+				.append("country", city.getCountryName());
+    	Document updatedFields = new Document();
+    	for(Map.Entry<String,Integer> attribute: city.getHashedCharacteristics().entrySet()) 
+    		updatedFields.append(attribute.getKey(), attribute.getValue());
+    	UpdateResult result = cityCollection.updateOne(Filters.eq("_id", id), new Document("$set", updatedFields));
+    	if(result.getModifiedCount() == 0) {
+    		System.out.println("City update operation failed: There's nothing to change");
+    		return 2;
+    	}
+        return 1;
     }
 
     public static boolean deleteHotel(Hotel hotel) {
