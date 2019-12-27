@@ -21,13 +21,16 @@ public class EmployeeInterface {
 	private Hotel selectedHotel;
 	private NomadAdvisor nomadAdvisor;
 	
+	private CityFormController cityForm;
 	private StatisticsInterface statInterface;
+	private HotelFormInterface hotelForm;
 	private FXMLLoader fxmlStatLoader;
 	private FXMLLoader fxmlCityFormLoader;
 	private FXMLLoader fxmlHotelFormLoader;
 	private Scene statScene;
 	private Scene cityFormScene;
 	private Scene hotelFormScene;
+	private Stage parentEmployeeStage;
 	
 
     @FXML private AnchorPane backgroundPane;
@@ -74,7 +77,6 @@ public class EmployeeInterface {
     @FXML private TableView<Hotel> hotelTable;
     @FXML private TableColumn<Hotel, String> hotelNameCol;
     @FXML private TableColumn<Hotel, String> hotelAddressCol;
-    @FXML private TableColumn<Hotel, String> avgColumn;
     @FXML private TableColumn<Hotel, String> webColumn;
     
     @FXML private Button newHotelButton;
@@ -95,16 +97,18 @@ public class EmployeeInterface {
     	try {
 	    	fxmlStatLoader = new FXMLLoader(EmployeeInterface.class.getResource("resources/StatisticsInterface.fxml"));
 	    	fxmlCityFormLoader = new FXMLLoader(EmployeeInterface.class.getResource("resources/CityForm.fxml"));
-	    	//fxmlHotelFormLoader = new FXMLLoader(EmployeeInterface.class.getResource("resource/HotelForm.fxml"));
+	    	fxmlHotelFormLoader = new FXMLLoader(EmployeeInterface.class.getResource("resources/HotelFormInterface.fxml"));
 	    	statScene = new Scene(fxmlStatLoader.load());
 	    	cityFormScene = new Scene(fxmlCityFormLoader.load());
-	    	//hotelFormScene = new Scene(fxmlHotelFormLoader.load());
+	    	hotelFormScene = new Scene(fxmlHotelFormLoader.load());
     	} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
     	}
     	
-    	//get statisticsInterface controller in order to be able to reload statistics
+    	//get popup controllers in order to be able to reload interface with the updated data
+    	cityForm = (CityFormController)fxmlCityFormLoader.getController();
+    	hotelForm = (HotelFormInterface)fxmlHotelFormLoader.getController();
     	statInterface = (StatisticsInterface)fxmlStatLoader.getController();	
     }
 
@@ -149,7 +153,6 @@ public class EmployeeInterface {
     private void initializeHotelTable() {
     	hotelNameCol.setCellValueFactory(new PropertyValueFactory<Hotel, String>("hotelName"));
         hotelAddressCol.setCellValueFactory(new PropertyValueFactory<Hotel, String>("address"));;
-        avgColumn.setCellValueFactory(new PropertyValueFactory<Hotel, String>("avgScore"));
         webColumn.setCellValueFactory(new PropertyValueFactory<Hotel, String>("website"));
     
         hotelTable.setItems(hotelList);
@@ -167,8 +170,8 @@ public class EmployeeInterface {
         });
     }
    
-    public void init_interface() {
-    	customerListUpdate();	
+    public void initInterface() {
+    	customerListUpdate();
     }
     
     private void customerListUpdate() {
@@ -212,6 +215,8 @@ public class EmployeeInterface {
     	Stage popupStage = new Stage();
 
     	popupStage.setScene(cityFormScene);
+    	cityForm.initInterface();
+    	popupStage.initOwner(parentEmployeeStage);
     	popupStage.setOnCloseRequest((WindowEvent we) -> {
     		cityListUpdate("");
     	});
@@ -222,8 +227,9 @@ public class EmployeeInterface {
     @FXML
     void addHotel(ActionEvent event) {
     	Stage popupStage = new Stage();
-
-    	popupStage.setScene(cityFormScene);
+    	popupStage.setScene(hotelFormScene);
+    	popupStage.initOwner(parentEmployeeStage);
+    	hotelForm.initInterface(selectedCity.getCityName(), selectedCity.getCountryName());
     	popupStage.setOnCloseRequest((WindowEvent we) -> {
            	hotelListUpdate(selectedCity);
     	});
@@ -262,6 +268,7 @@ public class EmployeeInterface {
     	logMsg.setText(NomadHandler.deleteCity(selectedCity));
     	cityListUpdate("");
     	hotelListUpdate(selectedCity);
+    	cityNameField.setText("");
     }
 
     @FXML
@@ -275,6 +282,7 @@ public class EmployeeInterface {
     	Stage popupStage = new Stage();
 
     	popupStage.setScene(statScene);
+    	popupStage.initOwner(parentEmployeeStage);
     	statInterface.initInterface();
     	popupStage.setOnCloseRequest((WindowEvent we) -> {
            	cityListUpdate("");
@@ -289,6 +297,10 @@ public class EmployeeInterface {
     
     public void setNomadAdvisor(NomadAdvisor nomadAdvisor) {
     	this.nomadAdvisor = nomadAdvisor;
+    }
+    
+    public void setParentStage(Stage stage) {
+    	this.parentEmployeeStage = stage;
     }
 
 }

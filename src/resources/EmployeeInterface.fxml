@@ -37,7 +37,7 @@
                   </Label>
                   <TableView fx:id="cityTable" prefHeight="306.0" prefWidth="292.0">
                      <columns>
-                        <TableColumn fx:id="cityNameCol" prefWidth="77.0" text="Nome" />
+                        <TableColumn fx:id="cityNameCol" prefWidth="77.0" text="Name" />
                         <TableColumn fx:id="cityCountryCol" prefWidth="102.0" text="Country" />
                         <TableColumn fx:id="cityCharCol" prefWidth="136.0" text="Characteristics" />
                      </columns>
@@ -68,10 +68,9 @@
                   </Label>
                   <TableView fx:id="hotelTable" prefHeight="309.0" prefWidth="316.0">
                      <columns>
-                        <TableColumn fx:id="hotelNameCol" prefWidth="61.0" text="Nome" />
-                        <TableColumn fx:id="hotelAddressCol" prefWidth="89.0" text="Address" />
-                        <TableColumn fx:id="avgColumn" prefWidth="83.0" text="Avg Score" />
-                        <TableColumn fx:id="webColumn" prefWidth="83.0" text="Websites" />
+                        <TableColumn fx:id="hotelNameCol" prefWidth="106.0" text="Name" />
+                        <TableColumn fx:id="hotelAddressCol" prefWidth="111.0" text="Address" />
+                        <TableColumn fx:id="webColumn" prefWidth="98.0" text="Websites" />
                      </columns>
                   </TableView>
                   <ButtonBar prefHeight="40.0" prefWidth="200.0">
@@ -81,7 +80,10 @@
                     </buttons>
                   </ButtonBar>
                </children></VBox>
-            <Text fx:id="logMsg" layoutX="309.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+            <Text fx:id="logMsg" fill="#045491" layoutX="309.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="">
+               <font>
+                  <Font size="14.0" />
+               </font></Text>
             <VBox fx:id="customerPanel" alignment="TOP_CENTER" layoutX="25.0" layoutY="48.0" prefHeight="373.0" prefWidth="505.0">
                <children>
                   <Label fx:id="customerTitle" text="Customers List">
