@@ -62,6 +62,26 @@ public class NomadHandler {
         return "You didn't complete the city fields";
 	}
 	
+	public static String updateCity(City updatingCity) {
+		if(updatingCity != null) {
+			//Check if all the text fields have been correctly inserted from the Employee
+			if(updatingCity.getCityName().equals("") == false && updatingCity.getCountryName().equals("") == false 
+					&& updatingCity.getHashedCharacteristics().isEmpty() == false) {
+				int result = MongoDBHandle.updateCity(updatingCity);
+				switch(result) {
+				case 0:
+					return "Success!";
+				case 1:
+					return "City update operation failed: there's nothing to change!";
+				case 2:
+					return "City update operation failed: The city does not exists!";
+				}
+			}
+		}
+		System.out.println("The city fields are not correctly inserted");
+        return "You didn't complete the city fields";
+	}
+	
 	public static String deleteCity(City selectedCity) {
 		if(selectedCity != null) {
 			boolean result = MongoDBHandle.deleteCity(selectedCity);

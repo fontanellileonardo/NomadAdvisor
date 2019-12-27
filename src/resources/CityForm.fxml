@@ -5,6 +5,9 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
@@ -12,22 +15,28 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox fx:id="cityForm" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="508.0" prefWidth="368.0" spacing="5.0" style="-fx-background-color: #ffebcc;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CityFormController">
+<VBox fx:id="cityForm" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="536.0" prefWidth="370.0" spacing="5.0" style="-fx-background-color: #ffebcc;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CityFormController">
    <children>
-      <Label fx:id="title" alignment="CENTER" prefHeight="27.0" prefWidth="138.0" text="Add a new City: " textAlignment="CENTER">
-         <font>
-            <Font name="System Italic" size="18.0" />
-         </font>
-         <VBox.margin>
-            <Insets bottom="5.0" />
-         </VBox.margin>
-      </Label>
-      <Text fx:id="logMsg" fill="#045491" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Text>
-      <GridPane alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="415.0" prefWidth="318.0">
+      <AnchorPane fx:id="titleBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="102.0" prefWidth="338.0">
+         <children>
+            <ImageView fx:id="logo" fitHeight="104.0" fitWidth="113.0" layoutX="43.0" layoutY="-10.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/world.gif" />
+               </image>
+            </ImageView>
+            <Label fx:id="title" alignment="CENTER" layoutX="121.0" layoutY="38.0" prefHeight="27.0" prefWidth="138.0" text="Add a new City: " textAlignment="CENTER" textFill="#045491">
+               <font>
+                  <Font name="System Italic" size="18.0" />
+               </font>
+            </Label>
+            <Text fx:id="logMsg" fill="#045491" fontSmoothingType="LCD" layoutX="5.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="328.0">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+      <GridPane alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="393.0" prefWidth="318.0">
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="154.0" minWidth="10.0" prefWidth="148.0" />
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="98.0" minWidth="7.0" prefWidth="24.0" />
@@ -86,13 +95,18 @@
             <ComboBox fx:id="walkScore" layoutX="65.0" layoutY="292.0" prefHeight="25.0" prefWidth="42.0" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="6" />
             <ComboBox fx:id="nightScore" layoutX="224.0" layoutY="250.0" prefHeight="25.0" prefWidth="42.0" GridPane.halignment="RIGHT" GridPane.rowIndex="8" />
             <ComboBox fx:id="airScore" layoutX="65.0" layoutY="338.0" prefHeight="25.0" prefWidth="42.0" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
-            <Button fx:id="addButton" mnemonicParsing="false" onAction="#addCity" prefHeight="25.0" prefWidth="74.0" text="ADD CITY" GridPane.columnIndex="2" GridPane.rowIndex="9">
+            <Button fx:id="addButton" mnemonicParsing="false" onAction="#addCity" prefHeight="25.0" prefWidth="74.0" text="ADD CITY" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="9">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
             <TextField fx:id="costField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="51.0" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
             <TextField fx:id="tempField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="51.0" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+            <Button fx:id="updateButton" mnemonicParsing="false" onAction="#updateCity" prefHeight="25.0" prefWidth="65.0" text="UPDATE" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="9">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
          </children>
          <padding>
             <Insets right="5.0" />

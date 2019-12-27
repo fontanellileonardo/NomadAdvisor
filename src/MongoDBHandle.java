@@ -388,11 +388,16 @@ public class MongoDBHandle {
     	for(Map.Entry<String,Integer> attribute: city.getHashedCharacteristics().entrySet()) 
     		updatedFields.append(attribute.getKey(), attribute.getValue());
     	UpdateResult result = cityCollection.updateOne(Filters.eq("_id", id), new Document("$set", updatedFields));
-    	if(result.getModifiedCount() == 0) {
-    		System.out.println("City update operation failed: There's nothing to change");
+    	if(result.getMatchedCount() == 0) {
+    		System.out.println("City update operation failed: The city does not exists");
     		return 2;
     	}
-        return 1;
+    	else if(result.getModifiedCount() == 0) {
+    		System.out.println("City update operation failed: there's nothing to change");
+    		return 1;
+    	}
+    	
+        return 0;
     }
 
     public static boolean deleteHotel(Hotel hotel) {
