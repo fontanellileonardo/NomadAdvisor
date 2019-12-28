@@ -295,7 +295,7 @@ public class MongoDBHandle {
     // Employee Interface
     public static List<Customer> selectCustomers() {
     	List<Customer> customers = new ArrayList<Customer>();
-    	MongoCursor<Document> cursor = userCollection.find(Filters.eq("role","customer")).limit(30).iterator();
+    	MongoCursor<Document> cursor = userCollection.find(Filters.eq("role","customer")).iterator();
     	try {
     		while(cursor.hasNext()) {
     			Document document = cursor.next();
@@ -338,7 +338,7 @@ public class MongoDBHandle {
     	Document hotelId = new Document("name",hotelName)
     						.append("city", cityName)
     						.append("country", country);
-		//check for the correct deletion of all the review associated
+		//check for the correct deletion of all the reviews associated
 		try {
 			DeleteResult deleteResult = reviewCollection.deleteMany(Filters.eq("hotelId",hotelId));
 			System.out.println("For the hotel "+hotelName+" # of reviews deleted: "+deleteResult.getDeletedCount());
@@ -380,6 +380,11 @@ public class MongoDBHandle {
         return 0;
     }
     
+    /* Update a city. 
+  	 * Return 0 -> everything is ok
+  	 * Return 1 -> object already exists or nothing has been modified
+  	 * Return 2 -> DB error
+  	 */
     public static int updateCity(City city) {
     	Document id = new Document(
 				"city", city.getCityName())
