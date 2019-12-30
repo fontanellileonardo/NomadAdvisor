@@ -27,7 +27,6 @@ public class NomadAdvisor extends Application {
     private FXMLLoader fxmlLoaderCity;
     private FXMLLoader fxmlLoaderPersonalArea;
     private FXMLLoader fxmlLoaderEmployee;
-    private NomadHandler nomadHandler;
     private Scene loginScene;
     private Scene personalAreaScene;
     private Scene cityScene;
@@ -36,13 +35,9 @@ public class NomadAdvisor extends Application {
     private User loggedUser;
     private City selectedCity;
 
-    public NomadHandler getNomadHandler() {
-        return nomadHandler;
-    }
-
+    
     public void start(Stage stage) {
     	NomadHandler.openConnection();
-        nomadHandler = new NomadHandler();
         this.stage = stage;
         this.stage.setTitle("Nomad Advisor");
         try {
