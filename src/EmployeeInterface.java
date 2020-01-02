@@ -39,7 +39,7 @@ public class EmployeeInterface {
     @FXML private ComboBox<String> chooseView;
     private ObservableList<String> viewList = 
     		FXCollections.observableArrayList(
-    		"Customer View","City view");
+    		"Customer View","City View");
     @FXML private Button statButton; 
     
     @FXML private VBox customerPanel;
@@ -139,7 +139,7 @@ public class EmployeeInterface {
             else {
 
                 selectedCity = cityTable.getSelectionModel().getSelectedItem();
-                System.out.println("I selected: "+selectedCity.getCityName());
+                hotelTitle.setText(selectedCity.getCityName()+"'s Hotels List");
                 
                 //show hotels related to the selectedCity or delete selected city
                 //call to the listUpdate with the choosen city for the hotelTable
@@ -206,6 +206,7 @@ public class EmployeeInterface {
     @FXML
     void searchCity(ActionEvent event) {
     	String cityName = cityNameField.getText().trim();
+    	cityViewClean();
     	cityListUpdate(cityName);
     		
     } 
@@ -244,6 +245,7 @@ public class EmployeeInterface {
     		//retrieve the node related to the table to hide and hide it
     		((VBox)paneChildren.get(paneChildren.indexOf(cityPanel))).setVisible(false);
     		((VBox)paneChildren.get(paneChildren.indexOf(hotelPanel))).setVisible(false);
+    		cityViewClean();
     		
     		//show the right table
     		((VBox)paneChildren.get(paneChildren.indexOf(customerPanel))).setVisible(true);
@@ -292,6 +294,7 @@ public class EmployeeInterface {
     
     // Go back to the Login interface
     @FXML void logout(ActionEvent event) {
+    	clean();
     	nomadAdvisor.changeScene("loginInterface");
     }
     
@@ -301,6 +304,19 @@ public class EmployeeInterface {
     
     public void setParentStage(Stage stage) {
     	this.parentEmployeeStage = stage;
+    }
+   
+    private void cityViewClean() {
+    	cityNameField.setText("");
+    	hotelList.clear();
+		hotelTitle.setText("City's Hotels List");
+		logMsg.setText("");
+    }
+    private void clean() {
+    	chooseView.setValue("Customer View");
+    	logMsg.setText("");
+    	
+    	
     }
 
 }
