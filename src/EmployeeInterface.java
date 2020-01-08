@@ -148,6 +148,7 @@ public class EmployeeInterface {
             else {
 
                 selectedCity = cityTable.getSelectionModel().getSelectedItem();
+                logMsg.setText("");
                 hotelTitle.setText(selectedCity.getCityName()+"'s Hotels List");
                 
                 //show hotels related to the selectedCity or delete the selected city if the Delete button is clicked
@@ -176,6 +177,7 @@ public class EmployeeInterface {
             }
             else {
                 selectedHotel = hotelTable.getSelectionModel().getSelectedItem();
+                logMsg.setText("");
             }
         });
     }
