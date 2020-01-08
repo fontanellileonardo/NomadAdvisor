@@ -222,6 +222,7 @@ public class EmployeeInterface {
     @FXML void searchCity(ActionEvent event) {
     	String cityName = cityNameField.getText().trim();
     	cityViewClean();
+    	logMsg.setText("");
     	cityListUpdate(cityName);
     		
     } 
@@ -266,6 +267,7 @@ public class EmployeeInterface {
     		((VBox)paneChildren.get(paneChildren.indexOf(cityPanel))).setVisible(false);
     		((VBox)paneChildren.get(paneChildren.indexOf(hotelPanel))).setVisible(false);
     		cityViewClean();
+    		logMsg.setText("");
     		
     		//show the right table
     		((VBox)paneChildren.get(paneChildren.indexOf(customerPanel))).setVisible(true);
@@ -281,17 +283,14 @@ public class EmployeeInterface {
     		((VBox)paneChildren.get(paneChildren.indexOf(hotelPanel))).setVisible(true);
     		cityListUpdate("");
     	}
-    		
-    		
+	
     }
 
     // Delete the selected city and reload the data in the city and hotel table
     @FXML void deleteCity(ActionEvent event) {
     	logMsg.setText(NomadHandler.deleteCity(selectedCity));
     	cityListUpdate("");
-    	cityNameField.setText("");
-    	hotelList.clear();
-		hotelTitle.setText("City's Hotels List");
+    	cityViewClean();    	
     }
 
     // Delete the selected hotel and reload the data in the hotel table
@@ -334,7 +333,8 @@ public class EmployeeInterface {
     	cityNameField.setText("");
     	hotelList.clear();
 		hotelTitle.setText("City's Hotels List");
-		logMsg.setText("");
+		newHotelButton.setDisable(true);
+        deleteHotelButton.setDisable(true);
     }
     
     // Clear the interface
