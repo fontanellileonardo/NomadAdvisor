@@ -293,6 +293,7 @@ public class MongoDBHandle {
     }
   
     // Employee Interface
+    //retrieve all the registered customers
     public static List<Customer> selectCustomers() {
     	List<Customer> customers = new ArrayList<Customer>();
     	MongoCursor<Document> cursor = userCollection.find(Filters.eq("role","customer")).iterator();
@@ -338,7 +339,7 @@ public class MongoDBHandle {
     	Document hotelId = new Document("name",hotelName)
     						.append("city", cityName)
     						.append("country", country);
-		//check for the correct deletion of all the reviews associated
+		//check for the correct deletion of all the associated reviews
 		try {
 			DeleteResult deleteResult = reviewCollection.deleteMany(Filters.eq("hotelId",hotelId));
 			System.out.println("For the hotel "+hotelName+" # of reviews deleted: "+deleteResult.getDeletedCount());
@@ -359,7 +360,7 @@ public class MongoDBHandle {
 
     /* Create new object. 
 	 * Return 0 -> everything is ok
-	 * Return 1 -> object already exists or a unique value already exists
+	 * Return 1 -> object already exists
 	 * Return 2 -> DB error
 	 */
     public static int createCity(City cityAdded) {

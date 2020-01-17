@@ -21,6 +21,7 @@ public class EmployeeInterface {
 	private Hotel selectedHotel;
 	private NomadAdvisor nomadAdvisor;
 	
+	//popup interfaces for add/update city/hotel and view statistics
 	private CityFormController cityForm;
 	private StatisticsInterface statInterface;
 	private HotelFormInterface hotelForm;
@@ -30,6 +31,7 @@ public class EmployeeInterface {
 	private Scene statScene;
 	private Scene cityFormScene;
 	private Scene hotelFormScene;
+	
 	private Stage parentEmployeeStage;
 	
 
@@ -41,10 +43,11 @@ public class EmployeeInterface {
     		FXCollections.observableArrayList(
     		"Customer View","City View");
     @FXML private Button statButton; 
-    
+   
+    // Elements for the customers view
     @FXML private VBox customerPanel;
     @FXML private Label customerTitle;   
-    //Customer Table Section
+    // Customers Table Section
     private ObservableList<Customer> customerList = 
     		FXCollections.observableArrayList();
     @FXML private TableView<Customer> customerTable;
@@ -53,6 +56,7 @@ public class EmployeeInterface {
     @FXML private TableColumn<Customer, String> usernameCol;
     @FXML private TableColumn<Customer, String> emailCol;
     
+    // Elements for the Cities view
     @FXML private VBox cityPanel;
     @FXML private Label cityTitle;
     //City Table Section
@@ -63,13 +67,16 @@ public class EmployeeInterface {
     @FXML private TableColumn<City, String> cityCountryCol;
     @FXML private TableColumn<City, String> cityCharCol;
     
+    // Research panel for searching by city name
     @FXML private HBox bottomPanel;
     @FXML private Button searchButton;
     @FXML private TextField cityNameField;
+    
     @FXML private HBox buttonBox;
     @FXML private Button newCityButton;
     @FXML private Button deleteCityButton;
     
+    // Hotels view
     @FXML private VBox hotelPanel;
     @FXML private Label hotelTitle;
     //Hotel Table Section
@@ -86,8 +93,8 @@ public class EmployeeInterface {
     @FXML private Button logoutButton;
     @FXML private Text title;
     
-    @FXML
-    private void initialize() {
+    // Initialize all the fxml elements in the interface and the popup interfaces handled by this interface
+    @FXML private void initialize() {
     	chooseView.setItems(viewList);
     	initializeCustomerTable();
     	initializeCityTable();
@@ -101,8 +108,7 @@ public class EmployeeInterface {
 	    	statScene = new Scene(fxmlStatLoader.load());
 	    	cityFormScene = new Scene(fxmlCityFormLoader.load());
 	    	hotelFormScene = new Scene(fxmlHotelFormLoader.load());
-    	} catch (IOException e) {
-			// TODO Auto-generated catch block
+    	} catch (IOException e) {		
 			e.printStackTrace();
     	}
     	
@@ -112,6 +118,7 @@ public class EmployeeInterface {
     	statInterface = (StatisticsInterface)fxmlStatLoader.getController();	
     }
 
+    // Initialize the tableView of the customers
     private void initializeCustomerTable() {
     	 customerNameCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("name"));
     	 surnameCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("surname"));
@@ -121,6 +128,7 @@ public class EmployeeInterface {
     	 customerTable.setItems(customerList);
     }
     
+    // Initialize the tableView of the cities
     private void initializeCityTable() {
     	
     	cityNameCol.setCellValueFactory(new PropertyValueFactory<City, String>("cityName")); 
@@ -130,6 +138,7 @@ public class EmployeeInterface {
 
     	cityTable.setItems(cityList);
     	
+    	// Add an event listener for the selection event of a row in the cities table
     	cityTable.getSelectionModel().selectedIndexProperty().addListener((num) ->
         {           
             if(cityTable.getSelectionModel().getSelectedItem() == null) {
@@ -139,10 +148,11 @@ public class EmployeeInterface {
             else {
 
                 selectedCity = cityTable.getSelectionModel().getSelectedItem();
+                logMsg.setText("");
                 hotelTitle.setText(selectedCity.getCityName()+"'s Hotels List");
                 
-                //show hotels related to the selectedCity or delete selected city
-                //call to the listUpdate with the choosen city for the hotelTable
+                //show hotels related to the selectedCity or delete the selected city if the Delete button is clicked
+                //call to the hotelListUpdate with the choosen city for update the hotelTable
                 hotelListUpdate(selectedCity);
 	            newHotelButton.setDisable(false);
 	            deleteHotelButton.setDisable(false);
@@ -150,6 +160,7 @@ public class EmployeeInterface {
         });
     }
     
+    // Initialize the table of the hotels
     private void initializeHotelTable() {
     	hotelNameCol.setCellValueFactory(new PropertyValueFactory<Hotel, String>("hotelName"));
         hotelAddressCol.setCellValueFactory(new PropertyValueFactory<Hotel, String>("address"));;
@@ -157,6 +168,7 @@ public class EmployeeInterface {
     
         hotelTable.setItems(hotelList);
         
+        // Add an event listener for the selection event of a row of the hotels table
         hotelTable.getSelectionModel().selectedIndexProperty().addListener((num) ->
         {           
             if(hotelTable.getSelectionModel().getSelectedItem() == null) {
@@ -165,15 +177,17 @@ public class EmployeeInterface {
             }
             else {
                 selectedHotel = hotelTable.getSelectionModel().getSelectedItem();
-                System.out.println("I selected: "+selectedHotel.getHotelName());
+                logMsg.setText("");
             }
         });
     }
-   
+
+    // Reinitialize the interface at his starting point with updated data 
     public void initInterface() {
     	customerListUpdate();
     }
-    
+   
+    // Retrieve the list of the customers to show in the related table
     private void customerListUpdate() {
     	List<Customer> customers = NomadHandler.getCustomers();
     	if(customers == null) 
@@ -183,6 +197,8 @@ public class EmployeeInterface {
     		customerList.addAll(customers);
     	}
     }
+    
+    // Retrieve the list of the cities to show in the related table
     private void cityListUpdate(String name){
     	List<City> cities = NomadHandler.getCity(name);
     	if(cities == null) 
@@ -193,6 +209,7 @@ public class EmployeeInterface {
     	}
     }
     
+    // Retrieve the list of the hotels to show in the related table
     private void hotelListUpdate(City choosen){
     	List<Hotel> hotels = NomadHandler.getHotels(choosen);
     	if(hotels == null) 
@@ -203,20 +220,24 @@ public class EmployeeInterface {
     	}
     }
     
-    @FXML
-    void searchCity(ActionEvent event) {
+    // Search and show a city in the table by name
+    @FXML void searchCity(ActionEvent event) {
     	String cityName = cityNameField.getText().trim();
     	cityViewClean();
+    	logMsg.setText("");
     	cityListUpdate(cityName);
     		
     } 
-    @FXML
-    void addCity(ActionEvent event) {
+    
+    // Open the city's form as a popup
+    @FXML void addCity(ActionEvent event) {
     	
     	Stage popupStage = new Stage();
 
     	popupStage.setScene(cityFormScene);
     	cityForm.initInterface();
+    	// Set this EmployeeInterface as Owner of the popup stage so that 
+    	//closing the parent (owner) also the children are closed with it
     	popupStage.initOwner(parentEmployeeStage);
     	popupStage.setOnCloseRequest((WindowEvent we) -> {
     		cityListUpdate("");
@@ -225,10 +246,12 @@ public class EmployeeInterface {
     	
     }
 
-    @FXML
-    void addHotel(ActionEvent event) {
+ // Open the hotel's form as a popup
+    @FXML void addHotel(ActionEvent event) {
     	Stage popupStage = new Stage();
     	popupStage.setScene(hotelFormScene);
+    	// Set this EmployeeInterface as Owner of the popup stage so that 
+    	//closing the parent (owner) also the children are closed with it
     	popupStage.initOwner(parentEmployeeStage);
     	hotelForm.initInterface(selectedCity.getCityName(), selectedCity.getCountryName());
     	popupStage.setOnCloseRequest((WindowEvent we) -> {
@@ -238,14 +261,15 @@ public class EmployeeInterface {
 
     }
 
-    @FXML
-    void changeView(ActionEvent event) {
+    // Handle the data to show in the interface
+    @FXML void changeView(ActionEvent event) {
     	ObservableList paneChildren = bodyPane.getChildren();
     	if(chooseView.getValue() == "Customer View") {
-    		//retrieve the node related to the table to hide and hide it
+    		//retrieve the node related to the table to hide and than hide it
     		((VBox)paneChildren.get(paneChildren.indexOf(cityPanel))).setVisible(false);
     		((VBox)paneChildren.get(paneChildren.indexOf(hotelPanel))).setVisible(false);
     		cityViewClean();
+    		logMsg.setText("");
     		
     		//show the right table
     		((VBox)paneChildren.get(paneChildren.indexOf(customerPanel))).setVisible(true);
@@ -253,7 +277,7 @@ public class EmployeeInterface {
 
     	}
     	else {
-    		//retrieve the node related to the table to hide and hide it
+    		//retrieve the node related to the table to hide and than hide it
     		((VBox)paneChildren.get(paneChildren.indexOf(customerPanel))).setVisible(false);
     		
     		//show the right table
@@ -261,34 +285,31 @@ public class EmployeeInterface {
     		((VBox)paneChildren.get(paneChildren.indexOf(hotelPanel))).setVisible(true);
     		cityListUpdate("");
     	}
-    		
-    		
+	
     }
 
-    @FXML
-    void deleteCity(ActionEvent event) {
+    // Delete the selected city and reload the data in the city and hotel table
+    @FXML void deleteCity(ActionEvent event) {
     	logMsg.setText(NomadHandler.deleteCity(selectedCity));
     	cityListUpdate("");
-    	hotelListUpdate(selectedCity);
-    	cityNameField.setText("");
+    	cityViewClean();    	
     }
 
-    @FXML
-    void deleteHotel(ActionEvent event) {
+    // Delete the selected hotel and reload the data in the hotel table
+    @FXML void deleteHotel(ActionEvent event) {
     	logMsg.setText(NomadHandler.deleteHotel(selectedHotel));
     	hotelListUpdate(selectedCity);
     }
 
-    @FXML
-    void showStatistics(ActionEvent event) {
+    // Open the statistics interface as a popup
+    @FXML void showStatistics(ActionEvent event) {
     	Stage popupStage = new Stage();
-
     	popupStage.setScene(statScene);
+    	// Set this EmployeeInterface as Owner of the popup stage so that 
+    	//closing the parent (owner) also the children are closed with it
     	popupStage.initOwner(parentEmployeeStage);
     	statInterface.initInterface();
-    	popupStage.setOnCloseRequest((WindowEvent we) -> {
-           	cityListUpdate("");
-    	});
+
     	popupStage.show();
     }
     
@@ -298,25 +319,30 @@ public class EmployeeInterface {
     	nomadAdvisor.changeScene("loginInterface");
     }
     
+    // Retrieve the handler of the interfaces of the application
     public void setNomadAdvisor(NomadAdvisor nomadAdvisor) {
     	this.nomadAdvisor = nomadAdvisor;
     }
     
+    // Retrieve the instance of the stage related to this interface controller, handled by NomadAdvisor, 
+    //in order to be able to set it as the owner/parent of the popups interfaces.
     public void setParentStage(Stage stage) {
     	this.parentEmployeeStage = stage;
     }
    
+    // Clear the view of the cities and hotels
     private void cityViewClean() {
     	cityNameField.setText("");
     	hotelList.clear();
 		hotelTitle.setText("City's Hotels List");
-		logMsg.setText("");
+		newHotelButton.setDisable(true);
+        deleteHotelButton.setDisable(true);
     }
+    
+    // Clear the interface
     private void clean() {
     	chooseView.setValue("Customer View");
-    	logMsg.setText("");
-    	
-    	
+    	logMsg.setText("");	
     }
 
 }
