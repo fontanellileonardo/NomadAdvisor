@@ -15,8 +15,6 @@ The workgroup must design a complete application which manages a â€œbig datasetâ
 The dataset must be a real dataset characterized by a large volume (at least 200mb).
 
 ## Documentation
-* [Introduction](/docs/introduction.md)
-
 For more details regarding the project, you can consult the [official documentation.](/docs/documentation.pdf)
 
 ## Credits
